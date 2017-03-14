@@ -43,9 +43,11 @@ $('.typeahead').typeahead(null, {
 }).bind('typeahead:select', function(ev, suggestion) {
     $('#inv-button').removeClass('disabled');
     $('#inv-id').val(suggestion.id);
+    $('#inv-cat').val(suggestion.category);
 }).on('keyup', function(e) {
     if(e.which != 13) {
       $('#inv-button').addClass('disabled');
       $('#inv-id').val('');
+      $('#inv-cat').val('');
     }
 });

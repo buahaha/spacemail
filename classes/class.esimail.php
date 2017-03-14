@@ -33,7 +33,7 @@ class ESIMAIL extends ESISSO
             $mail->setBody($body);
             $mail->setApprovedCost($cspa);
             try {
-                $result = $mailapi->postCharactersCharacterIdMail($mail_int_id, $mail, "tranquility");
+                $result = $mailapi->postCharactersCharacterIdMail($this->characterID, $mail, "tranquility");
             } catch (Exception $e) {
                 $this->error = true;
                 $this->message = 'Mail not sent: '.$e->getMessage().PHP_EOL;
@@ -47,9 +47,34 @@ class ESIMAIL extends ESISSO
             $subject = '';
             $body = '';
             $mailapi = $this->getMailAPI();
-            $mail = json_decode($mailapi->getCharactersCharacterIdMailMailId($this->characterID, $mailid, 'tranquility'), true);
+            try {
+                $mail = json_decode($mailapi->getCharactersCharacterIdMailMailId($this->characterID, $mailid, 'tranquility'), true);
+            } catch (Exception $e) {
+                $this->error = true;
+                $this->message = 'Mail could not be fetche: '.$e->getMessage().PHP_EOL;
+                $this->log->exception($e);
+            }
             return $mail;
         }
+
+        public function markRead($mailid, $is_read = true) {
+            $recipients = array();
+            $subject = '';
+            $body = '';
+            $mailapi = $this->getMailAPI();
+            $contents = new \Swagger\Client\Model\PutCharactersCharacterIdMailMailIdContents();
+            $contents->setRead($is_read);
+            try {
+                $mailapi->putCharactersCharacterIdMailMailId($this->characterID, $contents, $mailid, 'tranquility');
+            } catch (Exception $e) {
+                $this->error = true;
+                $this->message = 'Mail could not be updated: '.$e->getMessage().PHP_EOL;
+                $this->log->exception($e);
+                return false;
+            }
+            return true;
+        }
+
          
         public function getMailApi() {
             if ($this->hasExpired()) {

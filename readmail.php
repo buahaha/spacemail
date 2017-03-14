@@ -27,11 +27,29 @@ function idToName($id, $dict) {
   }
 }
 
+function strparse($html) {
+  $html = str_replace ('href="fitting:', 'target="_blank" href="http://o.smium.org/loadout/dna/', $html);
+  $html = str_replace ('href="showinfo:1380//', 'target="_blank" href="https://zkillboard.com/character/', $html);
+  $html = str_replace ('href="showinfo:2//', 'target="_blank" href="https://zkillboard.com/corporation/', $html);
+  $html = str_replace ('href="showinfo:5//', 'target="_blank" href="http://evemaps.dotlan.net/system/', $html);
+  $html = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $html);
+  $html = preg_replace('$(\s|^)(https?://[a-z0-9_./?=&-]+)(?![^<>]*>)$i', ' <a href="$2" target="_blank">$2</a> ', $html." ");
+  return $html;
+}
+
 $characterID = $_GET['cid'];
 $mailID = $_GET['mid'];
 
 $esimail = new ESIMAIL($characterID);
 $mail = $esimail->readMail($mailID);
+if ($esimail->getError()) {
+    echo('Error fetching mail: '.$esimail->getMessage());
+    exit;
+} else {
+    if(isset($_GET['read']) && !$_GET['read']) {
+        $esimail->markRead($mailID);
+    }
+}
 $body = preg_replace('/(<[^>]+) (style|size)=".*?"/i', '$1', $mail['body']);
 $ids = array($mail['from']);
 foreach ($mail['recipients'] as $r) {
@@ -58,7 +76,7 @@ $html = '<div class="row"><div class="col-xs-12"><span class="h5">'.$mail['subje
              <div class="col-xs-4 col-md-2 col-lg-1">From: </div><div class="col-xs-8 col-md-9"><span class="evechar" eveid="'.$mail['from'].'">'.$mail['from_name'].'</span></div>
              <div class="col-xs-4 col-md-2 col-lg-1">to: </div><div class="col-xs-8 col-md-9">'.implode(', ', $recarray).'</div>
              <div class="col-xs-12" style="height: 20px"></div>
-             <div class="col-xs-12">'.$body.'</div>
+             <div class="col-xs-12">'.strparse($body).'</div>
          </div>
          <script src="js/clickable.php"></script>
          <script src="js/bootstrap-contextmenu.js"></script>';

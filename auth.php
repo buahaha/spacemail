@@ -16,13 +16,13 @@ if (!isset($_SESSION['characterID'])) {
 }
 
 if (isset($_SESSION['characterID']) && !isset($_SESSION['characterName'])) {
-  $esipilot = new ESIPILOT($_SESSION['characterID']);
-  $_SESSION['characterName'] = $esipilot->getCharacterName();
+  $esimail = new ESIMAIL($_SESSION['characterID']);
+  $_SESSION['characterName'] = $esimail->getCharacterName();
 }
 
 if (isset($_SESSION['characterID']) && isset($_SESSION['characterName'])) {
   if (in_array($_SESSION['characterID'], ADMINS)) {
-    $_SESSION['isAdmin'] = $_SESSION['isRecruiter'] = $_SESSION['isInternal'] = True;
+    $_SESSION['isAdmin'] = True;
   }
 }
 ?>

@@ -30,17 +30,18 @@ function mailsPage($esimail) {
     }
     $table .= '</div><div class="col-sm-12 hidden-md hidden-lg" style="height: 20px"></div>
     <div class="col-sm-12 col-sm-10 col-lg-11">
-    <table id="mailstable" class="jdatatable table table-striped table-hover" cellspacing="0" width="100%">
+    <table id="mailstable" class="jdatatable table responsive table-striped table-hover" cellspacing="0" width="100%">
       <thead>
-          <th>Time</th>';
+          <th class="all">Time</th>';
           if ($l == 2) {
             $table .= '<th>To:</th>
             <th>Subject</th>';
           } else {
-            $table .= '<th class="num no-sort"></th>
+            $table .= '<th class="all no-sort"></th>
+            <th class="num no-sort min-mobile-l"></th>
             <th>From:</th>
             <th>Subject</th>
-            <th>To:</th>';
+            <th class="min-tablet-l">To:</th>';
           }
       $table .= '</thead>
       <tbody>';
@@ -52,17 +53,16 @@ function mailsPage($esimail) {
           }
           $toline = '<td>'. implode(', ', $recarray).'</td>';
           $table .= '<tr><td>'.date('y/m/d H:i', strtotime($mail['timestamp'])).'</td>';
-          (($l == 2)?$table .= $toline:$table .= $fromline);
-          $table .= '<td><a href="#" id="'.$mail['mail_id'].'" onclick="readmail(this); return false;">'.$mail['subject'].'</a></td>';
+          (($l == 2)?$table .= $toline:$table .= '<td><i class="fa fa-envelope'.($mail['is_read']?'-open':'').'-o" aria-hidden="true"></i></td>'.$fromline);
+          $table .= '<td><a href="#" id="'.$mail['mail_id'].'" onclick="readmail(this, '.($mail['is_read']?'1':'0').'); return false;">'.$mail['subject'].'</a></td>';
           (($l != 2)?$table .= $toline:'');
           $table .= '</tr>';
           
       }
       $table .= '</tbody></table></div></div>
       <script>
-          function readmail(link) {
+          function readmail(link, isread) {
               var id = $(link).attr("id");
-              //alert(id);
               var dialog = new BootstrapDialog(
                   {message: "Fetching mail...</br><center><i class=\"fa fa-spinner fa-pulse fa-3x fa-fw\"></i></center>",
                   buttons: [{
@@ -72,7 +72,7 @@ function mailsPage($esimail) {
                       }
                   }],});
               dialog.open();
-              $.get("readmail.php?mid="+id+"&cid='.$esimail->getCharacterID().'", function(data, status){
+              $.get("readmail.php?mid="+id+"&cid='.$esimail->getCharacterID().'&read="+isread, function(data, status){
                   dialog.setMessage(data);
               });
           }
@@ -98,7 +98,7 @@ $html = '';
 
 if (!isset($_SESSION['characterID']) || !$scopesOK) {
   $page = new Page('Login required');
-  $html .= "<div class='col-xs-12'><br/>You need to log in with your EVE account to acces your mails. We do NOT get your account credentials. To Login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php?login=apply&page=apply.php'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know, what we use your API information for, please red our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
+  $html .= "<div class='col-xs-12'><br/>You need to log in with your EVE account to acces your mails. We do NOT get your account credentials. To Login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know, what we use your API information for, please red our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
   $page->addBody($html);
   $page->display();
   exit;

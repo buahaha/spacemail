@@ -31,10 +31,15 @@ body {
   margin: 10px 0;
 }
 
-.panel {
-  margin-bottom: 10px;
-  margin-top: 20px;
-  /*background-color: #111111;*/
+@media (min-width: 768px) {
+  .panel {
+    margin-bottom: 10px;
+    margin-top: 20px;
+    /*background-color: #111111;*/
+  }
+  .panel, .navbar-inverse {
+    box-shadow: 0 0 15px black;
+  }
 }
 
 @media (min-width: 1300px) {
@@ -56,7 +61,7 @@ body {
   }
 }
 
-@media (max-width: 780px) {
+@media (max-width: 767px) {
   #logoimg {
     left: 0px;
     top: 2px;
@@ -64,6 +69,9 @@ body {
   #logoimg img{
     height: 40px;
   }
+  .container .navbar-header {padding: 0; margin: 0;}
+  .container {padding: 0;}
+  .panel {box-shadow: none; margin-bottom: 0; border-radius: 0;}
 }
 
 .navbar-brand {
@@ -76,6 +84,11 @@ body {
 
 .nav > li > a > img {
   margin: -16px 0px -16px 10px;
+}
+
+.token {
+  display: inline-block;
+  margin-right: 4px;
 }
 
 .badge {
@@ -133,10 +146,6 @@ img.mod-column {
 .carousel-caption {
   max-width: 480px;
   margin: 0 auto;
-}
-
-.panel, .navbar-inverse {
-  box-shadow: 0 0 15px black;
 }
 
 .custom-editable {
