@@ -1,0 +1,13 @@
+.htaccess
+config.php
+/sql/*.sql
+/log/*
+!/log/.gitkeep
+!/sql/schema.sql
+/cache/*
+!/cache/.gitkeep
+!/cache/pages/.gitkeep
+!/cache/api/.gitkeep
+!/cache/.htaccess
+/cache/pages/*
+!/cache/pages/.gitkeep

@@ -1,0 +1,197 @@
+<?php
+require_once('config.php');
+ini_set('display_errors', 'On');
+error_reporting(E_ALL | E_STRICT);
+
+use Swagger\Client\ApiClient;
+use Swagger\Client\Configuration;
+use Swagger\Client\ApiException;
+use Swagger\Client\Api\MailApi;
+
+require_once('classes/esi/autoload.php');
+require_once('classes/class.esisso.php');
+
+class ESIMAIL extends ESISSO
+{
+
+        public function __construct($characterID) {
+            parent::__construct(null, $characterID);
+        }
+
+        public function sendMail($recipients, $subject, $body, $cspa = 0) {
+            $rec_ary = array();
+            foreach($recipients as $rec) {
+                $temp = new \Swagger\Client\Model\CharacterscharacterIdmailRecipients();
+                $temp->setRecipientId($rec['id']);
+                $temp->setRecipientType($rec['type']);
+                $rec_ary[]=$temp;
+            }
+            $mailapi = $this->getMailAPI();
+            $mail = new \Swagger\Client\Model\PostCharactersCharacterIdMailMail();
+            $mail->setRecipients($rec_ary);
+            $mail->setSubject($subject);
+            $mail->setBody($body);
+            $mail->setApprovedCost($cspa);
+            try {
+                $result = $mailapi->postCharactersCharacterIdMail($mail_int_id, $mail, "tranquility");
+            } catch (Exception $e) {
+                $this->error = true;
+                $this->message = 'Mail not sent: '.$e->getMessage().PHP_EOL;
+                $this->log->exception($e);
+            }
+            return $result;
+        }
+
+        public function readMail($mailid) {
+            $recipients = array();
+            $subject = '';
+            $body = '';
+            $mailapi = $this->getMailAPI();
+            $mail = json_decode($mailapi->getCharactersCharacterIdMailMailId($this->characterID, $mailid, 'tranquility'), true);
+            return $mail;
+        }
+         
+        public function getMailApi() {
+            if ($this->hasExpired()) {
+                $this->verify();
+            }
+            $esiapi = new ESIAPI();
+            $esiapi->setAccessToken($this->accessToken);
+            $mailapi = new MailApi($esiapi);
+            return $mailapi;
+        }
+
+        public function getMailLabels() {
+            $mailapi = $this->getMailAPI();
+            try {
+                $labelfetch = $mailapi->getCharactersCharacterIdMailLabels($this->characterID, 'tranquility');
+                $labels = array();
+                foreach ($labelfetch->getLabels() as $label) {
+                    $labels[$label->getLabelId()] = $label->getName();
+                }
+            } catch (Exception $e) {
+                $this->error = true;
+                $this->message = 'Could not retrieve Maillabels: '.$e->getMessage().PHP_EOL;
+                $this->log->exception($e);
+                return null;
+            }
+            return $labels;
+        }
+
+        public function getMails($labels = null, $lastid = null) {
+            $mailapi = $this->getMailAPI();
+            if ($labels == null) {
+                try {
+                    $labels = $mailapi->getCharactersCharacterIdMailLabels($this->characterID, 'tranquility');
+                } catch (Exception $e) {
+                    $this->error = true;
+                    $this->message = 'Could not retrieve Maillabels: '.$e->getMessage().PHP_EOL;
+                    $this->log->exception($e);
+                    return null;
+                }
+            }
+            $mails = array();
+            $i = 0;
+            $maxruns = 4;
+            try {
+                do {
+                    $mailfetch = $mailapi->getCharactersCharacterIdMail($this->characterID, 'tranquility', $labels, $lastid);
+                    foreach ($mailfetch as $mail) {
+                        $mails[] = json_decode($mail, true);
+                    }
+                    $lastid = end($mails)['mail_id'];
+                    $i++;
+                } while (count($mailfetch) && $i < $maxruns);
+            } catch (Exception $e) {
+                $this->error = true;
+                $this->message = 'Could not retrieve Mails: '.$e->getMessage().PHP_EOL;
+                $this->log->exception($e);
+                return null;
+            }
+            if (!count($mails)) {
+                return null;
+            }
+            $ids = array();
+            foreach ($mails as $mail) {
+                $ids[]=$mail['from'];
+                foreach($mail['recipients'] as $recipient) {
+                    $ids[]=$recipient['recipient_id'];
+                }
+            }
+            $dict = EVEHELPERS::esiIdsToNames($ids);
+            foreach ($mails as $i => $mail) {
+                if (isset($dict[$mail['from']])) {
+                    $mails[$i]['from_name'] = $dict[$mail['from']];
+                } else {
+                    $mails[$i]['from_name'] = 'Unknown';
+                }
+                foreach($mail['recipients'] as $j => $recipient) {
+                    if ($recipient['recipient_type'] == 'mailing_list') {
+                        $mails[$i]['recipients'][$j]['recipient_name'] = 'Mailing list';
+                    } elseif (isset($dict[$recipient['recipient_id']])) {
+                        $mails[$i]['recipients'][$j]['recipient_name'] = $dict[$recipient['recipient_id']];
+                    } else {
+                        $mails[$i]['recipients'][$j]['recipient_name'] = 'Unknown';
+                    }
+                }
+            }
+            if (count($labels) == 1 && $labels[0] == 0) {
+                $reduced = array();
+                foreach ($mails as $mail) {
+                    if(!isset($mail['labels']) || !count($mail['labels']) ) {
+                        $reduced[] = $mail;
+                    }
+                }
+                return $reduced;
+            }
+            return $mails;
+        }
+
+        public function getContacts() {
+            if ($this->hasExpired()) {
+                $this->verify();
+            }
+            $esiapi = new ESIAPI();
+            $esiapi->setAccessToken($this->accessToken);
+            $contactsapi = new ContactsApi($esiapi);
+            $contacts = array();
+            try {
+                $response = array();
+                $page = 1;
+                do {
+                    $contactspage = $contactsapi->getCharactersCharacterIdContacts($this->characterID, 'tranquility', $page);
+                    if (count($contactspage)) {
+                        $response = array_merge($response, $contactspage);
+                    }
+                    $page += 1;
+                } while (count($contactspage));
+                if (count($response)) {
+                    $lookup = array();
+                    foreach ($response as $contact) {
+                        $id = $contact->getContactId();
+                        $contacts[$id] = array();
+                        $lookup[] = $id;
+                        $contacts[$id]['id'] = $id;
+                        $contacts[$id]['name'] = null;
+                        $contacts[$id]['type'] = $contact->getContactType();
+                        $contacts[$id]['watched'] = $contact->getIsWatched();
+                        $contacts[$id]['standing'] = $contact->getStanding();
+                    }
+                    $universeapi = new UniverseApi($esiapi);
+                    $results = $universeapi->postUniverseNames($lookup, 'tranquility');
+                    foreach ($results as $r) {
+                        if (isset($contacts[$r->getId()])) {
+                            $contacts[$r->getId()]['name'] = $r->getName();
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                $contacts = null;
+                $this->error = true;
+                $this->message = 'Could not retrieve Contacts: '.$e->getMessage().PHP_EOL;
+                $this->log->exception($e);
+            }
+            return $contacts;
+        }
+
+}
