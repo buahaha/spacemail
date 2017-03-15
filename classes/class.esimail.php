@@ -51,8 +51,9 @@ class ESIMAIL extends ESISSO
                 $mail = json_decode($mailapi->getCharactersCharacterIdMailMailId($this->characterID, $mailid, 'tranquility'), true);
             } catch (Exception $e) {
                 $this->error = true;
-                $this->message = 'Mail could not be fetche: '.$e->getMessage().PHP_EOL;
+                $this->message = 'Mail could not be fetched: '.$e->getMessage().PHP_EOL;
                 $this->log->exception($e);
+                return false;
             }
             return $mail;
         }

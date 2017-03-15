@@ -16,6 +16,7 @@ Additional Software used:<br/>
 <li>Nakupanda\'s <a href="https://nakupanda.github.io/bootstrap3-dialog/">Bootstrap Dialog</a></li>
 <li><a href="http://searchturbine.com/php/phpwee">PHPWee</a> Minifier</li>
 <li>Sydcanem\'s <a href="https://github.com/sydcanem/bootstrap-contextmenu">Bootstrap Contextmenu</a></li>
+<li><a href="https://github.com/bootstrap-wysiwyg/bootstrap3-wysiwyg">bootstrap3-wysihtml5</a></li>
 </ul>
 <br/>
 Special Thanks to a lot of very helpful people in #devfleet and #esi on the tweetfleet slack.<br/>

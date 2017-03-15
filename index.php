@@ -63,8 +63,10 @@ function mailsPage($esimail) {
       <script>
           function readmail(link, isread) {
               var id = $(link).attr("id");
+              var subject = $(link).text();
               var dialog = new BootstrapDialog(
                   {message: "Fetching mail...</br><center><i class=\"fa fa-spinner fa-pulse fa-3x fa-fw\"></i></center>",
+                  title: subject,
                   buttons: [{
                       label: "Close",
                       action: function(dialogRef) {
@@ -122,7 +124,7 @@ $footer = '<script>
                        header: true,
                        footer: true
                    },
-                   responsive: true,
+                   responsive: {details: false},
                });
           });
     </script>

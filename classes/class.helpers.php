@@ -166,6 +166,26 @@ class EVEHELPERS {
         return $dict;
     }
 
+    public static function esiIdsLookup($ids) {
+        $lookup = array();
+        foreach($ids as $key=>$val) {
+            $lookup[$val] = true;
+        }
+        $lookup = array_keys($lookup);
+        $esiapi = new ESIAPI();
+        $universeapi = new UniverseApi($esiapi);
+        try {
+            $results = $universeapi->postUniverseNames($lookup, 'tranquility');
+        } catch (Exception $e) {
+            return null;
+        }
+        $dict = array();
+        foreach($results as $r) {
+            $dict[$r->getId()] = array('name' => $r->getName(), 'cat' => $r->getCategory());
+        }
+        return $dict;
+    }
+
     public static function getCorpForChar($characterID) {
         $esiapi = new ESIAPI();
         $charapi = new CharacterApi($esiapi);

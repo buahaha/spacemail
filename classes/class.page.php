@@ -89,13 +89,13 @@ class Page {
             <meta name="og:description" content="An EVE Online out-of-game mail client.">
             <meta name="og:title" content="Spacemail">
             <meta name="twitter:title" content="Spacemail">
-            <meta name="og:image" content="'.URL::url_path().'img/spacemail.png">
-            <meta name="twitter:image" content="'.URL::url_path().'img/spacemail.png">
+            <meta name="og:image" content="'.URL::url_path().'img/spacemail_sq.png">
+            <meta name="twitter:image" content="'.URL::url_path().'img/spacemail_sq.png">
             <meta name="og:url" content="'.URL::url_path().'">
             <meta name="twitter:card" content="summary">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <link rel="icon" href="img/spacemail.png" type="image/png">
-            <link rel="shortcut icon" href="img/spacemail.png" type="image/png">
+            <link rel="icon" href="img/spacemail_sq.png" type="image/png">
+            <link rel="shortcut icon" href="img/spacemail_sq.png" type="image/png">
             '.$this->getCSS().'
             <link rel="stylesheet" href="css/custom.css" type="text/css"> 
             <title>Spacemail: '.$this->title.'</title>

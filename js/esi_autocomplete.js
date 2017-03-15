@@ -23,7 +23,7 @@ var esisearch = new Bloodhound({
 
 
 // Instantiate the Typeahead UI
-$('.typeahead').typeahead(null, {
+var esiypeahead = $('.typeahead').typeahead(null, {
   display: 'name',
   limit: 50,
   source: esisearch,
@@ -41,13 +41,6 @@ $('.typeahead').typeahead(null, {
 }).bind('typeahead:render', function(e) {
     $('.typeahead').parent().find('.tt-selectable:first').addClass('tt-cursor');
 }).bind('typeahead:select', function(ev, suggestion) {
-    $('#inv-button').removeClass('disabled');
-    $('#inv-id').val(suggestion.id);
-    $('#inv-cat').val(suggestion.category);
-}).on('keyup', function(e) {
-    if(e.which != 13) {
-      $('#inv-button').addClass('disabled');
-      $('#inv-id').val('');
-      $('#inv-cat').val('');
-    }
+    $( "#recipients" ).append('<div class="token btn-sm bg-primary"><input type="hidden" name="rec['+suggestion.id+'][cat]" value="'+suggestion.category+'"></input><input type="hidden" name="rec['+suggestion.id+'][name]" value="'+suggestion.name+'"></input>'+suggestion.name+'&nbsp;<span class="btn btn-xs glyphicon glyphicon-remove" onclick="delrecipient(this)"></span></div>' );
+     esiypeahead.typeahead('val','');
 });
