@@ -13,6 +13,9 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
     if(($_POST['ajtok'] == $_SESSION['ajtoken']) && isset($_POST['id']) && isset($_SESSION['characterID'])) {
         $esimail = new ESIMAIL($_SESSION['characterID']);
         if($esimail->deleteMail($_POST['id'])) {
+          $qry = DB::getConnection();
+          $sql = "REPLACE INTO deleted_mails (mailID) VALUES (".$_POST['id'].")";
+          $result = $qry->query($sql);
           echo('true');
           exit;
         }

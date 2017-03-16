@@ -33,18 +33,17 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
     <script src="js/bootstrap-dialog.min.js"></script>
     <link href="css/bootstrap-dialog.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js" integrity="sha256-dHf/YjH1A4tewEsKUSmNnV05DDbfGN3g7NMq86xgGh8=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-wysiwyg/0.3.3/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="css/bootstrap3-wysihtml5.min.css">
     <script>
     $(document).ready(function() {
       $("#bodyarea").wysihtml5({
-          toolbar: {
+              "stylesheets": ["css/wysiwyg-color.css"],
               "blockquote": false,
               "image": false,
-              "color": false,
+              "color": true,
               "lists": false,
               "html": true,
               "fa": true,
-          },
       });
     });
     $(document).on("keypress", ":input:not(textarea)", function(event) {
@@ -60,7 +59,7 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
         var tok = btn.closest(".token").remove();
     }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-wysiwyg/0.3.3/bootstrap3-wysihtml5.all.min.js"</script>';
+    <script src="js/bootstrap3-wysihtml5.all.min.js"</script>';
 
 function getToBar($recipients = null, $subject = null, $mailbody = null) {
     $html = '<form id="mail" method="post" action="" data-toggle="validator" role="form"><div class="col-xs-12">

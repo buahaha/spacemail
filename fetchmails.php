@@ -43,7 +43,18 @@ if ($l == 'none') {
     $mails = $esimail->getMails(array($l), URL::getQ('lastid'), URL::getQ('pages'));
 }
 
+$deleted = array();
+$qry = DB::getConnection();
+$sql = "SELECT mailID FROM deleted_mails WHERE deleted >= '".date("Y-m-d H:i:s", time()-60)."'";
+$result = $qry->query($sql);
+while ($row = $result->fetch_assoc()) {
+    $deleted[] = $row['mailID'];
+}
+
 foreach ((array)$mails as $mail) {
+    if (in_array($mail['mail_id'], $deleted)) {
+        continue;
+    }
     $temp = array();
     $temp['date'] = date('y/m/d H:i', strtotime($mail['timestamp']));
     $temp['isread'] = '<i class="fa fa-envelope'.($mail['is_read']?'-open':'').'-o" aria-hidden="true"></i>';
