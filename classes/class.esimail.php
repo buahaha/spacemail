@@ -76,6 +76,18 @@ class ESIMAIL extends ESISSO
             return true;
         }
 
+        public function deleteMail($mailid) {
+            $mailapi = $this->getMailAPI();
+            try {
+                $mailapi->deleteCharactersCharacterIdMailMailId($this->characterID, $mailid, 'tranquility');
+            } catch (Exception $e) {
+                $this->error = true;
+                $this->message = 'Mail could not be deleted: '.$e->getMessage().PHP_EOL;
+                $this->log->exception($e);
+                return false;
+            }
+            return true;
+        }
          
         public function getMailApi() {
             if ($this->hasExpired()) {
@@ -104,7 +116,7 @@ class ESIMAIL extends ESISSO
             return $labels;
         }
 
-        public function getMails($labels = null, $lastid = null) {
+        public function getMails($labels = null, $lastid = null, $pages = 4) {
             $mailapi = $this->getMailAPI();
             if ($labels == null) {
                 try {
@@ -118,7 +130,6 @@ class ESIMAIL extends ESISSO
             }
             $mails = array();
             $i = 0;
-            $maxruns = 4;
             try {
                 do {
                     $mailfetch = $mailapi->getCharactersCharacterIdMail($this->characterID, 'tranquility', $labels, $lastid);
@@ -127,7 +138,7 @@ class ESIMAIL extends ESISSO
                     }
                     $lastid = end($mails)['mail_id'];
                     $i++;
-                } while (count($mailfetch) && $i < $maxruns);
+                } while (count($mailfetch) && $i < $pages);
             } catch (Exception $e) {
                 $this->error = true;
                 $this->message = 'Could not retrieve Mails: '.$e->getMessage().PHP_EOL;
@@ -153,7 +164,14 @@ class ESIMAIL extends ESISSO
                 }
                 foreach($mail['recipients'] as $j => $recipient) {
                     if ($recipient['recipient_type'] == 'mailing_list') {
-                        $mails[$i]['recipients'][$j]['recipient_name'] = 'Mailing list';
+                        if(!isset($mldict)) {
+                            $mldict = $this->getMailingLists();
+                        }
+                        if (isset($mldict[$recipient['recipient_id']])) {
+                            $mails[$i]['recipients'][$j]['recipient_name'] = $mldict[$recipient['recipient_id']];
+                        } else {
+                            $mails[$i]['recipients'][$j]['recipient_name'] = 'Mailing list';
+                        }
                     } elseif (isset($dict[$recipient['recipient_id']])) {
                         $mails[$i]['recipients'][$j]['recipient_name'] = $dict[$recipient['recipient_id']];
                     } else {
@@ -171,6 +189,23 @@ class ESIMAIL extends ESISSO
                 return $reduced;
             }
             return $mails;
+        }
+
+        public function getMailingLists() {
+            $mailapi = $this->getMailAPI();
+            $response = array();
+            try {
+                $result = $mailapi->getCharactersCharacterIdMailLists($this->characterID, 'tranquility');
+            } catch (Exception $e) {
+                $this->error = true;
+                $this->message = 'Mail could not be updated: '.$e->getMessage().PHP_EOL;
+                $this->log->exception($e);
+                return false;
+            }
+            foreach ($result as $list) {
+                $response[$list->getMailingListId()] = $list->getName();
+            }
+            return $response;
         }
 
         public function getContacts() {

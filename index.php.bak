@@ -23,6 +23,11 @@ function mailsPage($esimail) {
             $table .= '<li'.($l==$k?' class="active"':'').'><a style="padding: 7px 7px;" href="index.php?p=mail&label='.$k.'" onclick="return loading()">'.str_replace(array("]", "["), "", $label).'</a></li>';
         } 
     $table .= '</ul>';
+    if ($l == 'none') {
+        $mails = $esimail->getMails(array(0));
+    } else {
+        $mails = $esimail->getMails(array($l));
+    }
     $table .= '</div><div class="col-sm-12 hidden-md hidden-lg" style="height: 20px"></div>
     <div class="col-sm-12 col-sm-10 col-lg-11">
     <table id="mailstable" class="jdatatable table responsive table-striped table-hover" cellspacing="0" width="100%">
@@ -38,9 +43,24 @@ function mailsPage($esimail) {
             <th>Subject</th>
             <th class="min-tablet-l">To:</th>';
           }
-      $table .= '</thead></table></div></div>
+      $table .= '</thead>
+      <tbody>';
+      foreach ((array)$mails as $mail) {
+          $fromline = '<td><img height="24px" src="https://imageserver.eveonline.com/Character/'.$mail['from'].'_32.jpg"></td><td><span class="evechar" eveid="'.$mail['from'].'">'.$mail['from_name'].'<span></td>';
+          $recarray = array();
+          foreach ($mail['recipients'] as $r) {
+              $recarray[] =  '<span class="eve'.strtolower(substr($r['recipient_type'], 0, 4)).'" eveid="'.$r['recipient_id'].'">'.$r['recipient_name'].'</span>';
+          }
+          $toline = '<td>'. implode(', ', $recarray).'</td>';
+          $table .= '<tr><td>'.date('y/m/d H:i', strtotime($mail['timestamp'])).'</td>';
+          (($l == 2)?$table .= $toline:$table .= '<td><i class="fa fa-envelope'.($mail['is_read']?'-open':'').'-o" aria-hidden="true"></i></td>'.$fromline);
+          $table .= '<td><a href="#" id="'.$mail['mail_id'].'" onclick="readmail(this, '.($mail['is_read']?'1':'0').'); return false;">'.$mail['subject'].'</a></td>';
+          (($l != 2)?$table .= $toline:'');
+          $table .= '</tr>';
+          
+      }
+      $table .= '</tbody></table></div></div>
       <script>
-          var label = '.$l.';
           function readmail(link, isread) {
               var id = $(link).attr("id");
               var subject = $(link).text();
@@ -86,53 +106,10 @@ if (!isset($_SESSION['characterID']) || !$scopesOK) {
   exit;
 }
 
-if (!isset($_SESSION['ajtoken'])) {
-  $_SESSION['ajtoken'] = EVEHELPERS::random_str(32);
-}
-
 $footer = '<script>
-          var lastid;
-          var mtable;
-          var pages;
-          function getmore() {
-              $.ajax({
-                  url: "fetchmails.php?label="+label+"&lastid="+lastid+"&pages="+pages,
-                  success: function(data) {
-                      json = JSON.parse(data);
-                      mtable.rows.add(json.data).draw();
-                      if (json.lastid < lastid) {
-                          lastid = json.lastid;
-                          if (json.lastid != 0) {
-                              getmore();
-                          }
-                      }
-                  }
-              });
-          }
           $(document).ready(function() {
-            if (label == 2) {
-                var columns = [{ "data": "date" },{ "data": "to" },{ "data": "subject" }]
-            } else {
-                var columns =  [{ "data": "date" },{ "data": "isread" },{ "data": "img" },{ "data": "from" },{ "data": "subject" },{ "data": "to" }]
-            }
-            if (label == 0) {
-                pages = 5 
-            } else {
-                pages = 1
-            }
-            mtable = $(".jdatatable").DataTable(
+            $(".jdatatable").dataTable(
                {
-                   "ajax": {
-                       "url": "fetchmails.php?label="+label+"&pages="+pages,
-                       "dataSrc": function ( json ) {
-                           lastid = json.lastid;
-                           console.log(lastid);
-                           getmore();
-                           return json.data;
-                       },
-                  },
-
-                   "columns": columns,
                    "bPaginate": true,
                    "pageLength": 25,
                    "aoColumnDefs" : [ {
@@ -150,36 +127,6 @@ $footer = '<script>
                    responsive: {details: false},
                });
           });
-
-         function deletemail(id) {
-             BootstrapDialog.show({
-                  message: "Are you sure you want to delete this mail?",
-                  type: BootstrapDialog.TYPE_WARNING,
-                  buttons: [{
-                      label: "Delete mail",
-                      action: function(dialogItself){
-                          dialogItself.close();
-                          $.ajax({
-                              type: "POST",
-                              url: "'.URL::url_path().'ajax/aj_deletemail.php",
-                              data: {"ajtok" : "'.$_SESSION['ajtoken'].'", "id" : id},
-                              success:function(data) {
-                                  if (data !== "true") {
-                                      BootstrapDialog.show({message: "Something went wrong..."+data, type: BootstrapDialog.TYPE_WARNING});
-                                  } else {
-                                      location.reload();
-                                  }
-                              }
-                          });
-                      }
-                  },{
-                      label: "Cancel",
-                      action: function(dialogItself){
-                          dialogItself.close();
-                      }
-                  }],
-             });
-         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/css/dataTables.bootstrap.min.css" rel="stylesheet"/>

@@ -61,7 +61,14 @@ $dict = EVEHELPERS::esiIdsToNames($ids);
 $mail['from_name'] = idToName($mail['from'], $dict);
 foreach ($mail['recipients'] as $i=>$r) {
     if ($r['recipient_type'] == 'mailing_list') {
-        $mail['recipients'][$i]['recipient_name'] = 'Mailing list';
+        if(!isset($mldict)) {
+            $mldict = $esimail->getMailingLists();
+        }
+        if (isset($mldict[$r['recipient_id']])) {
+            $mail['recipients'][$i]['recipient_name'] = $mldict[$r['recipient_id']];
+        } else {
+            $mail['recipients'][$i]['recipient_name'] = 'Mailing list';
+        }
     } else {
         $mail['recipients'][$i]['recipient_name'] = idToName($r['recipient_id'], $dict);
     }
@@ -76,6 +83,7 @@ $html = '<div class="row" style="display: none"><div class="col-xs-12"><span cla
              .($characterID == $mail['from']?'':'<a style="margin: 0 2px;" class="btn btn-primary btn-xs" href="compose.php?action=re&mid='.$mailID.'" title="Reply to"><i class="fa fa-reply" aria-hidden="true"></i></a>')
              .((count($mail['recipients']) < 2)?'':'<a style="margin: 0 2px;" class="btn btn-primary btn-xs" href="compose.php?action=reall&mid='.$mailID.'" title="Reply to all"><i class="fa fa-reply-all" aria-hidden="true"></i></a>').'
              <a style="margin: 0 2px;" class="btn btn-primary btn-xs" href="compose.php?action=fwd&mid='.$mailID.'" title="Forward mail"><i class="fa fa-share" aria-hidden="true"></i></a>
+             <a style="margin: 0 2px;" class="btn btn-primary btn-xs" href="#" title="Delete mail" onclick="deletemail('.$mailID.')"><i class="fa fa-trash" aria-hidden="true"></i></a>
            </div></div>
            <div class="well well-sm"><div class="row">
              <div class="col-xs-4 col-md-2 col-lg-1">Date: </div><div class="col-xs-8 col-md-9 col-lg-11">'.date('Y/m/d', strtotime($mail['timestamp'])).'</div>
