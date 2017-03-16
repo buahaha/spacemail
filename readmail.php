@@ -28,12 +28,13 @@ function idToName($id, $dict) {
 }
 
 function strparse($html) {
-  $html = preg_replace('/(<[^>]+) (style|size)=".*?"/i', '$1', $html);
-  $html = preg_replace('/(<font[^>]*>)|(<\/font>)/', '', $html);
-  $html = str_replace ('href="fitting:', 'target="_blank" href="http://o.smium.org/loadout/dna/', $html);
-  $html = str_replace ('href="showinfo:1380//', 'target="_blank" href="https://zkillboard.com/character/', $html);
-  $html = str_replace ('href="showinfo:2//', 'target="_blank" href="https://zkillboard.com/corporation/', $html);
-  $html = str_replace ('href="showinfo:5//', 'target="_blank" href="http://evemaps.dotlan.net/system/', $html);
+  //$html = preg_replace('/(<[^>]+) (style|size)=".*?"/i', '$1', $html);
+  //$html = preg_replace('/(<font[^>]*>)|(<\/font>)/', '', $html);
+  $html =  str_replace(array('color="#bfffffff"', 'color="#ffffa600"', 'size="12"'), '', $html);
+  $html = str_replace('href="fitting:', 'target="_blank" href="http://o.smium.org/loadout/dna/', $html);
+  $html = str_replace('href="showinfo:1380//', 'target="_blank" href="https://zkillboard.com/character/', $html);
+  $html = str_replace('href="showinfo:2//', 'target="_blank" href="https://zkillboard.com/corporation/', $html);
+  $html = str_replace('href="showinfo:5//', 'target="_blank" href="http://evemaps.dotlan.net/system/', $html);
   $html = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $html);
   $html = preg_replace('$(\s|^)(https?://[a-z0-9_./?=&-]+)(?![^<>]*>)$i', ' <a href="$2" target="_blank">$2</a> ', $html." ");
   return $html;

@@ -40,8 +40,10 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
           toolbar: {
               "blockquote": false,
               "image": false,
-              "color": true,
+              "color": false,
+              "lists": false,
               "fa": true,
+              "stylesheets": [],
           },
       });
     });

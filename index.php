@@ -30,13 +30,15 @@ function mailsPage($esimail) {
           <th class="all">Time</th>';
           if ($l == 2) {
             $table .= '<th>To:</th>
-            <th>Subject</th>';
+            <th>Subject</th>
+            <th class="num no-sort min-mobile-l"></th>';
           } else {
             $table .= '<th class="all no-sort"></th>
-            <th class="num no-sort min-mobile-l"></th>
+            <th class="num no-sort min-tablet-l"></th>
             <th>From:</th>
             <th>Subject</th>
-            <th class="min-tablet-l">To:</th>';
+            <th class="min-tablet-l">To:</th>
+            <th class="num no-sort min-mobile-l"></th>';
           }
       $table .= '</thead></table></div></div>
       <script>
@@ -111,9 +113,9 @@ $footer = '<script>
           }
           $(document).ready(function() {
             if (label == 2) {
-                var columns = [{ "data": "date" },{ "data": "to" },{ "data": "subject" }]
+                var columns = [{ "data": "date" },{ "data": "to" },{ "data": "subject" }, {"data" : null,"defaultContent": "<a href=\"#\" title=\"Forward mail\" onclick=\"fwdrow(this)\"><i class=\"fa fa-share\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" title=\"Delete mail\" onclick=\"deleterow(this)\"><i class=\"fa fa-trash\" aria-hidden=\"true\"><\/i><\/a>", "width": "32px"}]
             } else {
-                var columns =  [{ "data": "date" },{ "data": "isread" },{ "data": "img" },{ "data": "from" },{ "data": "subject" },{ "data": "to" }]
+                var columns =  [{ "data": "date" },{ "data": "isread" },{ "data": "img" },{ "data": "from" },{ "data": "subject" },{ "data": "to" },{ "data": null,"defaultContent": "<a href=\"#\" title=\"Reply to\" onclick=\"replyrow(this)\"><i class=\"fa fa-reply\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" title=\"Forward mail\" onclick=\"fwdrow(this)\"><i class=\"fa fa-share\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" title=\"Delete mail\" onclick=\"deleterow(this)\"><i class=\"fa fa-trash\" aria-hidden=\"true\"><\/i><\/a>", "width": "50px"}]
             }
             if (label == 0) {
                 pages = 5 
@@ -126,7 +128,6 @@ $footer = '<script>
                        "url": "fetchmails.php?label="+label+"&pages="+pages,
                        "dataSrc": function ( json ) {
                            lastid = json.lastid;
-                           console.log(lastid);
                            getmore();
                            return json.data;
                        },
@@ -167,7 +168,9 @@ $footer = '<script>
                                   if (data !== "true") {
                                       BootstrapDialog.show({message: "Something went wrong..."+data, type: BootstrapDialog.TYPE_WARNING});
                                   } else {
-                                      location.reload();
+                                      var trow = $("#"+id).closest("tr");
+                                      mtable.row(trow).remove().draw(false);
+                                      BootstrapDialog.closeAll();
                                   }
                               }
                           });
@@ -179,6 +182,19 @@ $footer = '<script>
                       }
                   }],
              });
+         }
+         function fwdrow(btn) {
+             var trow = $(btn).closest("tr");
+             var id = trow.find("a").first().attr("id");
+         }
+         function deleterow(btn) {
+             var trow = $(btn).closest("tr");
+             var id = trow.find("a").first().attr("id");
+             deletemail(id);
+         }
+         function replyrow(btn) {
+             var trow = $(btn).closest("tr");
+             var id = trow.find("a").first().attr("id");
          }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
