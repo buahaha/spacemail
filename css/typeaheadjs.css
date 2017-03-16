@@ -22,7 +22,7 @@ span.twitter-typeahead .tt-dropdown-menu {
 }
 span.twitter-typeahead .tt-suggestion {
   display: block;
-  padding: 3px 20px;
+  padding: 3px 20px 3px 6px;
   clear: both;
   font-weight: normal;
   line-height: 1.42857143;
@@ -92,12 +92,22 @@ span.twitter-typeahead .tt-suggestion:focus {
   top: 46px !important;
 }
 
+.twitter-typeahead { width: 100%; } 
+
 .tt-pilot .visuallyhidden {
   display: none;
 }
 
 .tt-sug-div {
   cursor: pointer;
+}
+
+.tt-selectable {
+  position: relative;
+}
+
+.tt-exp-div {
+  display: inline;
 }
 
 .tt-sug-img {

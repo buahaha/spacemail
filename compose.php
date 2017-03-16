@@ -42,6 +42,7 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
               "image": false,
               "color": false,
               "lists": false,
+              "html": true,
               "fa": true,
               "stylesheets": [],
           },
@@ -75,7 +76,7 @@ function getToBar($recipients = null, $subject = null, $mailbody = null) {
     }
     $html .= '</div>
         </div>
-        <div class="form-group col-xs-12">
+        <div class="form-group col-xs-12 col-md-8 col-lg-5">
            <input id="inv-name" type="text" class="typeahead form-control" placeholder="Search mail recipients...">
         </div>
         <div class="col-xs-12" style="height: 20px;"></div>

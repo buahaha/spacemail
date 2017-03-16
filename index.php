@@ -186,6 +186,7 @@ $footer = '<script>
          function fwdrow(btn) {
              var trow = $(btn).closest("tr");
              var id = trow.find("a").first().attr("id");
+             window.location = "compose.php?action=fwd&mid="+id;
          }
          function deleterow(btn) {
              var trow = $(btn).closest("tr");
@@ -195,6 +196,7 @@ $footer = '<script>
          function replyrow(btn) {
              var trow = $(btn).closest("tr");
              var id = trow.find("a").first().attr("id");
+             window.location = "compose.php?action=re&mid="+id;
          }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

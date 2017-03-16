@@ -30,11 +30,11 @@ var esiypeahead = $('.typeahead').typeahead(null, {
   templates: {
   suggestion: function(data) {
       if(data.category == 'character') {
-         return '<div class="tt-sug-div"><img class="tt-sug-img img-rounded" src="https://imageserver.eveonline.com/Character/'+data.id+'_32.jpg"><p class="tt-sug-text">'+data.name+'</p></div>';
+         return '<div class="tt-sug-div"><img class="tt-sug-img img-rounded" src="https://imageserver.eveonline.com/Character/'+data.id+'_32.jpg"><span class="tt-sug-text">'+data.name+'</span>&nbsp;<div class="small text-right tt-exp-div"><em>(Character)</em></div></div>';
       } else if (data.category == 'corporation') {
-         return '<div class="tt-sug-div"><img class="tt-sug-img img-rounded" src="https://imageserver.eveonline.com/Corporation/'+data.id+'_32.png"><p class="tt-sug-text">'+data.name+'</p></div>';
+         return '<div class="tt-sug-div"><img class="tt-sug-img img-rounded" src="https://imageserver.eveonline.com/Corporation/'+data.id+'_32.png"><span class="tt-sug-text">'+data.name+'</span>&nbsp;<div class="small text-right tt-exp-div"><em>(Corp)</em></div></div>';
       } else if (data.category == 'alliance') {
-         return '<div class="tt-sug-div"><img class="tt-sug-img img-rounded" src="https://imageserver.eveonline.com/Alliance/'+data.id+'_32.png"><p class="tt-sug-text">'+data.name+'</p></div>';
+         return '<div class="tt-sug-div"><img class="tt-sug-img img-rounded" src="https://imageserver.eveonline.com/Alliance/'+data.id+'_32.png"><span class="tt-sug-text">'+data.name+'</span>&nbsp;<div class="small text-right tt-exp-div"><em>(Alliance)</em></div></div>';
       }
     }
   }
