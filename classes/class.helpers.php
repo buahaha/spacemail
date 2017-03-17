@@ -274,5 +274,20 @@ class EVEHELPERS {
         return $allys;
     }
 
+    public static function mailparse($html) {
+        $html = str_replace(array('color="#bfffffff"', 'color="#ffffa600"', 'size="12"'), '', $html);
+        $html = str_replace('href="fitting:', 'target="_blank" href="http://o.smium.org/loadout/dna/', $html);
+        $html = preg_replace('/<a href="killReport:(\d+):(\w+)">/', '<a href="https://zkillboard.com/kill/\1/#\2" target="_blank">', $html);
+        $html = str_replace(array('href="showinfo:1380//', 'href="showinfo:1379//', 'href="showinfo:1378//', 'href="showinfo:1377//'), 'target="_blank" href="https://zkillboard.com/character/', $html);
+        $html = str_replace('href="showinfo:2//', 'target="_blank" href="https://zkillboard.com/corporation/', $html);
+        $html = str_replace('href="showinfo:16159//', 'target="_blank" href="https://zkillboard.com/alliance/', $html);
+        $html = str_replace('href="showinfo:5//', 'target="_blank" href="http://evemaps.dotlan.net/system/', $html);
+        $html = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $html);
+        $html = preg_replace('$(?<=\s|^|br\s\/>|br>|br\/>|div>|<p>)(https?:\/\/[a-z0-9_./?=&-]+)(?![^<>]*>)$i', ' <a href="$1" target="_blank">$1</a> ', $html." ");
+        $html = preg_replace('/size="[^"]*[^"]"/', "", $html);
+        $html = preg_replace('/(color="#)[a-f0-9]{2}([a-f0-9]{6}")/', '\1\2', $html);
+        return $html;
+    }
+
 }
 ?>

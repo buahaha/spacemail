@@ -63,9 +63,9 @@ class AUTHTOKEN {
     }
 
     public static function getFromCookie() {
-        if (isset($_COOKIE["blocform"])) {
+        if (isset($_COOKIE["spacemail"])) {
             try {
-                $cookie = json_decode($_COOKIE["blocform"]);
+                $cookie = json_decode($_COOKIE["spacemail"]);
                 $authtoken = new AUTHTOKEN($cookie->selector);
                 $authtoken->setCookietoken($cookie->token);
             } catch (Exception $e) {
@@ -107,7 +107,7 @@ class AUTHTOKEN {
         $data = json_encode(array('selector' => $this->selector, 'token' => $this->cookietoken));
         $path = URL::path_only();
         $server = URL::server();
-        setcookie('blocform', $data, $this->expires, $path, $server, 1);
+        setcookie('spacemail', $data, $this->expires, $path, $server, 1);
     }
 
     public function setCharacterID($characterID) {

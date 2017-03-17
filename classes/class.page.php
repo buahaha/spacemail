@@ -104,7 +104,7 @@ class Page {
         <body>
 
         <!-- Fixed navbar -->
-        <nav class="navbar navbar-inverse">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
           <div class="container">
             <div class="navbar-header">
               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -136,7 +136,7 @@ class Page {
                 }
                 if (isset($_SESSION['characterID'])) {
                 $page .= '<li class="dropdown navbar-right">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'.$_SESSION['characterName'].' <span class="caret"></span><img src="https://imageserver.eveonline.com/Character/'.$_SESSION['characterID'].'_32.jpg"></a>
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'.$_SESSION['characterName'].' <span class="caret"></span><img class="img-rounded" src="https://imageserver.eveonline.com/Character/'.$_SESSION['characterID'].'_32.jpg"></a>
                                   <ul class="dropdown-menu">
                                       <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                                       <li><a href="preferences.php"><span class="glyphicon glyphicon-cog"></span> Preferences</a></li>
@@ -147,7 +147,7 @@ class Page {
             </div><!--/.nav-collapse -->
           </div>
         </nav>
-        <div class="container" role="main">';
+        <div id="maincontainer"  class="container" role="main">';
         if (!$this->cookiesOk()) {
             $page .= '<div id="cookiequestion" class="panel panel-info">
             <div class="panel-heading">Cookies disclaimer</div>
@@ -180,21 +180,42 @@ class Page {
     private function getStatic() {
         $page = '';
         if (isset($this->error)) {
+            if (is_array($this->error)) {
+                $heading = $this->error[0];
+                $info = $this->error[1];
+            } else {
+                $heading = 'Error';
+                $info = $this->error;
+            }
             $page .= '<div class="panel panel-danger">
-                <div class="panel-heading">Error</div>
-                <div class="panel-body">'.$this->error.'</div>
+                <div class="panel-heading">'.$heading.'</div>
+                <div class="panel-body">'.$info.'</div>
             </div>';
         }
         if (isset($this->warning)) {
+            if (is_array($this->warning)) {
+                $heading = $this->warning[0];
+                $info = $this->warning[1];
+            } else {
+                $heading = 'Warning';
+                $info = $this->warning;
+            }
             $page .= '<div class="panel panel-warning">
-                <div class="panel-heading">Warning</div>
-                <div class="panel-body">'.$this->warning.'</div>
+                <div class="panel-heading">'.$heading.'</div>
+                <div class="panel-body">'.$info.'</div>
             </div>';
         }
         if (isset($this->info)) {
+            if (is_array($this->info)) {
+                $heading = $this->info[0];
+                $info = $this->info[1];
+            } else {
+                $heading = 'Information';
+                $info = $this->info;
+            }
             $page .= '<div class="panel panel-primary">
-                <div class="panel-heading">Information</div>
-                <div class="panel-body">'.$this->info.'</div>
+                <div class="panel-heading">'.$heading.'</div>
+                <div class="panel-body">'.$info.'</div>
             </div>';
         }
     
@@ -253,8 +274,8 @@ class Page {
     private function getCSS() {
         if (isset($_SESSION["style"])) {
             $style = $_SESSION["style"];
-        } elseif (isset($_COOKIE["blocformstyle"])) {
-            $style = $_COOKIE["blocformstyle"];
+        } elseif (isset($_COOKIE["spacemailstyle"])) {
+            $style = $_COOKIE["spacemailstyle"];
             $_SESSION["style"] = $style;
         } else {
             $style = "dark";

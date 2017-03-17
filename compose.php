@@ -20,7 +20,7 @@ if (isset($_SESSION['characterID'])) {
 
 if (!isset($_SESSION['characterID']) || !$scopesOK) {
   $page = new Page('Login required');
-  $html = "<div class='col-xs-12'><br/>You need to log in with your EVE account to acces your mails. We do NOT get your account credentials. To Login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php?login=apply&page=apply.php'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know, what we use your API information for, please red our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
+  $html = "<div class='col-xs-12'><br/>You need to log in with your EVE account to acces your mails. We do NOT get your account credentials. To Login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php?page=".rawurlencode("compose.php?".URL::getQueryString())."'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know, what we use your API information for, please red our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
   $page->addBody($html);
   $page->display();
   exit;
@@ -33,7 +33,7 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
     <script src="js/bootstrap-dialog.min.js"></script>
     <link href="css/bootstrap-dialog.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js" integrity="sha256-dHf/YjH1A4tewEsKUSmNnV05DDbfGN3g7NMq86xgGh8=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-wysiwyg/0.3.3/bootstrap3-wysihtml5.min.css">
+    <link rel="stylesheet" href="css/bootstrap3-wysihtml5.min.css">
     <script>
     $(document).ready(function() {
       $("#bodyarea").wysihtml5({
@@ -60,7 +60,7 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
         var tok = btn.closest(".token").remove();
     }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-wysiwyg/0.3.3/bootstrap3-wysihtml5.all.min.js"</script>';
+    <script src="js/bootstrap3-wysihtml5.all.js"</script>';
 
 function getToBar($recipients = null, $subject = null, $mailbody = null) {
     $html = '<form id="mail" method="post" action="" data-toggle="validator" role="form"><div class="col-xs-12">
@@ -113,17 +113,6 @@ function idToCategory($id, $dict) {
   }
 }
 
-
-function strparse($html) {
-  $html = str_replace ('href="fitting:', 'target="_blank" href="http://o.smium.org/loadout/dna/', $html);
-  $html = str_replace ('href="showinfo:1380//', 'target="_blank" href="https://zkillboard.com/character/', $html);
-  $html = str_replace ('href="showinfo:2//', 'target="_blank" href="https://zkillboard.com/corporation/', $html);
-  $html = str_replace ('href="showinfo:5//', 'target="_blank" href="http://evemaps.dotlan.net/system/', $html);
-  $html = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $html);
-  $html = preg_replace('$(\s|^)(https?://[a-z0-9_./?=&-]+)(?![^<>]*>)$i', ' <a href="$2" target="_blank">$2</a> ', $html." ");
-  return $html;
-}
-
 $recipients = array();
 $subject = null;
 $mailbody = null;
@@ -156,7 +145,7 @@ if(!isset($_POST['submit']) && isset($_GET['action']) && isset($_GET['mid']) && 
                 $mail['recipients'][$i]['recipient_name'] = idToName($r['recipient_id'], $dict);
             }
         }
-        $mailbody .= '<br /><br />--------------------------------<br />'.$mail['subject'].'<br />Sent: '.date('Y/m/d H:i', strtotime($mail['timestamp'])).'<br />From: '.$mail['from_name'].'<br />To: '.implode(', ', array_column($mail['recipients'],'recipient_name')).'<br /><br />'.strparse($mail['body']);
+        $mailbody .= '<br /><br />--------------------------------<br />'.$mail['subject'].'<br />Sent: '.date('Y/m/d H:i', strtotime($mail['timestamp'])).'<br />From: '.$mail['from_name'].'<br />To: '.implode(', ', array_column($mail['recipients'],'recipient_name')).'<br /><br />'.EVEHELPERS::mailparse($mail['body']);
         if($_GET['action'] == 'fwd') {
             $subject = 'Fw: '.$mail['subject'];
         } else {
@@ -193,7 +182,9 @@ if (isset($_POST['submit'])) {
           $page->setError($esisso->getMessage());
       } else {
           $page = new Page('Done.');
-          $page->addBody('<p>Your mail has been sent.</p><br/><br/><a class="btn btn-primary" href="'.URL::url_path().'">Back to inbox</a>');
+          $page->addHeader('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.0.10/font-awesome-animation.min.css" integrity="sha256-C4J6NW3obn7eEgdECI2D1pMBTve41JFWQs0UTboJSTg=" crossorigin="anonymous" />');
+          $page->setInfo(array('Done.', '<i padding-left: 50px; class="fa fa-envelope-o fa-4x faa-passing animated" aria-hidden="true"></i><br/><br/><p>Your mail has been sent.</p><br/><br/><a class="btn btn-primary" href="'.URL::url_path().'">Back to inbox</a>'));
           $page->display();
           exit;
       }
@@ -206,4 +197,3 @@ $page->addFooter($footer);
 $page->setBuildTime(number_format(microtime(true) - $start_time, 3));
 $page->display("true");
 ?>
-

@@ -27,19 +27,6 @@ function idToName($id, $dict) {
   }
 }
 
-function strparse($html) {
-  //$html = preg_replace('/(<[^>]+) (style|size)=".*?"/i', '$1', $html);
-  //$html = preg_replace('/(<font[^>]*>)|(<\/font>)/', '', $html);
-  $html =  str_replace(array('color="#bfffffff"', 'color="#ffffa600"', 'size="12"'), '', $html);
-  $html = str_replace('href="fitting:', 'target="_blank" href="http://o.smium.org/loadout/dna/', $html);
-  $html = str_replace(array('href="showinfo:1380//', 'href="showinfo:1379//', 'href="showinfo:1378//', 'href="showinfo:1377//'), 'target="_blank" href="https://zkillboard.com/character/', $html);
-  $html = str_replace('href="showinfo:2//', 'target="_blank" href="https://zkillboard.com/corporation/', $html);
-  $html = str_replace('href="showinfo:5//', 'target="_blank" href="http://evemaps.dotlan.net/system/', $html);
-  $html = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $html);
-  $html = preg_replace('$(\s|^)(https?://[a-z0-9_./?=&-]+)(?![^<>]*>)$i', ' <a href="$2" target="_blank">$2</a> ', $html." ");
-  return $html;
-}
-
 $characterID = $_GET['cid'];
 $mailID = $_GET['mid'];
 
@@ -93,7 +80,7 @@ $html = '<div class="row" style="display: none"><div class="col-xs-12"><span cla
              <div class="col-xs-4 col-md-2 col-lg-1">to: </div><div class="col-xs-8 col-md-9 col-lg-11">'.implode(', ', $recarray).'</div>
            </div></div>
            <div class="well well-sm"><div class="row">
-             <div class="col-xs-12"><p>'.strparse($body).'</p></div>
+             <div class="col-xs-12"><p>'.EVEHELPERS::mailparse($body).'</p></div>
            </div></div>
          </div>';
 echo(preg_replace( "/\r|\n/", "", $html));

@@ -8,8 +8,8 @@ unset($_SESSION['characterName']);
 session_destroy();
 $path = URL::path_only();
 $server = URL::server();
-setcookie('blocform', "", time()-3600, $path, $server, 1);
-unset($_COOKIE['blocform']);
+setcookie('spacemail', "", time()-3600, $path, $server, 1);
+unset($_COOKIE['spacemail']);
 
 $page = new Page('SSO Login');
 $page->setInfo("You were logged out.");

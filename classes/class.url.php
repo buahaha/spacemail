@@ -43,6 +43,7 @@ class URL {
         $s = $_SERVER;
         return $s['SERVER_NAME'];
     }
+
     public static function getQ($str)
     {
         $s = $_SERVER;
@@ -53,6 +54,13 @@ class URL {
         } else {
             return null;
         }
+    }
+
+    public static function getQueryString()
+    {
+        $s = $_SERVER;
+        $querystring = parse_url(self::full_url(), PHP_URL_QUERY);
+        return $querystring;
     }
 }    
 ?>

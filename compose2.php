@@ -37,13 +37,15 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
     <script>
     $(document).ready(function() {
       $("#bodyarea").wysihtml5({
-              "stylesheets": ["css/wysiwyg-color.css"],
+          "stylesheets": ["css/wysiwyg-color.css"],
+          "toolbar": {
               "blockquote": false,
               "image": false,
               "color": true,
               "lists": false,
               "html": true,
               "fa": true,
+          }
       });
     });
     $(document).on("keypress", ":input:not(textarea)", function(event) {
@@ -59,7 +61,7 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
         var tok = btn.closest(".token").remove();
     }
     </script>
-    <script src="js/bootstrap3-wysihtml5.all.min.js"</script>';
+    <script src="js/bootstrap3-wysihtml5.all.js"</script>';
 
 function getToBar($recipients = null, $subject = null, $mailbody = null) {
     $html = '<form id="mail" method="post" action="" data-toggle="validator" role="form"><div class="col-xs-12">
