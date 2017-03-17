@@ -97,7 +97,7 @@ class Page {
             <link rel="icon" href="img/spacemail_sq.png" type="image/png">
             <link rel="shortcut icon" href="img/spacemail_sq.png" type="image/png">
             '.$this->getCSS().'
-            <link rel="stylesheet" href="css/custom.css" type="text/css"> 
+            <link rel="stylesheet" href="css/custom.min.css" type="text/css"> 
             <title>Spacemail: '.$this->title.'</title>
             '.$this->header.'
         </head>
