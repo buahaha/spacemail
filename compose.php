@@ -20,7 +20,7 @@ if (isset($_SESSION['characterID'])) {
 
 if (!isset($_SESSION['characterID']) || !$scopesOK) {
   $page = new Page('Login required');
-  $html = "<div class='col-xs-12'><br/>You need to log in with your EVE account to acces your mails. We do NOT get your account credentials. To Login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php?page=".rawurlencode("compose.php?".URL::getQueryString())."'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know, what we use your API information for, please red our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
+  $html = "<div class='col-xs-12'><br/>You need to log in with your EVE account to acces your mails. We do NOT get your account credentials. The login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php?page=".rawurlencode("compose.php?".URL::getQueryString())."'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know what we use your API information for, please read our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
   $page->addBody($html);
   $page->display();
   exit;
@@ -60,10 +60,16 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
     function delrecipient(btn) {
         var tok = btn.closest(".token").remove();
     }
+    function addml(link) {
+        a = $(link);
+        var id = a.attr("id");
+        var name = a.text();
+        $( "#recipients" ).append(\'<div class="token btn-sm bg-primary"><input type="hidden" name="rec[\'+id+\'][cat]" value="mailing_list"></input><input type="hidden" name="rec[\'+id+\'][name]" value="\'+name+\'"></input>\'+name+\'&nbsp;<span class="btn btn-xs glyphicon glyphicon-remove" onclick="delrecipient(this)"></span></div>\' );
+    }
     </script>
     <script src="js/bs-wysiwyg.all.min.js"</script>';
 
-function getToBar($recipients = null, $subject = null, $mailbody = null) {
+function getToBar($recipients = null, $subject = null, $mailbody = null, $lists = array()) {
     $html = '<form id="mail" method="post" action="" data-toggle="validator" role="form"><div class="col-xs-12">
         <div class="form-group col-xs-12 col-md-10 col-lg-8">
             <label for="recipients">To:</label>
@@ -78,8 +84,21 @@ function getToBar($recipients = null, $subject = null, $mailbody = null) {
         </div>
         <div class="form-group col-xs-12 col-md-8 col-lg-5">
            <input id="inv-name" type="text" class="typeahead form-control" placeholder="Search mail recipients...">
-        </div>
-        <div class="col-xs-12" style="height: 20px;"></div>
+        </div>';
+    if(count($lists)) {
+        $html .= '<div class="form-group col-xs-12 col-md-2 col-lg-3">
+                    <div class="dropdown pull-right">
+                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Mailing lists
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu">';
+        foreach($lists as $id => $ml) {
+            $html .= '  <li><a href="#" id="'.$id.'" onclick="addml(this); return false;">'.$ml.'</a></li>';
+        }
+        $html .= '    </ul>
+                    </div>
+                  </div>';
+    }   
+    $html .= '<div class="col-xs-12" style="height: 20px;"></div>
         <div class="form-group col-xs-12 col-md-10 col-lg-8">
             <label for="subject">Subject:</label>
             <input type="text" class="form-control" name="subject" required value="'.$subject.'"></input>
@@ -203,7 +222,7 @@ if (isset($_POST['submit'])) {
 }
 
 $page->addHeader('<link href="css/typeaheadjs.css" rel="stylesheet">');
-$page->addBody(getToBar($recipients, $subject, $mailbody));
+$page->addBody(getToBar($recipients, $subject, $mailbody, $esimail->getMailingLists()));
 $page->addFooter($footer);
 $page->setBuildTime(number_format(microtime(true) - $start_time, 3));
 $page->display("true");
