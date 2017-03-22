@@ -83,7 +83,7 @@ class Page {
         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
         <head>
             <meta charset="utf-8"/>
-            <link rel="canonical" href="'.URL::url_path().'"/>
+            <link rel="canonical" href="'.URL::full_url().'"/>
             <meta name="og:site_name" content="Spacemail">
             <meta name="description" content="An EVE Online out-of-game mail client.">
             <meta name="og:description" content="An EVE Online out-of-game mail client.">
@@ -97,7 +97,7 @@ class Page {
             <link rel="icon" href="img/spacemail_sq.png" type="image/png">
             <link rel="shortcut icon" href="img/spacemail_sq.png" type="image/png">
             '.$this->getCSS().'
-            <link rel="stylesheet" href="css/custom.min.css" type="text/css"> 
+            <link rel="stylesheet" href="css/custom.css" type="text/css"> 
             <title>Spacemail: '.$this->title.'</title>
             '.$this->header.'
         </head>

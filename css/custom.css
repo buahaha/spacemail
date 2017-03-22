@@ -93,10 +93,11 @@ body {
   margin-right: 4px;
 }
 
-.badge {
-  float: left;
+.badge-unread {
+  position: absolute;
+  float: right;
   font-size: 9px;
-  margin-top: -5px;
+  margin-top: -3px;
 }
 
 .col-form-label {

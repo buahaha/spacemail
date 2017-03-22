@@ -8,7 +8,7 @@ require_once('loadclasses.php');
 function mailsPage($esimail) {
     $table = '<div class="row"><div class="col-sm-12 col-md-2 col-lg-1">';
     $labels = $esimail->getMailLabels();
-    $labels['0'] = 'others';
+    $labels['0'] = array('name' => 'others', 'unread' => 0);
     $table .= '<ul class="nav nav-pills nav-stacked">';
         if (null == URL::getQ('label')) {
             if($labels) {
@@ -20,7 +20,7 @@ function mailsPage($esimail) {
             $l = URL::getQ('label');
         }
         foreach ((array)$labels as $k => $label) {
-            $table .= '<li'.($l==$k?' class="active"':'').'><a style="padding: 7px 7px;" href="index.php?p=mail&label='.$k.'" onclick="return loading()">'.str_replace(array("]", "["), "", $label).'</a></li>';
+            $table .= '<li'.($l==$k?' class="active"':'').'><a style="padding: 7px 7px;" href="index.php?p=mail&label='.$k.'" onclick="return loading()">'.str_replace(array("]", "["), "", $label['name']).($label['unread']?'<span class="badge badge-unread">'.$label['unread'].'</span>':'').'</a></li>';
         } 
     $table .= '</ul>';
     $table .= '</div><div class="col-sm-12 hidden-md hidden-lg" style="height: 20px"></div>

@@ -37,11 +37,10 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
     <script>
     $(document).ready(function() {
       $("#bodyarea").wysihtml5({
-          stylesheets : ["css/wysiwyg-color.css"],
           toolbar: {
               "blockquote": false,
               "image": false,
-              "color": true,
+              "color": false,
               "lists": false,
               "html": true,
               "fa": true,
@@ -61,7 +60,7 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
         var tok = btn.closest(".token").remove();
     }
     </script>
-    <script src="js/bs-wysiwyg.all.min.js"</script>';
+    <script src="js/bootstrap3-wysihtml5.all.js"</script>';
 
 function getToBar($recipients = null, $subject = null, $mailbody = null) {
     $html = '<form id="mail" method="post" action="" data-toggle="validator" role="form"><div class="col-xs-12">
@@ -114,16 +113,6 @@ function idToCategory($id, $dict) {
   }
 }
 
-function outColors($html) {
-    return preg_replace('/(class="wysiwyg-color-)([a-zA-Z]*)"/i', 'color="$2"', $html);
-}
-
-function inColors($html) {
-    return preg_replace('/(color=")([a-zA-Z]*)"/i', 'class="wysiwyg-color-$2"', $html);
-}
-
-
-
 $recipients = array();
 $subject = null;
 $mailbody = null;
@@ -141,7 +130,7 @@ if(isset($_POST['cancel'])) {
 if(!isset($_POST['submit']) && isset($_GET['action']) && isset($_GET['mid']) && ($_GET['action'] == 'fwd' || $_GET['action'] == 're' || $_GET['action'] == 'reall')) {
     $mail = $esimail->readMail($_GET['mid']);
     if($esimail->getError()) {
-        $page->setError($esimail->getMessage());
+        $page->setError($esisso->getMessage());
     } else {
         $ids = array($mail['from']);
         foreach ($mail['recipients'] as $r) {
@@ -156,7 +145,7 @@ if(!isset($_POST['submit']) && isset($_GET['action']) && isset($_GET['mid']) && 
                 $mail['recipients'][$i]['recipient_name'] = idToName($r['recipient_id'], $dict);
             }
         }
-        $mailbody .= '<br /><br />--------------------------------<br />'.$mail['subject'].'<br />Sent: '.date('Y/m/d H:i', strtotime($mail['timestamp'])).'<br />From: '.$mail['from_name'].'<br />To: '.implode(', ', array_column($mail['recipients'],'recipient_name')).'<br /><br />'.inColors(EVEHELPERS::mailparse($mail['body']));
+        $mailbody .= '<br /><br />--------------------------------<br />'.$mail['subject'].'<br />Sent: '.date('Y/m/d H:i', strtotime($mail['timestamp'])).'<br />From: '.$mail['from_name'].'<br />To: '.implode(', ', array_column($mail['recipients'],'recipient_name')).'<br /><br />'.EVEHELPERS::mailparse($mail['body']);
         if($_GET['action'] == 'fwd') {
             $subject = 'Fw: '.$mail['subject'];
         } else {
@@ -188,7 +177,7 @@ if (isset($_POST['submit'])) {
       foreach($recipients as $id => $rec) {
           $rec_ary[] = array('id' => $id, 'type' => $rec['cat']);
       }
-      $esimail->sendMail($rec_ary, htmlspecialchars($subject), preg_replace("/\r\n|\r|\n/", "<br />", outColors($mailbody)));
+      $esimail->sendMail($rec_ary, htmlspecialchars($subject), preg_replace("/\r\n|\r|\n/", "<br />", $mailbody));
       if($esimail->getError()) {
           $page->setError($esisso->getMessage());
       } else {

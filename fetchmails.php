@@ -25,7 +25,7 @@ if (!isset($_SESSION['characterID']) || !$scopesOK) {
 }
 
 $labels = $esimail->getMailLabels();
-$labels['0'] = 'others';
+$labels['0'] = array('name' => 'others', 'unread' => 0);
 
 if (null == URL::getQ('label')) {
     if($labels) {

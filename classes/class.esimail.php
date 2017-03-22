@@ -105,7 +105,7 @@ class ESIMAIL extends ESISSO
                 $labelfetch = $mailapi->getCharactersCharacterIdMailLabels($this->characterID, 'tranquility');
                 $labels = array();
                 foreach ($labelfetch->getLabels() as $label) {
-                    $labels[$label->getLabelId()] = $label->getName();
+                    $labels[$label->getLabelId()] = array('name' => $label->getName(), 'unread' => $label->getUnreadCount());
                 }
             } catch (Exception $e) {
                 $this->error = true;
