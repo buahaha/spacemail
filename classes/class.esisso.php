@@ -197,14 +197,25 @@ class ESISSO
                             $this->log->error($this->message);
                             return false;
                         }
-                	$sql="INSERT into esisso (characterID,characterName,refreshToken,accessToken,expires,ownerHash,failcount,enabled) 
-                              VALUES ({$characterID},'{$characterName}','{$refreshToken}','{$accessToken}','{$expires}','{$ownerHash}',0,TRUE)";
-			$result = $qry->query($sql);
-                        if (!$result) {
+                	$stmt = $qry->prepare("INSERT into esisso (characterID,characterName,refreshToken,accessToken,expires,ownerHash,failcount,enabled) 
+                                               VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                        if ($stmt) {
+                            $stmt->bind_param('isssssii', $cid, $cn, $rt, $at, $exp, $oh, $fc, $en);
+                            $cid = $characterID;
+                            $cn = $characterName;
+                            $rt = $refreshToken;
+                            $at = $accessToken;
+                            $exp = $expires;
+                            $oh = $ownerHash;
+                            $ft = 0;
+                            $en = 1;
+			    $stmt->execute();
+                            if ($stmt->errno) {
 				$this->error = true;
-				$this->message = $qry->getErrorMsg();
+				$this->message = $stmt->error;
                                 $this->log->error($this->message);
 				return false;
+                            }
                         }
                         $this->message = 'SSO credentials succesfully added.';
 		} else {
