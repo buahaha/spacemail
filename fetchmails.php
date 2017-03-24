@@ -38,9 +38,9 @@ if (null == URL::getQ('label')) {
 }
 
 if ($l == 'none') {
-    $mails = $esimail->getMails(array(0), URL::getQ('lastid'), URL::getQ('pages'));
+    $mails = $esimail->getMails(array(0), URL::getQ('lastid'), URL::getQ('pages'), URL::getQ('mlist'));
 } else {
-    $mails = $esimail->getMails(array($l), URL::getQ('lastid'), URL::getQ('pages'));
+    $mails = $esimail->getMails(array($l), URL::getQ('lastid'), URL::getQ('pages'), URL::getQ('mlist'));
 }
 
 $deleted = array();

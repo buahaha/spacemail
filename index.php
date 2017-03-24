@@ -6,10 +6,10 @@ require_once('config.php');
 require_once('loadclasses.php');
 
 function mailsPage($esimail) {
-    $table = '<div class="row"><div class="col-sm-12 col-md-2 col-lg-1">';
+    $table = '<div class="row"><div class="col-sm-12 col-md-3 col-lg-2">';
     $labels = $esimail->getMailLabels();
-    $labels['0'] = array('name' => 'others', 'unread' => 0);
-    $table .= '<ul class="nav nav-pills nav-stacked">';
+    $table .= '<ul class="nav nav-pills nav-stacked">
+                   <li class="spacer hidden-xs"><em>Mail boxes:</em></li>';
         if (null == URL::getQ('label')) {
             if($labels) {
                 $l = array_keys($labels)[0];
@@ -19,12 +19,20 @@ function mailsPage($esimail) {
         } else {
             $l = URL::getQ('label');
         }
+        $ml = URL::getQ('mlist');
         foreach ((array)$labels as $k => $label) {
-            $table .= '<li'.($l==$k?' class="active"':'').'><a style="padding: 7px 7px;" href="index.php?p=mail&label='.$k.'" onclick="return loading()">'.str_replace(array("]", "["), "", $label['name']).($label['unread']?'<span class="badge badge-unread">'.$label['unread'].'</span>':'').'</a></li>';
-        } 
+            $table .= '<li'.($l==$k && null == $ml?' class="active"':'').'><a style="padding: 7px 7px;" href="index.php?p=mail&label='.$k.'" onclick="return loading()">'.str_replace(array("]", "["), "", $label['name']).($label['unread']?'<span class="badge badge-unread">'.$label['unread'].'</span>':'').'</a></li>';
+        }
+    $mlists =  $esimail->getMailingLists();
+    if (count($mlists)) {
+        $table .= '<li class="spacer hidden-xs" style="margin-top: 20px;"><em>Mailing lists:</em></li>';
+        foreach ($mlists as $id => $mlist) {
+            $table .= '<li'.($l==0 && $ml == $id?' class="active"':'').'><a style="padding: 7px 7px;" href="index.php?p=mail&label=0&mlist='.$id.'" onclick="return loading()">'.$mlist.'</a></li>';
+        }
+    } 
     $table .= '</ul>';
     $table .= '</div><div class="col-sm-12 hidden-md hidden-lg" style="height: 20px"></div>
-    <div class="col-sm-12 col-sm-10 col-lg-11">
+    <div class="col-sm-12 col-sm-9 col-lg-10">
     <table id="mailstable" class="jdatatable table responsive table-striped table-hover" cellspacing="0" width="100%">
       <thead>
           <th class="all">Time</th>';
@@ -43,6 +51,7 @@ function mailsPage($esimail) {
       $table .= '</thead></table></div></div>
       <script>
           var label = '.$l.';
+          var mlist = '.($ml == null?'null':$ml).';
           function readmail(link, isread) {
               var id = $(link).attr("id");
               var subject = $(link).text();
@@ -98,7 +107,7 @@ $footer = '<script>
           var pages;
           function getmore() {
               $.ajax({
-                  url: "fetchmails.php?label="+label+"&lastid="+lastid+"&pages="+pages,
+                  url: "fetchmails.php?label="+label+"&lastid="+lastid+"&pages="+pages+mlstring,
                   success: function(data) {
                       json = JSON.parse(data);
                       mtable.rows.add(json.data).draw();
@@ -117,15 +126,17 @@ $footer = '<script>
             } else {
                 var columns =  [{ "data": "date" },{ "data": "isread" },{ "data": "img" },{ "data": "from" },{ "data": "subject" },{ "data": "to" },{ "data": null,"defaultContent": "<a href=\"#\" title=\"Reply to\" onclick=\"replyrow(this)\"><i class=\"fa fa-reply\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" title=\"Forward mail\" onclick=\"fwdrow(this)\"><i class=\"fa fa-share\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" class=\"faa-parent animated-hover\" title=\"Delete mail\" onclick=\"deleterow(this)\"><i class=\"fa fa-trash faa-shake\" aria-hidden=\"true\"><\/i><\/a>", "width": "50px"}]
             }
-            if (label == 0) {
-                pages = 5 
+            if (mlist != undefined) {
+                pages = 5
+                mlstring = "&mlist="+mlist;
             } else {
                 pages = 1
+                mlstring = "";
             }
             mtable = $(".jdatatable").DataTable(
                {
                    "ajax": {
-                       "url": "fetchmails.php?label="+label+"&pages="+pages,
+                       "url": "fetchmails.php?label="+label+"&pages="+pages+mlstring,
                        "dataSrc": function ( json ) {
                            lastid = json.lastid;
                            getmore();

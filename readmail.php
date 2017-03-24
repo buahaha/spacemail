@@ -46,7 +46,20 @@ foreach ($mail['recipients'] as $r) {
   $ids[] = $r['recipient_id'];
 }
 $dict = EVEHELPERS::esiIdsToNames($ids);
-$mail['from_name'] = idToName($mail['from'], $dict);
+
+if (isset($dict[$mail['from']])) {
+    $mail['from_name'] = $dict[$mail['from']];
+} else {
+    if(!isset($mldict)) {
+        $mldict = $esimail->getMailingLists();
+    }
+    if (isset($mldict[$mail['from']])) {
+        $mail['from_name'] = $mldict[$mail['from']];
+    } else {
+        $mail['from_name'] = 'Unknown';
+    }
+}
+
 foreach ($mail['recipients'] as $i=>$r) {
     if ($r['recipient_type'] == 'mailing_list') {
         if(!isset($mldict)) {

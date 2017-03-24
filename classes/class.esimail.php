@@ -104,6 +104,7 @@ class ESIMAIL extends ESISSO
             try {
                 $labelfetch = $mailapi->getCharactersCharacterIdMailLabels($this->characterID, 'tranquility');
                 $labels = array();
+                $labels[0] = array('name' => 'All', 'unread' => $labelfetch->getTotalUnreadCount());
                 foreach ($labelfetch->getLabels() as $label) {
                     $labels[$label->getLabelId()] = array('name' => $label->getName(), 'unread' => $label->getUnreadCount());
                 }
@@ -116,7 +117,7 @@ class ESIMAIL extends ESISSO
             return $labels;
         }
 
-        public function getMails($labels = null, $lastid = null, $pages = 4) {
+        public function getMails($labels = null, $lastid = null, $pages = 4, $mlist = null) {
             $mailapi = $this->getMailAPI();
             if ($labels == null) {
                 try {
@@ -160,7 +161,14 @@ class ESIMAIL extends ESISSO
                 if (isset($dict[$mail['from']])) {
                     $mails[$i]['from_name'] = $dict[$mail['from']];
                 } else {
-                    $mails[$i]['from_name'] = 'Unknown';
+                    if(!isset($mldict)) {
+                        $mldict = $this->getMailingLists();
+                    }
+                    if (isset($mldict[$mail['from']])) {
+                        $mails[$i]['from_name'] = $mldict[$mail['from']];
+                    } else {
+                        $mails[$i]['from_name'] = 'Unknown';
+                    }
                 }
                 foreach($mail['recipients'] as $j => $recipient) {
                     if ($recipient['recipient_type'] == 'mailing_list') {
@@ -179,10 +187,10 @@ class ESIMAIL extends ESISSO
                     }
                 }
             }
-            if (count($labels) == 1 && $labels[0] == 0) {
+            if (count($labels) == 1 && $labels[0] == 0 && $mlist != null) {
                 $reduced = array();
                 foreach ($mails as $mail) {
-                    if(!isset($mail['labels']) || !count($mail['labels']) ) {
+                    if(in_array($mlist, array_column($mail['recipients'],'recipient_id'))) {
                         $reduced[] = $mail;
                     }
                 }
