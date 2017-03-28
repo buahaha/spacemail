@@ -4,6 +4,8 @@ require_once('auth.php');
 require_once('config.php');
 require_once('loadclasses.php');
 
+$cachetime = 30;
+
 if (session_status() != PHP_SESSION_ACTIVE) {
   session_start();
 }
@@ -22,6 +24,21 @@ $data = array('data' => array(), 'lastid' => 0);
 if (!isset($_SESSION['characterID']) || !$scopesOK) {
   echo(json_encode($data));
   exit;
+}
+
+$deleted = array();
+$qry = DB::getConnection();
+$sql = "SELECT mailID FROM deleted_mails WHERE deleted >= '".date("Y-m-d H:i:s", time()-60)."' AND characterID=".$_SESSION['characterID'];
+$result = $qry->query($sql);
+while ($row = $result->fetch_assoc()) {
+    $deleted[] = $row['mailID'];
+}
+
+$cachefile = 'cache/mails/'.$_SESSION['characterID'].'_'.preg_replace('/[^A-Za-z0-9\-]/', '', URL::getQueryString()).'.json';
+if (file_exists($cachefile) && time() - $cachetime < filemtime($cachefile) && !count($deleted)) {
+    $response = file_get_contents($cachefile);
+    echo $response;
+    die();
 }
 
 $labels = $esimail->getMailLabels();
@@ -43,14 +60,6 @@ if ($l == 'none') {
     $mails = $esimail->getMails(array($l), URL::getQ('lastid'), URL::getQ('pages'), URL::getQ('mlist'));
 }
 
-$deleted = array();
-$qry = DB::getConnection();
-$sql = "SELECT mailID FROM deleted_mails WHERE deleted >= '".date("Y-m-d H:i:s", time()-60)."'";
-$result = $qry->query($sql);
-while ($row = $result->fetch_assoc()) {
-    $deleted[] = $row['mailID'];
-}
-
 foreach ((array)$mails as $mail) {
     if (in_array($mail['mail_id'], $deleted)) {
         continue;
@@ -70,6 +79,11 @@ foreach ((array)$mails as $mail) {
     $data['lastid'] = $mail['mail_id'];
 }
 
-echo(json_encode($data));
+$response = json_encode($data);
+if (count($data['data'])) {
+    file_put_contents($cachefile, $response, LOCK_EX);
+}
+
+echo($response);
 
 ?>

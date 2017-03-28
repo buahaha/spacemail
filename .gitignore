@@ -11,3 +11,5 @@ config.php
 !/cache/.htaccess
 /cache/pages/*
 !/cache/pages/.gitkeep
+/cache/mails/*
+!/cache/mails/.gitkeep

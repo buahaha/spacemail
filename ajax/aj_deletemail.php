@@ -14,7 +14,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest') {
         $esimail = new ESIMAIL($_SESSION['characterID']);
         if($esimail->deleteMail($_POST['id'])) {
           $qry = DB::getConnection();
-          $sql = "REPLACE INTO deleted_mails (mailID) VALUES (".$_POST['id'].")";
+          $sql = "REPLACE INTO deleted_mails (mailID, characterID) VALUES (".$_POST['id'].", ".$_SESSION['characterID'].")";
           $result = $qry->query($sql);
           echo('true');
           exit;
