@@ -3,8 +3,7 @@
 require_once('config.php');
 require_once('loadclasses.php');
 
-unset($_SESSION['characterID']);
-unset($_SESSION['characterName']);
+$_SESSION = array();
 session_destroy();
 $path = URL::path_only();
 $server = URL::server();

@@ -27,6 +27,10 @@ footer .container .text-muted {
   margin: 10px 0;
 }
 
+.tiny {
+  font-size: 10px;
+}
+
 @media (min-width: 768px) {
   .panel {
     margin-bottom: 10px;
@@ -135,8 +139,9 @@ img.mod-column {
   display: inline-block;
   position: relative;
   width: 13%;
-  box-shadow: 0 0 3px #000000 !important;
-  margin: 4px;
+  box-shadow: none !important;
+  margin: 2px;
+  vertical-align: top;
 }
 
 .cal-cell .panel-heading {
@@ -145,8 +150,17 @@ img.mod-column {
 
 .cal-cell .panel-body {
   min-height: 50px;
+  padding: 4px;
 }
 
+.cal-event {
+  float: left;
+}
+
+@media (max-width: 767px) {
+  .cal-row {padding: 0;}
+  .cal-cell{margin: 1px 0; width: 14.2%;}
+}
 
 .carousel-inner img {
   margin: auto;

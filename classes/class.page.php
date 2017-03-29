@@ -24,6 +24,7 @@ class Page {
             $this->addMenuItem('<span class="glyphicon glyphicon-user"></span> Login', 'login.php');
         } else {
             $this->addMenuItem('<span class="glyphicon glyphicon-envelope"></span> New Mail', 'compose.php');
+            $this->addMenuItem('<span class="glyphicon glyphicon-calendar"></span> Calendar', 'calendar.php');
         }
         if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']) {
             $this->addMenuItem('<span class="glyphicon glyphicon-king"></span> Admin panel', 'admin.php');
