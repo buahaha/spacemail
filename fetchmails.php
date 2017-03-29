@@ -65,7 +65,7 @@ foreach ((array)$mails as $mail) {
         continue;
     }
     $temp = array();
-    $temp['date'] = date('y/m/d H:i', strtotime($mail['timestamp']));
+    $temp['date'] = gmdate('y/m/d H:i', strtotime($mail['timestamp']));
     $temp['isread'] = '<i class="fa fa-envelope'.($mail['is_read']?'-open':'').'-o" aria-hidden="true"></i>';
     $temp['img'] = '<img height="24px" src="https://imageserver.eveonline.com/Character/'.$mail['from'].'_32.jpg">';
     $temp['from'] = '<span class="evechar" eveid="'.$mail['from'].'">'.$mail['from_name'].'<span>';

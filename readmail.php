@@ -87,8 +87,8 @@ $html = '<div class="row" style="display: none"><div class="col-xs-12"><span cla
              <a style="margin: 0 2px;" class="btn btn-primary btn-xs" href="#" title="Delete mail" onclick="deletemail('.$mailID.')"><i class="fa fa-trash" aria-hidden="true"></i></a>
            </div></div>
            <div class="well well-sm"><div class="row">
-             <div class="col-xs-4 col-md-2 col-lg-1">Date: </div><div class="col-xs-8 col-md-9 col-lg-11">'.date('Y/m/d', strtotime($mail['timestamp'])).'</div>
-             <div class="col-xs-4 col-md-2 col-lg-1">Time: </div><div class="col-xs-8 col-md-9 col-lg-11">'.date('H:i', strtotime($mail['timestamp'])).'</div>
+             <div class="col-xs-4 col-md-2 col-lg-1">Date: </div><div class="col-xs-8 col-md-9 col-lg-11">'.gmdate('Y/m/d', strtotime($mail['timestamp'])).'</div>
+             <div class="col-xs-4 col-md-2 col-lg-1">Time: </div><div class="col-xs-8 col-md-9 col-lg-11">'.gmdate('H:i', strtotime($mail['timestamp'])).'</div>
              <div class="col-xs-4 col-md-2 col-lg-1">From: </div><div class="col-xs-8 col-md-9 col-lg-11"><span class="evechar" eveid="'.$mail['from'].'">'.$mail['from_name'].'</span></div>
              <div class="col-xs-4 col-md-2 col-lg-1">to: </div><div class="col-xs-8 col-md-9 col-lg-11">'.implode(', ', $recarray).'</div>
            </div></div>

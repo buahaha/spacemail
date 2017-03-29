@@ -175,7 +175,7 @@ if(!isset($_POST['submit']) && isset($_GET['action']) && isset($_GET['mid']) && 
                 $mail['recipients'][$i]['recipient_name'] = idToName($r['recipient_id'], $dict);
             }
         }
-        $mailbody .= '<br /><br />--------------------------------<br />'.$mail['subject'].'<br />Sent: '.date('Y/m/d H:i', strtotime($mail['timestamp'])).'<br />From: '.$mail['from_name'].'<br />To: '.implode(', ', array_column($mail['recipients'],'recipient_name')).'<br /><br />'.inColors(EVEHELPERS::mailparse($mail['body']));
+        $mailbody .= '<br /><br />--------------------------------<br />'.$mail['subject'].'<br />Sent: '.gmdate('Y/m/d H:i', strtotime($mail['timestamp'])).'<br />From: '.$mail['from_name'].'<br />To: '.implode(', ', array_column($mail['recipients'],'recipient_name')).'<br /><br />'.inColors(EVEHELPERS::mailparse($mail['body']));
         if($_GET['action'] == 'fwd') {
             $subject = 'Fw: '.$mail['subject'];
         } else {

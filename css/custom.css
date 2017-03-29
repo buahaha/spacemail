@@ -22,7 +22,7 @@ body {
 -------------------------------------------------- */
 /* Not required for template or sticky footer method. */
 
-.container .text-muted {
+footer .container .text-muted {
   font-size: 10px;
   margin: 10px 0;
 }
@@ -124,6 +124,29 @@ body {
 img.mod-column {
   height: 20px;
 }
+
+.cal-row {
+  width: 100%;
+  margin: 0 auto;
+  padding: 2px;
+}
+
+.cal-cell {
+  display: inline-block;
+  position: relative;
+  width: 13%;
+  box-shadow: 0 0 3px #000000 !important;
+  margin: 4px;
+}
+
+.cal-cell .panel-heading {
+  padding: 2px 3px;
+}
+
+.cal-cell .panel-body {
+  min-height: 50px;
+}
+
 
 .carousel-inner img {
   margin: auto;
