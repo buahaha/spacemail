@@ -11,8 +11,8 @@ function mailsPage($esimail) {
     $table .= '<ul class="nav nav-pills nav-stacked">
                    <li class="spacer hidden-xs"><em>Mail boxes:</em></li>';
         if (null == URL::getQ('label')) {
-            if($labels) {
-                $l = array_keys($labels)[0];
+            if($labels && isset($labels[1])) {
+                $l = array_keys($labels)[1];
             } else {
                 $l = null;
             }

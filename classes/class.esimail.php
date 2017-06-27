@@ -158,6 +158,9 @@ class ESIMAIL extends ESISSO
             }
             $dict = EVEHELPERS::esiIdsToNames($ids);
             foreach ($mails as $i => $mail) {
+                if (!isset($mail['is_read'])) {
+                    $mails[$i]['is_read'] = false;
+                }
                 if (isset($dict[$mail['from']])) {
                     $mails[$i]['from_name'] = $dict[$mail['from']];
                 } else {

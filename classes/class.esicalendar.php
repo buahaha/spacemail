@@ -45,11 +45,25 @@ class ESICALENDAR extends ESISSO
                 } while (count($calfetch));
             } catch (Exception $e) {
                 $this->error = true;
-                $this->message = 'Could not retrieve Mails: '.$e->getMessage().PHP_EOL;
+                $this->message = 'Could not retrieve Calendar Events: '.$e->getMessage().PHP_EOL;
                 $this->log->exception($e);
                 return null;
             }
             return $events;
+        }
+
+        public function getEvent($eventID) {
+            $calendarapi = $this-> getCalendarApi();
+            $event = array();
+            try {
+                $event = json_decode($calendarapi->getCharactersCharacterIdCalendarEventId($this->characterID, $eventID, 'tranquility'), true);
+            } catch (Exception $e) {
+                $this->error = true;
+                $this->message = 'Could not retrieve Calendar Event: '.$e->getMessage().PHP_EOL;
+                $this->log->exception($e);
+                return null;
+            }
+            return $event;
         }
 
 }

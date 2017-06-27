@@ -35,7 +35,7 @@ function calPage($esicalendar) {
                              $evdate = new DateTime($event['event_date']);
                              //print $evdate->format('Ymd');
                              if ($evdate->format('Ymd') == $dto->format('Ymd')) {
-                                 $cal .= '<span class="cal-event" title="'.$event['title'].'">';
+                                 $cal .= '<a href="#" id="'.$event['event_id'].'" onclick="viewevent(this);" class="cal-event" title="'.$event['title'].'">';
                                  if ($event['event_response'] == 'accepted') {
                                      $cal .= '<span class="glyphicon glyphicon-ok-sign text-success" title="'.str_replace('_', ' ', $event['event_response']).'">&nbsp;</span>';
                                  } elseif ($event['event_response'] == 'declined') {
@@ -46,7 +46,7 @@ function calPage($esicalendar) {
                                      $cal .= '<span class="glyphicon glyphicon-stop" title="'.str_replace('_', ' ', $event['event_response']).'">&nbsp;</span>';
                                  }
                                  ($event['importance']?$cal .='<span class="text-danger"><b>!</b>&nbsp;</span>':'');
-                                 $cal .= $evdate->format('h:i').'<span class="hidden-xs">&nbsp;'.$event['title'].'</span></span><br />';
+                                 $cal .= $evdate->format('h:i').'<span class="hidden-xs"> '.$event['title'].'</span></a><br />';
                              } elseif ($evdate->format('m') > $dto->format('m')+1) {
                                  continue;
                              }
@@ -66,7 +66,28 @@ function calPage($esicalendar) {
             <li><a href="calendar.php?y='.($m==1?$y-1:$y).'&m='.($m==1?12:$m-1).'"><span class="glyphicon glyphicon-chevron-left"></span>Previous month</a></li>
             <li><a href="calendar.php?y='.($m==12?$y+1:$y).'&m='.($m==12?1:$m+1).'">Next month<span class="glyphicon glyphicon-chevron-right"></span></a></li>
         </ul>
-    </div></div>';
+    </div></div>
+    <script>
+        function viewevent(link) {
+            var id = $(link).attr("id");
+            var subject = $(link).attr("title");
+            var dialog = new BootstrapDialog(
+                {message: "Fetching event...</br><center><i class=\"fa fa-spinner fa-pulse fa-3x fa-fw\"></i></center>",
+                title: subject,
+                buttons: [{
+                    label: "Close",
+                    action: function(dialogRef) {
+                        dialogRef.close();
+                    }
+                }],});
+            dialog.open();
+            console.log(id);
+            console.log('.$esicalendar->getCharacterID().');
+            $.get("readevent.php?eid="+id+"&cid='.$esicalendar->getCharacterID().'", function(data, status){
+                dialog.setMessage(data);
+            });
+        }
+    </script>';
     return $cal;
 }
 
