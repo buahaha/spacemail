@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **position** | [**\Swagger\Client\Model\GetUniverseSystemsSystemIdOkPosition**](GetUniverseSystemsSystemIdOkPosition.md) |  | [optional] 
 **security_class** | **string** | security_class string | [optional] 
 **security_status** | **float** | security_status number | 
+**star_id** | **int** | star_id integer | 
 **stargates** | **int[]** | stargates array | 
 **system_id** | **int** | system_id integer | 
 
