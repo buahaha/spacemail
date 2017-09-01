@@ -166,7 +166,7 @@ if(!isset($_POST['submit']) && isset($_GET['action']) && isset($_GET['mid']) && 
         foreach ($mail['recipients'] as $r) {
             $ids[] = $r['recipient_id'];
         }
-        $dict = EVEHELPERS::esiIdsLookup($ids);
+        $dict = EVEHELPERS::esiMailIdsLookup($ids);
         $mail['from_name'] = idToName($mail['from'], $dict);
         foreach ($mail['recipients'] as $i=>$r) {
             if ($r['recipient_type'] == 'mailing_list') {
@@ -209,7 +209,7 @@ if (isset($_POST['submit'])) {
       }
       $esimail->sendMail($rec_ary, htmlspecialchars($subject), preg_replace("/\r\n|\r|\n/", "<br />", outColors($mailbody)));
       if($esimail->getError()) {
-          $page->setError($esisso->getMessage());
+          $page->setError($esimail->getMessage());
       } else {
           $page = new Page('Done.');
           $page->addHeader('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

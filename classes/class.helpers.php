@@ -4,6 +4,7 @@ include_once('config.php');
 use Swagger\Client\Api\UniverseApi;
 use Swagger\Client\Api\CorporationApi;
 use Swagger\Client\Api\AllianceApi;
+use Swagger\Client\Api\CharacterApi;
 
 class EVEHELPERS {
 
@@ -162,6 +163,77 @@ class EVEHELPERS {
         $dict = array();
         foreach($results as $r) {
             $dict[$r->getId()] = $r->getName();
+        }
+        return $dict;
+    }
+
+   public static function esiMailIdsToNames($mailids) {
+        $dict = array();
+        foreach($mailids as $cat => $ids) {
+            try {
+                $esiapi = new ESIAPI();
+                switch($cat) {
+                    case 'alliance': 
+                        $allianceapi = new AllianceApi($esiapi);
+                        $results = $allianceapi->getAlliancesNames($ids, 'tranquility');
+                        foreach($results as $result) {
+                            $dict[$result->getAllianceId()] = $result->getAllianceName();
+                        }           
+                        break;      
+                    case 'corporation':
+                        $corpapi = new CorporationApi($esiapi);
+                        $results = $corpapi->getCorporationsNames($ids, 'tranquility');
+                        foreach($results as $result) {
+                            $dict[$result->getCorporationId()] = $result->getCorporationName();
+                        }           
+                        break;      
+                    case 'character':
+                        $charapi = new CharacterApi($esiapi);
+                        $results = $charapi->getCharactersNames($ids, 'tranquility');
+                        foreach($results as $result) {
+                            $dict[$result->getCharacterId()] = $result->getCharacterName();
+                        }           
+                        break;      
+                }
+            } catch (Exception $e) {
+            }
+        }
+        return $dict;
+    }
+
+    public static function esiMailIdsLookup($ids) {
+        $lookup = array();
+        foreach($ids as $key=>$val) {
+            $lookup[$val] = true;
+        }
+        $dict = array();
+        $esiapi = new ESIAPI();
+        try {
+            if (count($lookup)) {
+                $charapi = new CharacterApi($esiapi);
+                $results = $charapi->getCharactersNames(array_keys($lookup), 'tranquility');
+                foreach($results as $result) {
+                    $dict[$result->getCharacterId()] = array('name' => $result->getCharacterName(), 'cat' => 'character');
+                    unset($lookup[$result->getCharacterId()]);
+                }
+            }
+            if (count($lookup)) {
+                $corpapi = new CorporationApi($esiapi);
+                $results = $corpapi->getCorporationsNames(array_keys($lookup), 'tranquility');
+                foreach($results as $result) {
+                    $dict[$result->getCorporationId()] = array('name' => $result->getCorporationName(), 'cat' => 'corporation');
+                    unset($lookup[$result->getCorporationId()]);
+                }
+            }
+            if (count($lookup)) {
+                $allianceapi = new AllianceApi($esiapi);
+                $results = $allianceapi->getAlliancesNames(array_keys($lookup), 'tranquility');
+                foreach($results as $result) {
+                    $dict[$result->getAllianceId()] = array('name' => $result->getAllianceName(), 'cat' => 'alliance');
+                    unset($lookup[$result->getCorporationId()]);
+                }
+            }
+        } catch (Exception $e) {
         }
         return $dict;
     }

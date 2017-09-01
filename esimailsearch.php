@@ -1,7 +1,9 @@
 <?php
 require_once('classes/class.esiapi.php');
 use Swagger\Client\ApiException;
-use Swagger\Client\Api\UniverseApi;
+use Swagger\Client\Api\AllianceApi;
+use Swagger\Client\Api\CorporationApi;
+use Swagger\Client\Api\CharacterApi;
 use Swagger\Client\Api\SearchApi;
 
 $cachetime = 600;
@@ -19,29 +21,43 @@ if (isset($_GET['q'])) {
         $searchapi = new SearchApi($esiapi);
         try {
             $tempids = json_decode($searchapi->getSearch(array('character', 'corporation', 'alliance'), $_GET['q'], 'tranquility', 'en-us', false), true);
-            $ids = array();
-            foreach ($tempids as $ary) {
-              $ids = array_merge($ids, $ary);
-            }
-            if (count($ids)) {
-                $universeapi = new UniverseApi($esiapi);
-                //$ids = new \Swagger\Client\Model\PostUniverseNamesIds(array('ids' => $charids['character']));
+            if (count($tempids)) {
                 $result_ary = array();
-                try {
-                    $results = $universeapi->postUniverseNames($ids, 'tranquility');
-                    foreach ($results as $result) {
-                        $result_ary[] = array('category' => $result->getCategory(), 'id' => $result->getId() , 'name' => $result->getName());
+                foreach($tempids as $cat => $ids) {
+                    try {
+                        switch($cat) {
+                            case 'alliance':
+                                $allianceapi = new AllianceApi($esiapi);
+                                $results = $allianceapi->getAlliancesNames($ids, 'tranquility');
+                                foreach($results as $result) {
+                                    $result_ary[] = array('category' => $cat, 'id' => $result->getAllianceId() , 'name' => $result->getAllianceName());
+                                }
+                                break;
+                            case 'corporation':
+                                $corpapi = new CorporationApi($esiapi);
+                                $results = $corpapi->getCorporationsNames($ids, 'tranquility');
+                                foreach($results as $result) {
+                                    $result_ary[] = array('category' => $cat, 'id' => $result->getCorporationId() , 'name' => $result->getCorporationName());
+                                }
+                                break;
+                            case 'character':
+                                $charapi = new CharacterApi($esiapi);
+                                $results = $charapi->getCharactersNames($ids, 'tranquility');
+                                foreach($results as $result) {
+                                    $result_ary[] = array('category' => $cat, 'id' => $result->getCharacterId() , 'name' => $result->getCharacterName());
+                                }
+                                break;
+                        }
+                    } catch (Exception $e) {
+                        print $e->getMessage();
+                        echo('{}');
+                        die();
                     }
-                    
                     for($i=0; $i<count($result_ary); $i++) {
-                       $temp_arr[levenshtein($_GET['q'], $result_ary[$i]['name'])] = $result_ary[$i];
+                        $temp_arr[levenshtein($_GET['q'], $result_ary[$i]['name'])] = $result_ary[$i];
                     }
                     ksort($temp_arr);
                     $response = json_encode(array_values($temp_arr));
-                } catch (Exception $e) {
-                    print $e->getMessage();
-                    echo('{}');
-                    die();
                 }
                 header('Content-type: application/json');
                 echo $response;

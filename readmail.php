@@ -41,11 +41,17 @@ if ($esimail->getError()) {
     }
 }
 $body = $mail['body'];
-$ids = array($mail['from']);
-foreach ($mail['recipients'] as $r) {
-  $ids[] = $r['recipient_id'];
+
+$mailids = array();
+$mailids['alliance'] = array();
+$mailids['corporation'] = array();
+$mailids['character'] = array();
+$mailids['mailing_list'] = array();
+$mailids['character'][]=$mail['from'];
+foreach($mail['recipients'] as $recipient) {
+    $mailids[$recipient['recipient_type']][]=$recipient['recipient_id'];
 }
-$dict = EVEHELPERS::esiIdsToNames($ids);
+$dict = EVEHELPERS::esiMailIdsToNames($mailids);
 
 if (isset($dict[$mail['from']])) {
     $mail['from_name'] = $dict[$mail['from']];

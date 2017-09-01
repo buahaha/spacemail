@@ -7,6 +7,9 @@ use Swagger\Client\ApiClient;
 use Swagger\Client\Configuration;
 use Swagger\Client\ApiException;
 use Swagger\Client\Api\MailApi;
+use Swagger\Client\Api\AllianceApi;
+use Swagger\Client\Api\CorporationApi;
+use Swagger\Client\Api\CharacterApi;
 
 require_once('classes/esi/autoload.php');
 require_once('classes/class.esisso.php');
@@ -149,14 +152,19 @@ class ESIMAIL extends ESISSO
             if (!count($mails)) {
                 return null;
             }
-            $ids = array();
+            $mailids = array();
+            $mailids['alliance'] = array();
+            $mailids['corporation'] = array();
+            $mailids['character'] = array();
+            $mailids['mailing_list'] = array();
             foreach ($mails as $mail) {
-                $ids[]=$mail['from'];
+                $mailids['character'][]=$mail['from'];
                 foreach($mail['recipients'] as $recipient) {
-                    $ids[]=$recipient['recipient_id'];
+                    $mailids[$recipient['recipient_type']][]=$recipient['recipient_id'];
                 }
             }
-            $dict = EVEHELPERS::esiIdsToNames($ids);
+            $dict = EVEHELPERS::esiMailIdsToNames($mailids);
+            
             foreach ($mails as $i => $mail) {
                 if (!isset($mail['is_read'])) {
                     $mails[$i]['is_read'] = false;
