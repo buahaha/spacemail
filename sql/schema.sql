@@ -7,6 +7,11 @@ CREATE TABLE `authTokens` (
   `characterID` bigint(16) NOT NULL,
   `expires` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE `deleted_mails` (
+  `mailID` bigint(20) NOT NULL,
+  `deleted` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `characterID` bigint(16) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 CREATE TABLE `esisso` (
   `id` int(11) NOT NULL,
   `characterID` bigint(16) NOT NULL,
@@ -18,37 +23,17 @@ CREATE TABLE `esisso` (
   `failcount` int(11) DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `pilots` (
-  `characterID` bigint(16) NOT NULL,
-  `characterName` varchar(255) NOT NULL,
-  `locationID` bigint(16) NOT NULL,
-  `shipTypeID` int(11) NOT NULL,
-  `stationID` int(11) DEFAULT NULL,
-  `structureID` bigint(16) DEFAULT NULL,
-  `fitting` varchar(500) DEFAULT NULL,
-  `lastFetch` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-CREATE TABLE `structures` (
-  `solarSystemID` int(11) NOT NULL,
-  `structureID` bigint(16) NOT NULL,
-  `structureName` varchar(255) DEFAULT NULL,
-  `lastUpdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ALTER TABLE `authTokens`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `characterID` (`characterID`);
+ALTER TABLE `deleted_mails`
+  ADD PRIMARY KEY (`mailID`),
+  ADD UNIQUE KEY `mailid` (`mailID`);
 ALTER TABLE `esisso`
   ADD PRIMARY KEY (`characterID`),
   ADD UNIQUE KEY `id` (`id`),
   ADD UNIQUE KEY `characterID` (`characterID`);
-ALTER TABLE `pilots`
-  ADD PRIMARY KEY (`characterID`),
-  ADD UNIQUE KEY `characterID` (`characterID`);
-ALTER TABLE `structures`
-  ADD PRIMARY KEY (`structureID`),
-  ADD UNIQUE KEY `structureID` (`structureID`),
-  ADD KEY `structureID_2` (`structureID`);
 ALTER TABLE `authTokens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=186;
 ALTER TABLE `esisso`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
