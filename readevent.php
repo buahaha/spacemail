@@ -32,8 +32,13 @@ $eventID = $_GET['eid'];
 
 $esicalendar = new ESICALENDAR($characterID);
 $event = $esicalendar->getEvent($eventID);
+
+if (isset($_GET['rsvp'])) {
+    $event['response'] = $esicalendar->rsvpEvent($eventID, $_GET['rsvp']);
+}
+
 if ($esicalendar->getError()) {
-    echo('Error fetching event: '.$esimail->getMessage());
+    echo('Error fetching event: '.$esicalendar->getMessage());
     exit;
 } 
 
@@ -47,6 +52,12 @@ $html = '<div class="row" style="display: none"><div class="col-xs-12"><span cla
            <div class="well well-sm"><div class="row">
              <div class="col-xs-12"><p>'.EVEHELPERS::mailparse($event['text']).'</p></div>
            </div></div>
+           <div>
+               <button type="button" class="btn '.($event['response'] == 'not_responded'?'btn-info active disabled':'btn-default').' btn-xs">Not responded</button>
+               <button type="button" onclick="rsvp('.$eventID.', \'tentative\')" class="btn '.($event['response'] == 'tentative'?'btn-primary active disabled':'btn-default').' btn-xs">Tentative</button>
+               <button type="button" onclick="rsvp('.$eventID.', \'accepted\')" class="btn '.($event['response'] == 'accepted'?'btn-success active disabled':'btn-default').' btn-xs">Accepted</button>
+               <button type="button" onclick="rsvp('.$eventID.', \'declined\')" class="btn '.($event['response'] == 'declined'?'btn-danger active disabled':'btn-default').' btn-xs">Declined</button>
+           </div>
          </div>';
 echo(preg_replace( "/\r|\n/", "", $html));
 ?>

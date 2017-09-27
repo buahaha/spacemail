@@ -68,10 +68,11 @@ function calPage($esicalendar) {
         </ul>
     </div></div>
     <script>
+        var dialog;
         function viewevent(link) {
             var id = $(link).attr("id");
             var subject = $(link).attr("title");
-            var dialog = new BootstrapDialog(
+            dialog = new BootstrapDialog(
                 {message: "Fetching event...</br><center><i class=\"fa fa-spinner fa-pulse fa-3x fa-fw\"></i></center>",
                 title: subject,
                 buttons: [{
@@ -85,6 +86,14 @@ function calPage($esicalendar) {
             console.log('.$esicalendar->getCharacterID().');
             $.get("readevent.php?eid="+id+"&cid='.$esicalendar->getCharacterID().'", function(data, status){
                 dialog.setMessage(data);
+            });
+        }
+        function rsvp(id, response) {
+            $.ajax({
+                url: "readevent.php?eid="+id+"&cid='.$esicalendar->getCharacterID().'&rsvp="+response,
+                success: function(data) {
+                    dialog.setMessage(data);
+                }
             });
         }
     </script>';

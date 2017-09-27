@@ -66,4 +66,16 @@ class ESICALENDAR extends ESISSO
             return $event;
         }
 
+        public function rsvpEvent($eventID, $respond) {
+            $calendarapi = $this-> getCalendarApi();
+            try {
+                $calendarapi->putCharactersCharacterIdCalendarEventId($this->characterID, $eventID, ['response' => $respond], 'tranquility');
+            } catch (Exception $e) {
+                $this->error = true;
+                $this->message = 'Could not respond to Calendar Event: '.$e->getMessage().PHP_EOL;
+                $this->log->exception($e);
+                return null;
+            }
+            return $respond;
+        }
 }
