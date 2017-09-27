@@ -298,7 +298,7 @@ class Page {
             $notify = $_SESSION["notify"];
         } elseif (isset($_COOKIE["spacemailnotify"])) {
             $notify = $_COOKIE["spacemailnotify"];
-            $_SESSION["style"] = $style;
+            $_SESSION["notify"] = $notify;
         } else {
             $notify = false;
         }
