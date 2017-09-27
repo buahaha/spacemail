@@ -12,8 +12,19 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 if (isset($_POST["submit"])) {
   $path = URL::path_only();
   $server = URL::server();
+  if (!isset($_POST["reload"])) {
+      $_POST["reload"] = 0;
+  }
+  if (!isset($_POST["notify"])) {
+      $_POST["notify"] = 0;
+  }
   setcookie('spacemailstyle', $_POST["style"], strtotime("now")+3600*24*365, $path, $server, 0);
   $_SESSION['style'] = $_POST["style"];
+  setcookie('spacemailreload', $_POST["reload"], strtotime("now")+3600*24*365, $path, $server, 0);
+  $_SESSION['reload'] = $_POST["reload"];
+  setcookie('spacemailnotify', $_POST["notify"], strtotime("now")+3600*24*365, $path, $server, 0);
+  $_SESSION['notify'] = $_POST["notify"];
+
 }
 
 if (isset($_SESSION["style"])) {
@@ -24,6 +35,25 @@ if (isset($_SESSION["style"])) {
 } else {
     $style = "dark";
 }
+
+if (isset($_SESSION["reload"])) {
+    $reload = $_SESSION["reload"];
+} elseif (isset($_COOKIE["spacemailreload"])) {
+    $reload = $_COOKIE["spacemailreload"];
+    $_SESSION["reload"] = $reload;
+} else {
+    $reload = False;
+}
+
+if (isset($_SESSION["notify"])) {
+    $notify = $_SESSION["notify"];
+} elseif (isset($_COOKIE["spacemailnotify"])) {
+    $notify = $_COOKIE["spacemailnotify"];
+    $_SESSION["notify"] = $notify;
+} else {
+    $notify = False;
+}
+
 
 $html = '<div class="col-xs-12">
            <form id="prefs" role="form" action="" method="post">
@@ -37,8 +67,14 @@ $html = '<div class="col-xs-12">
                </div>
              </div>
              <div class="form-group col-xs-12">
-            <button type="submit" id="submit" class="btn btn-primary" value="submit" name="submit">Submit</button>
-          </div>
+                 <label class="checkbox-inline"><input type="checkbox" name="reload" value="1" '.($reload?'checked ':'').'>Auto reload mails</label>
+             </div>
+             <div class="form-group col-xs-12">
+                 <label class="checkbox-inline"><input type="checkbox" name="notify" value="1" '.($notify?'checked ':'').'>Recieve Desktop notifications</label>
+             </div>
+             <div class="form-group col-xs-12">
+                 <button type="submit" id="submit" class="btn btn-primary" value="submit" name="submit">Submit</button>
+             </div>
         </form></div>';
 
 $page = new Page('My Preferences');

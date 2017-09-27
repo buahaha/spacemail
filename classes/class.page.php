@@ -100,7 +100,7 @@ class Page {
             '.$this->getCSS().'
             <link rel="stylesheet" href="css/custom.css" type="text/css"> 
             <title>Spacemail: '.$this->title.'</title>
-            '.$this->header.'
+            '.$this->header.$this->getNotifier().'
         </head>
         <body>
 
@@ -292,4 +292,28 @@ class Page {
                 break;
         }
     }
+
+    private function getNotifier() {
+        if (isset($_SESSION["notify"])) {
+            $notify = $_SESSION["notify"];
+        } elseif (isset($_COOKIE["spacemailnotify"])) {
+            $notify = $_COOKIE["spacemailnotify"];
+            $_SESSION["style"] = $style;
+        } else {
+            $notify = false;
+        }
+        if ($notify) {
+            return "<script>document.addEventListener('DOMContentLoaded', function () {
+                        if (!Notification) {
+                            alert('Desktop notifications not supported by your browser.'); 
+                            return;
+                        }
+                        if (Notification.permission !== 'granted')
+                            Notification.requestPermission();
+                    });</script>";
+        } else {
+            return '';
+        }
+    }
+
 }

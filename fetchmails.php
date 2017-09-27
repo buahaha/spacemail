@@ -60,6 +60,8 @@ if ($l == 'none') {
     $mails = $esimail->getMails(array($l), URL::getQ('lastid'), URL::getQ('pages'), URL::getQ('mlist'));
 }
 
+$data['firstid'] = 0;
+$data['unread'] = 0;
 foreach ((array)$mails as $mail) {
     if (in_array($mail['mail_id'], $deleted)) {
         continue;
@@ -67,6 +69,7 @@ foreach ((array)$mails as $mail) {
     $temp = array();
     $temp['date'] = gmdate('y/m/d H:i', strtotime($mail['timestamp']));
     $temp['isread'] = '<i class="fa fa-envelope'.($mail['is_read']?'-open':'').'-o" aria-hidden="true"></i>';
+    ($mail['is_read']?'':$data['unread']+=1);
     $temp['img'] = '<img height="24px" src="https://imageserver.eveonline.com/Character/'.$mail['from'].'_32.jpg">';
     $temp['from'] = '<span class="evechar" eveid="'.$mail['from'].'">'.$mail['from_name'].'<span>';
     $recarray = array();
@@ -77,6 +80,7 @@ foreach ((array)$mails as $mail) {
     $temp['subject'] = '<a href="#" id="'.$mail['mail_id'].'" onclick="readmail(this, '.($mail['is_read']?'1':'0').'); return false;">'.$mail['subject'].'</a>';
     $data['data'][] = $temp;
     $data['lastid'] = $mail['mail_id'];
+    (($mail['mail_id'] > $data['firstid'] && $mail['from'] != $_SESSION['characterID'])? $data['firstid'] = $mail['mail_id']:'');
 }
 
 $response = json_encode($data);

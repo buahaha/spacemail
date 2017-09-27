@@ -5,8 +5,36 @@ require_once('auth.php');
 require_once('config.php');
 require_once('loadclasses.php');
 
+function getMailBoxes($esimail) {
+    $labels = $esimail->getMailLabels();
+    $table = '<ul class="nav nav-pills nav-stacked">
+                   <li class="spacer hidden-xs"><em>Mail boxes:</em></li>';
+        if (null == URL::getQ('label')) {
+            if($labels && isset($labels[1])) {
+                $l = array_keys($labels)[1];
+            } else {
+                $l = null;
+            }
+        } else {
+            $l = URL::getQ('label');
+        }
+        $ml = URL::getQ('mlist');
+        foreach ((array)$labels as $k => $label) {
+            $table .= '<li'.($l==$k && null == $ml?' class="active"':'').'><a style="padding: 7px 7px;" href="index.php?p=mail&label='.$k.'" onclick="return loading()">'.str_replace(array("]", "["), "", $label['name']).($label['unread']?'<span class="badge badge-unread">'.$label['unread'].'</span>':'').'</a></li>';
+        }
+    $mlists =  $esimail->getMailingLists();
+    if (count($mlists)) {
+        $table .= '<li class="spacer hidden-xs" style="margin-top: 20px;"><em>Mailing lists:</em></li>';
+        foreach ($mlists as $id => $mlist) {
+            $table .= '<li'.($l==0 && $ml == $id?' class="active"':'').'><a style="padding: 7px 7px;" href="index.php?p=mail&label=0&mlist='.$id.'" onclick="return loading()">'.$mlist.'</a></li>';
+        }
+    }
+    $table .= '</ul>';
+    return $table;
+}
+
 function mailsPage($esimail) {
-    $table = '<div class="row"><div class="col-sm-12 col-md-3 col-lg-2">';
+    $table = '<div class="row"><div class="col-sm-12 col-md-3 col-lg-2" id="mailboxes">';
     $labels = $esimail->getMailLabels();
     $table .= '<ul class="nav nav-pills nav-stacked">
                    <li class="spacer hidden-xs"><em>Mail boxes:</em></li>';
@@ -105,7 +133,35 @@ $footer = '<script>
           var lastid;
           var mtable;
           var pages;
-          function getmore() {
+          var newest;';
+if (isset($_SESSION["reload"])) {
+    $reload = $_SESSION["reload"];
+} elseif (isset($_COOKIE["spacemailreload"])) {
+    $reload = $_COOKIE["spacemailreload"];
+    $_SESSION["reload"] = $reload;
+} else {
+    $reload = false;
+}
+if ($reload) {
+    $footer .= '          var reload = true;';
+} else {
+    $footer .= '          var reload = false;';
+}
+if (isset($_SESSION["notify"])) {
+    $notify = $_SESSION["notify"];
+} elseif (isset($_COOKIE["spacemailnotify"])) {
+    $notify = $_COOKIE["spacemailnotify"];
+    $_SESSION["notify"] = $notify;
+} else {
+    $notify = false;
+}
+if ($notify) {
+    $footer .= '          var notify = true;';
+} else {
+    $footer .= '          var notify = false;';
+}
+
+$footer .= '          function getmore() {
               $.ajax({
                   url: "fetchmails.php?label="+label+"&lastid="+lastid+"&pages="+pages+mlstring,
                   success: function(data) {
@@ -139,6 +195,16 @@ $footer = '<script>
                        "url": "fetchmails.php?label="+label+"&pages="+pages+mlstring,
                        "dataSrc": function ( json ) {
                            lastid = json.lastid;
+                           if (label == 0) {
+                               newest = json.firstid;
+                           } else if (reload) {
+                               $.ajax({
+                                   url: "fetchmails.php?label=0",
+                                   success: function(data) {
+                                       newest = JSON.parse(data).firstid;
+                                   }
+                               });
+                           }
                            getmore();
                            return json.data;
                        },
@@ -209,6 +275,46 @@ $footer = '<script>
              var id = trow.find("a").first().attr("id");
              window.location = "compose.php?action=re&mid="+id;
          }
+         function doReload() {
+             if (newest) {
+                 $.ajax({
+                     url: "fetchmails.php?label=0",
+                     success: function(data) {
+                         json2 = JSON.parse(data);
+                         new_newest = json2.firstid;
+                         unread = json2.unread;
+                         if (new_newest > newest) {
+                             newest = new_newest;
+                             if (notify) {
+                                 if (Notification.permission !== "granted")
+                                     Notification.requestPermission();
+                                 else {
+                                     var notification = new Notification("You got EVE mail!", {
+                                         icon: "https://spacemail.tk/img/spacemail.png",
+                                         body: "You got mail. Currently you have unread "+unread+" mails.",
+                                     });
+                                 }
+                             }
+                             if (reload) {
+                                 mtable.ajax.reload()
+                                 $.ajax({
+                                     url: "index.php?p=mail&label="+label+"&mailboxes_only=1",
+                                     success: function(data) {
+                                         $("#mailboxes").html(data);
+                                     }
+                                 });
+                             }
+                         }
+                     }
+                 });
+                 if (reload || notify) {
+                     setTimeout(doReload, 180000);
+                 }
+             }
+         }
+         if (reload || notify) {
+             setTimeout(doReload, 180000);    
+         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/css/dataTables.bootstrap.min.css" rel="stylesheet"/>
@@ -223,6 +329,11 @@ $footer = '<script>
     <script src="js/bootstrap-dialog.min.js"></script>
     <link href="css/bootstrap-dialog.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.0.10/font-awesome-animation.min.css" integrity="sha256-C4J6NW3obn7eEgdECI2D1pMBTve41JFWQs0UTboJSTg=" crossorigin="anonymous" />';
+
+if (true == URL::getQ('mailboxes_only')) {
+    echo getMailBoxes($esimail);
+    die;
+}
 
 $page = new Page($esimail->getCharacterName().'\'s mailbox');
 
