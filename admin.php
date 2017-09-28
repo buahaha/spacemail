@@ -51,10 +51,7 @@ while (!feof($handle)) {
 }
 fclose($handle);
 
-$myfile = 'log/esi.log';
-$command = "tac $myfile > /tmp/esilogreversed.txt";
-exec($command);
-$handle = fopen("/tmp/esilogreversed.txt", "r");
+$handle = fopen("log/esi.log", "r");
 $logtext = [];
 while (!feof($handle)) {
    $temp = [];
@@ -68,6 +65,7 @@ while (!feof($handle)) {
    }
 }
 fclose($handle);
+array_reverse($logtext);
 
 
 $fi = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('cache/'), RecursiveIteratorIterator::SELF_FIRST);
