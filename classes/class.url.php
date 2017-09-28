@@ -32,6 +32,12 @@ class URL {
         return self::url_origin( $s, $use_forwarded_host ) . substr($s['REQUEST_URI'], 0, strrpos($s['REQUEST_URI'], '/') + 1);
     }
 
+    public static function relative_url( $use_forwarded_host = false )
+    {
+        $s = $_SERVER;
+        return substr($s['REQUEST_URI'], strrpos($s['REQUEST_URI'], '/') + 1);
+    }
+
     public static function path_only()
     {
         $s = $_SERVER;

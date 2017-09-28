@@ -25,4 +25,26 @@ if (isset($_SESSION['characterID']) && isset($_SESSION['characterName'])) {
     $_SESSION['isAdmin'] = True;
   }
 }
+
+if (!isset($_SESSION['scopes'])) {
+    if (!isset($esimail)) {
+        $esimail = new ESIMAIL($_SESSION['characterID']);
+    }
+    $_SESSION['scopes'] = $esimail->getScopes();
+}
+$scopes = $_SESSION['scopes'];
+
+if (array_intersect($scopes, MAIL_SCOPES) != MAIL_SCOPES) {
+    $page = new Page('Scopes are missing');
+    $missing = array_diff(MAIL_SCOPES, $scopes);
+    $html = '<p>Some of the Scopes required for this app to work are missing, most likely functionality has been added.<br/>You are being redirected and to the EVE login and the following scope'.(count($missing) > 1?'s are':' is').' added to the current ones:<br/><br/>';
+    foreach ($missing as $m) {
+        $html .= '&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus-sign"></span>&nbsp;'.$m;
+    }
+    $html .= '</p>
+              <a href="login.php?page='.rawurlencode(URL::relative_url()).'" class="btn btn-primary" role="button">Re-login</a>';
+    $page->addBody($html);
+    $page->display();
+    die();
+}
 ?>
