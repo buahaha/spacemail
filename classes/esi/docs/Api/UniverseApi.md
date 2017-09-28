@@ -1208,7 +1208,7 @@ No authorization required
 
 Get solar system information
 
-Get information on a solar system  --- Alternate route: `/v2/universe/systems/{system_id}/`  --- This route expires daily at 11:05
+Get information on a solar system  --- Alternate route: `/v3/universe/systems/{system_id}/`  Alternate route: `/dev/universe/systems/{system_id}/`  --- This route expires daily at 11:05
 
 ### Example
 ```php

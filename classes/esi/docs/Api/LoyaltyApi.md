@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 Get loyalty points
 
-Return a list of loyalty points for all corporations the character has worked for  --- Alternate route: `/v1/characters/{character_id}/loyalty/points/`  Alternate route: `/legacy/characters/{character_id}/loyalty/points/`  Alternate route: `/dev/characters/{character_id}/loyalty/points/`
+Return a list of loyalty points for all corporations the character has worked for  --- Alternate route: `/v1/characters/{character_id}/loyalty/points/`  Alternate route: `/legacy/characters/{character_id}/loyalty/points/`  Alternate route: `/dev/characters/{character_id}/loyalty/points/`  --- This route is cached for up to 3600 seconds
 
 ### Example
 ```php

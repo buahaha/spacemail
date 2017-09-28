@@ -250,7 +250,7 @@ Name | Type | Description  | Notes
 
 Return mailing list subscriptions
 
-Return all mailing lists that the character is subscribed to   --- Alternate route: `/v1/characters/{character_id}/mail/lists/`  Alternate route: `/legacy/characters/{character_id}/mail/lists/`  Alternate route: `/dev/characters/{character_id}/mail/lists/`  --- This route is cached for up to 120 seconds
+Return all mailing lists that the character is subscribed to  --- Alternate route: `/v1/characters/{character_id}/mail/lists/`  Alternate route: `/legacy/characters/{character_id}/mail/lists/`  Alternate route: `/dev/characters/{character_id}/mail/lists/`  --- This route is cached for up to 120 seconds
 
 ### Example
 ```php

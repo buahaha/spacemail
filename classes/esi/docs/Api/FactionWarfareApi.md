@@ -213,7 +213,7 @@ No authorization required
 
 Ownership of faction warfare systems
 
-An overview of the current ownership of faction warfare solar systems  --- Alternate route: `/v1/fw/systems/`  Alternate route: `/legacy/fw/systems/`  Alternate route: `/dev/fw/systems/`  --- This route is cached for up to 3600 seconds
+An overview of the current ownership of faction warfare solar systems  --- Alternate route: `/v1/fw/systems/`  Alternate route: `/legacy/fw/systems/`  Alternate route: `/dev/fw/systems/`  --- This route is cached for up to 1800 seconds
 
 ### Example
 ```php
