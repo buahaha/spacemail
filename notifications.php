@@ -32,7 +32,26 @@ if (!isset($_SESSION['ajtoken'])) {
   $_SESSION['ajtoken'] = EVEHELPERS::random_str(32);
 }
 
-$footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+$footer = '<script>$(document).ready(function() {
+            var table = $("#nottable").dataTable(
+               {
+                   "bPaginate": true,
+                   "pageLength": 25,
+                   "aoColumnDefs" : [ {
+                       "bSortable" : false,
+                       "aTargets" : [ "no-sort" ]
+                   }, {
+                       "sClass" : "num-col",
+                       "aTargets" : [ "num" ]
+                   } ],
+                   fixedHeader: {
+                       header: true,
+                       footer: false
+                   },
+                   "order": [[ 0, "desc" ]],
+               });
+             });
+         </script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/css/dataTables.bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/jquery.dataTables.min.js"></script>
@@ -48,7 +67,37 @@ $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/f
 
 $page = new Page($esinot->getCharacterName().'\'s notifications');
 
-$page->addBody('');
+$notifications = $esinot->getNotifications();
+
+$lookup = ['character' => array(), 'corporation' => array(), 'alliance' => array()];
+foreach ($notifications as $n) {
+    $lookup[$n['sender_type']][] = $n['sender_id'];
+}
+$dict = EVEHELPERS::esiMailIdsToNames($lookup);
+
+$html = '<table class="table table-striped small" id="nottable">
+             <thead>
+                 <th>Date</th>
+                 <th class="no-sort"></th>
+                 <th>From</th>
+                 <th>type</th>
+                 <th>Message</th>
+             </thead>
+             <tbody>';
+foreach ($notifications as $n) {
+    $html .= '<tr><td>'.gmdate('y/m/d H:i', strtotime($n['timestamp'])).'</td>';
+    if (isset($dict[$n['sender_id']])) {
+        $html .= '<td><img src="https://imageserver.eveonline.com/'.$n['sender_type'].'/'.$n['sender_id'].'_32.'.($n['sender_type'] == 'character'?'jpg':'png').'" height="24px"></td><td>'.$dict[$n['sender_id']].'</td>';
+    } else {
+        $html .= '<td></td><td>Unknown</td>';
+    }
+    $html .= '<td>'.$n['type'].'</td><td class="wrap">'.$n['text'].'</td></tr>';
+}
+
+$html.=     '</tbody>
+         </table>';
+
+$page->addBody($html);
 $page->addFooter($footer);
 $page->setBuildTime(number_format(microtime(true) - $start_time, 3));
 $page->display("true");

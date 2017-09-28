@@ -175,21 +175,21 @@ class EVEHELPERS {
                 switch($cat) {
                     case 'alliance': 
                         $allianceapi = new AllianceApi($esiapi);
-                        $results = $allianceapi->getAlliancesNames($ids, 'tranquility');
+                        $results = $allianceapi->getAlliancesNames(array_unique($ids), 'tranquility');
                         foreach($results as $result) {
                             $dict[$result->getAllianceId()] = $result->getAllianceName();
                         }           
                         break;      
                     case 'corporation':
                         $corpapi = new CorporationApi($esiapi);
-                        $results = $corpapi->getCorporationsNames($ids, 'tranquility');
+                        $results = $corpapi->getCorporationsNames(array_unique($ids), 'tranquility');
                         foreach($results as $result) {
                             $dict[$result->getCorporationId()] = $result->getCorporationName();
                         }           
                         break;      
                     case 'character':
                         $charapi = new CharacterApi($esiapi);
-                        $results = $charapi->getCharactersNames($ids, 'tranquility');
+                        $results = $charapi->getCharactersNames(array_unique($ids), 'tranquility');
                         foreach($results as $result) {
                             $dict[$result->getCharacterId()] = $result->getCharacterName();
                         }           

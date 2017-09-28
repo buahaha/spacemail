@@ -42,8 +42,11 @@ class ESINOTIFICATIONS extends ESISSO
                 $this->log->exception($e);
                 return null;
             }
-            if (!count($detch)) {
+            if (!count($fetch)) {
                 return null;
+            }
+            foreach ($fetch as $n) {
+                $notifications[] = json_decode($n, true);
             }
             return $notifications;
         }

@@ -25,11 +25,12 @@ class Page {
         } else {
             $this->addMenuItem('<span class="glyphicon glyphicon-envelope"></span> New Mail', 'compose.php');
             $this->addMenuItem('<span class="glyphicon glyphicon-calendar"></span> Calendar', 'calendar.php');
+            $this->addMenuItem('<span class="glyphicon glyphicon-bullhorn"></span> Notifications', 'notifications.php');
         }
         if (isset($_SESSION['isAdmin']) && $_SESSION['isAdmin']) {
-            $this->addMenuItem('<span class="glyphicon glyphicon-king"></span> Admin panel', 'admin.php');
+            $this->addMenuItem('<span class="glyphicon glyphicon-king"></span> Admin', 'admin.php');
         }
-        $this->addMenuItem('<span class="glyphicon glyphicon-info-sign"></span> About', 'about.php');
+        $this->addMenuItem('<span class="hidden-sm"><span class="glyphicon glyphicon-info-sign"></span> About</span>', 'about.php');
     }
 
     public function setTitle($title){
@@ -98,7 +99,7 @@ class Page {
             <link rel="icon" href="img/spacemail_sq.png" type="image/png">
             <link rel="shortcut icon" href="img/spacemail_sq.png" type="image/png">
             '.$this->getCSS().'
-            <link rel="stylesheet" href="css/custom.css" type="text/css"> 
+            <link rel="stylesheet" href="css/custom.min.css" type="text/css"> 
             <title>Spacemail: '.$this->title.'</title>
             '.$this->header.$this->getNotifier().'
         </head>
@@ -115,7 +116,7 @@ class Page {
                 <span class="icon-bar"></span>
               </button>
               <div style="position: relative;">
-                <a class="navbar-brand" href="'.URL::url_path().'"><div id="logoimg"><img src="img/spacemail.png"></div>Spacemail</a>
+                <a class="navbar-brand" href="'.URL::url_path().'"><div id="logoimg"><img src="img/spacemail.png"></div><span class="hidden-sm">Spacemail</span></a>
               </div>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
