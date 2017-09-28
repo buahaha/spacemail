@@ -4,6 +4,8 @@ require_once('auth.php');
 require_once('config.php');
 require_once('loadclasses.php');
 
+$start_time = microtime(true);
+
 if (session_status() != PHP_SESSION_ACTIVE) {
   header('Location: '.URL::url_path.'index.php');
   die();
@@ -18,9 +20,178 @@ if (!isset($_SESSION['ajtoken'])) {
   $_SESSION['ajtoken'] = EVEHELPERS::random_str(32);
 }
 
-$html = '';
-$page = new Page('Admin Panel');
+if (isset($_POST['clearcache'])) {
+    $fi = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('cache/'), RecursiveIteratorIterator::SELF_FIRST);
+    foreach ($fi as $file) {
+        if ($file->isFile() and (substr($file->getFilename(), 0, 1) != '.' ) ) {
+            unlink($file->getRealPath());
+        }
+    }
+}
 
+$qry = DB::getConnection();
+$sql="SELECT * FROM esisso";
+$users = $qry->query($sql)->num_rows;
+$sql="SELECT * FROM esisso WHERE expires > DATE_SUB(NOW(), INTERVAL 24 HOUR)";
+$users24h = $qry->query($sql)->num_rows;
+
+$esierrors1h = 0;
+$esierrors24h = 0;
+$handle = fopen('log/esi.log','r');
+while (!feof($handle)) {
+    $dd = fgets($handle);
+    $timestamp = substr($dd, 0, 20);
+    $time = strtotime($timestamp);
+    if($time > strtotime("-1 hours")) {
+        $esierrors1h += 1;
+        $esierrors24h += 1;
+    } elseif ($time > strtotime("-24 hours")) {
+        $esierrors24h += 1;
+    }
+}
+fclose($handle);
+
+$myfile = 'log/esi.log';
+$command = "tac $myfile > /tmp/esilogreversed.txt";
+exec($command);
+$handle = fopen("/tmp/esilogreversed.txt", "r");
+$logtext = [];
+while (!feof($handle)) {
+   $temp = [];
+   $arr = explode(" ", fgets($handle, 4096));
+   if (count($arr) >= 4) {
+       $temp['date'] = $arr[0];
+       $temp['time'] = $arr[1];
+       $temp['type'] = $arr[2];
+       $temp['message'] = implode(" ", array_slice($arr,3));
+       $logtext[] = $temp;
+   }
+}
+fclose($handle);
+
+
+$fi = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('cache/'), RecursiveIteratorIterator::SELF_FIRST);
+$cachecount = 0;
+$cachesize = 0;
+foreach ($fi as $file) {
+    if ($file->isFile() and (substr($file->getFilename(), 0, 1) != '.' ) ) {
+        $cachecount += 1;
+        $cachesize += $file->getSize();
+    }
+}
+
+$html = '<div class="row">
+             <div class="col-sm-12 col-md-6 col-lg-4"><h3>Statistics</h3>
+               <div class="well well-sm">
+                 <div class="row">
+                     <div class="col-sm-7 col-lg-9">
+                         Total users:
+                     </div>
+                     <div class="col-sm-4 col-lg-2 text-right">
+                         '.$users.'
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-sm-7 col-lg-9">
+                         Users in the last 24h:
+                     </div>
+                     <div class="col-sm-4 col-lg-2 text-right">
+                         '.$users24h.'
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-sm-7 col-lg-9">
+                         ESI errors (last hour):
+                     </div>
+                     <div class="col-sm-4 col-lg-2 text-right">
+                         '.$esierrors1h.'
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-sm-7 col-lg-9">
+                         ESI errors (last 24 hours):
+                     </div>
+                     <div class="col-sm-4 col-lg-2 text-right">
+                         '.$esierrors24h.'
+                     </div>
+                 </div>
+               </div>
+             </div>
+             <div class="col-sm-12 col-md-6 col-lg-4"><h3>Cache</h3>
+               <div class="well well-sm">
+                 <div class="row">
+                     <div class="col-sm-7 col-lg-8">
+                         Number of Files:
+                     </div>
+                     <div class="col-sm-5 col-lg-4 text-right">
+                         '.$cachecount.'
+                     </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-sm-7 col-lg-8">
+                         Cache Size:
+                     </div>
+                     <div class="col-sm-5 col-lg-4 text-right">
+                         '.round($cachesize/(1024*1024), 2).' MB
+                     </div>
+                 </div>
+               </div>
+               <form id="cache" role="form" action="" method="post">
+                   <button id="clearcache" name="clearcache" type="submit" value="clearcache" class="btn btn-primary pull-right">Clear Cache</button>
+               </form>
+             </div>
+             <div class="col-lg-12"><h3>ESI error log</h3>
+                 <div class="">
+                     <table class="table table-striped small" id="logtable">
+                       <thead>
+                         <th>Date</th>
+                         <th>Time</th>
+                         <th>Message</th>
+                       </thead>
+                       <tbody>';
+foreach ($logtext as $l) {
+    $html .= '<tr><td>'.$l['date'].'</td><td>'.$l['time'].'</td><td class="wrap">'.$l['message'].'</td></tr>';
+}
+                       
+$html.=             ' </tbody>
+                    </table>
+                 </div>
+             </div>
+         </div>';
+
+$footer = '<script>$(document).ready(function() {
+            var table = $("#logtable").dataTable(
+               {
+                   "bPaginate": true,
+                   "pageLength": 25,
+                   "aoColumnDefs" : [ {
+                       "bSortable" : false,
+                       "aTargets" : [ "no-sort" ]
+                   }, {
+                       "sClass" : "num-col",
+                       "aTargets" : [ "num" ]
+                   } ],
+                   fixedHeader: {
+                       header: true,
+                       footer: false
+                   },
+                   "order": [[ 0, "desc" ], [ 1, "desc" ]],
+               });
+             });
+         </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/css/dataTables.bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.0.10/font-awesome-animation.min.css" integrity="sha256-C4J6NW3obn7eEgdECI2D1pMBTve41JFWQs0UTboJSTg=" crossorigin="anonymous" />';
+
+$page = new Page('Admin Panel');
+$page->addBody($html);
+$page->addFooter($footer);
+$page->setBuildTime(number_format(microtime(true) - $start_time, 3));
 $page->display();
 exit;
 ?>
