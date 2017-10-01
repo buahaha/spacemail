@@ -1,4 +1,6 @@
 <?php
+require_once('config.php');
+
 use Swagger\Client\ApiClient;
 use Swagger\Client\Configuration;
 use Swagger\Client\ApiException;

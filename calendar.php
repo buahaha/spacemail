@@ -100,32 +100,7 @@ function calPage($esicalendar) {
     return $cal;
 }
 
-if (session_status() != PHP_SESSION_ACTIVE) {
-  session_start();
-}
-
-if (isset($_SESSION['characterID'])) {
-  $esicalendar = new ESICALENDAR($_SESSION['characterID']);
-  if ($esicalendar->getScopes() == MAIL_SCOPES) {
-    $scopesOK = True;
-  } else {
-    $scopesOK = False;
-  }
-}
-
-$html = '';
-
-if (!isset($_SESSION['characterID']) || !$scopesOK) {
-  $page = new Page('Login required');
-  $html .= "<div class='col-xs-12'><br/>You need to log in with your EVE account to acces your calendar. We do NOT get your account credentials. The login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php?page=".rawurlencode("calendar.php?".URL::getQueryString())."'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know what we use your API information for, please read our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
-  $page->addBody($html);
-  $page->display();
-  exit;
-}
-
-if (!isset($_SESSION['ajtoken'])) {
-  $_SESSION['ajtoken'] = EVEHELPERS::random_str(32);
-}
+$esicalendar = new ESICALENDAR($_SESSION['characterID']);
 
 $footer = '<script>
           $(document).ready(function() {

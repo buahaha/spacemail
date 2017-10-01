@@ -1,7 +1,5 @@
 <?php
 require_once('config.php');
-ini_set('display_errors', 'On');
-error_reporting(E_ALL | E_STRICT);
 
 use Swagger\Client\ApiClient;
 use Swagger\Client\Configuration;

@@ -4907,7 +4907,7 @@ wysihtml5.browser = (function() {
         realUrl = "http://" + realUrl;
       }
 
-      return '<a href="' + realUrl + '">' + displayUrl + '</a>' + punctuation;
+      return '<loc><a href="' + realUrl + '">' + displayUrl + '</a></loc>' + punctuation;
     });
   }
 
@@ -6173,8 +6173,8 @@ wysihtml5.dom.parse = (function() {
         setClass            = rule.set_class,             // classes to set
         addClass            = rule.add_class,             // add classes based on existing attributes
         addStyle            = rule.add_style,             // add styles based on existing attributes
-        setAttributes       = rule.set_attributes,        // attributes to set on the current node
         checkAttributes     = rule.check_attributes,      // check/convert values of attributes
+        setAttributes       = rule.set_attributes,        // attributes to set on the current node
         allowedClasses      = currentRules.classes,
         i                   = 0,
         classes             = [],
@@ -14553,18 +14553,18 @@ var bsWysihtml5 = function($, wysihtml5) {
           }
         },
         'a':  {
+          'set_attributes': {
+            'target': '_blank'
+          },
           check_attributes: {
             'href': 'url' // important to avoid XSS
-          },
-          'set_attributes': {
-            'target': '_blank',
-            'rel': 'nofollow'
           }
         },
         'span': 1,
         'div': 1,
         'small': 1,
         // to allow save and edit files with code tag hacks
+        'loc': 1,
         'code': 1,
         'pre': 1
       }

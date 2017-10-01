@@ -5,26 +5,7 @@ require_once('auth.php');
 require_once('config.php');
 require_once('loadclasses.php');
 
-if (session_status() != PHP_SESSION_ACTIVE) {
-  session_start();
-}
-
-if (isset($_SESSION['characterID'])) {
-  $esimail = new ESIMAIL($_SESSION['characterID']);
-  if ($esimail->getScopes() == MAIL_SCOPES) {
-    $scopesOK = True;
-  } else {
-    $scopesOK = False;
-  }
-}
-
-if (!isset($_SESSION['characterID']) || !$scopesOK) {
-  $page = new Page('Login required');
-  $html = "<div class='col-xs-12'><br/>You need to log in with your EVE account to acces your mails. We do NOT get your account credentials. The login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php?page=".rawurlencode("compose.php?".URL::getQueryString())."'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know what we use your API information for, please read our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
-  $page->addBody($html);
-  $page->display();
-  exit;
-}
+$esimail = new ESIMAIL($_SESSION['characterID']);
 
 $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
@@ -137,6 +118,14 @@ function outColors($html) {
     return preg_replace('/(class="wysiwyg-color-)([a-zA-Z]*)"/i', 'color="$2"', $html);
 }
 
+function fixLinks($html) {
+    $html = str_replace('rel="nofollow" ', '', $html);
+    $html = preg_replace('/\<a\starget=\"([a-zA-Z_]*)\"\shref=\"([a-zA-Z0-9-._~:\/?#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\`]*)\"/i', '<a href=$2', $html);
+    $html = str_replace('<a ', '<loc><a ', $html);
+    $html = str_replace('</a>', '</a></loc>', $html);
+    return $html;
+}
+
 function inColors($html) {
     return preg_replace('/(color=")([a-zA-Z]*)"/i', 'class="wysiwyg-color-$2"', $html);
 }
@@ -207,7 +196,7 @@ if (isset($_POST['submit'])) {
       foreach($recipients as $id => $rec) {
           $rec_ary[] = array('id' => $id, 'type' => $rec['cat']);
       }
-      $esimail->sendMail($rec_ary, htmlspecialchars($subject), preg_replace("/\r\n|\r|\n/", "<br />", outColors($mailbody)));
+      $esimail->sendMail($rec_ary, htmlspecialchars($subject), preg_replace("/\r\n|\r|\n/", "<br />", fixLinks(outColors($mailbody))));
       if($esimail->getError()) {
           $page->setError($esimail->getMessage());
       } else {

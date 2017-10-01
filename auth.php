@@ -15,6 +15,14 @@ if (!isset($_SESSION['characterID'])) {
   }
 }
 
+if (!isset($_SESSION['characterID'])) {
+  $page = new Page('Login required');
+  $html = "<div class='col-xs-12'><br/>You need to log in with your EVE account to acces your mails. We do NOT get your account credentials. The login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php?page=".rawurlencode(URL::relative_url())."'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know what we use your API information for, please read our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
+  $page->addBody($html);
+  $page->display();
+  exit;
+}
+
 if (isset($_SESSION['characterID']) && !isset($_SESSION['characterName'])) {
   $esimail = new ESIMAIL($_SESSION['characterID']);
   $_SESSION['characterName'] = $esimail->getCharacterName();
@@ -47,7 +55,12 @@ if (isset($_SESSION['scopes'])) {
                   <a href="login.php?page='.rawurlencode(URL::relative_url()).'" class="btn btn-primary" role="button">Re-login</a>';
         $page->addBody($html);
         $page->display();
-        die();
+        exit;
     }
 }
+
+if (!isset($_SESSION['ajtoken'])) {
+  $_SESSION['ajtoken'] = EVEHELPERS::random_str(32);
+}
+
 ?>
