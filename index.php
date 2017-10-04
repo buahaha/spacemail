@@ -7,7 +7,7 @@ require_once('loadclasses.php');
 
 function getMailBoxes($esimail) {
     $labels = $esimail->getMailLabels();
-    $table = '<ul class="nav nav-pills nav-stacked">
+    $table = '<ul id="boxlinks" class="nav nav-pills nav-stacked">
                    <li class="spacer hidden-xs"><em>Mail boxes:</em></li>';
         if (null == URL::getQ('label')) {
             if($labels && isset($labels[1])) {
@@ -36,7 +36,7 @@ function getMailBoxes($esimail) {
 function mailsPage($esimail) {
     $table = '<div class="row"><div class="col-sm-12 col-md-3 col-lg-2" id="mailboxes">';
     $labels = $esimail->getMailLabels();
-    $table .= '<ul class="nav nav-pills nav-stacked">
+    $table .= '<ul id="boxlinks" class="nav nav-pills nav-stacked">
                    <li class="spacer hidden-xs"><em>Mail boxes:</em></li>';
         if (null == URL::getQ('label')) {
             if($labels && isset($labels[1])) {
@@ -96,6 +96,29 @@ function mailsPage($esimail) {
               $.get("readmail.php?mid="+id+"&cid='.$esimail->getCharacterID().'&read="+isread, function(data, status){
                   dialog.setMessage(data);
               });
+              isreadcol = $(link.closest("tr")).find("i");
+              if (isreadcol.hasClass("fa-envelope-o")) {
+                  isreadcol.removeClass("fa-envelope-o");
+                  isreadcol.addClass("fa-envelope-open-o");
+                  box = $("#boxlinks").children(".active");
+                  badge = $(box.find(".badge-unread"));
+                  if (badge.length) {
+                      if (badge.text() == "1") {
+                          badge.remove();
+                      } else {
+                          badge.text(parseInt(badge.text() - 1));
+                      }
+                  }
+                  allbox = $("#boxlinks").children("li:contains(\'All\')");
+                  allbadge = $(allbox.find(".badge-unread"));
+                  if (allbadge.length) {
+                      if (allbadge.text() == "1") {
+                          allbadge.remove();
+                      } else {
+                          allbadge.text(parseInt(allbadge.text() - 1));
+                      }
+                  }
+              }
           }
       </script>
       ';
