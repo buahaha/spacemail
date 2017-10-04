@@ -62,6 +62,12 @@ class ApiClient
     public static $DELETE = "DELETE";
     private static $maxtries = 3;
     private static $extracache = 30;
+
+    public function setExtraCacheTime($extratime)
+    {
+        $this->extracache = $extratime;
+    }
+
     /**
      * Configuration
      *

@@ -15,6 +15,9 @@ define('ESI_SALT', '6876sfdFgGfhgsdf76tga78sfgcgkjBJS');
 
 define('ESI_USER_AGENT', 'yourdomain spacemail ESI client');
 
+//Extra cache time (in addition to esis normal expiry) in seconds
+define('ESI_EXTRA_CACHE', 30);
+
 //Users able to enter the admin section
 define('ADMINS', array("Snitch" => 90976676,));
 

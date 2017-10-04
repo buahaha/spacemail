@@ -20,7 +20,8 @@ class ESIAPI extends ApiClient
             $esiConfig->addDefaultHeader('Expect', '');
         }
         
-        parent::__construct($esiConfig);     
+        parent::__construct($esiConfig);
+        $this->setExtraCacheTime(ESI_EXTRA_CACHE);
     }
     
     public function setAccessToken($accessToken)
