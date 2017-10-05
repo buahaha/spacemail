@@ -6,6 +6,8 @@ Version 1.0<br/><br/>
 This app is built using php and the <a href="http://getbootstrap.com/">bootstrap</a> framework.<br/>
 All interactions with EVE Online are done using the <a href=" https://esi.tech.ccp.is/">EVE Swagger Interface</a><br/>
 <br/>
+Sources are available <a href="https://bitbucket.org/snitchashor/spacemail">here</a>.<br/>
+<br/>
 Additional Software used:<br/>
 <ul>
 <li>ESI php client generated with <a href="http://swagger.io/swagger-codegen/">swagger-codegen</a></li>

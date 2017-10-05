@@ -68,6 +68,11 @@ class ApiClient
         $this->extracache = $extratime;
     }
 
+    public function setMaxTries($tries)
+    {
+        $this->maxtries = $tries;
+    }
+
     /**
      * Configuration
      *

@@ -76,6 +76,7 @@ function mailsPage($esimail) {
             <th class="min-tablet-l">To:</th>
             <th class="num no-sort min-mobile-l"></th>';
           }
+          $table .= '<th class="cb"></th>';
       $table .= '</thead></table></div></div>
       <script>
           var label = '.$l.';
@@ -106,7 +107,7 @@ function mailsPage($esimail) {
                       if (badge.text() == "1") {
                           badge.remove();
                       } else {
-                          badge.text(parseInt(badge.text() - 1));
+                          badge.text(parseInt(badge.text()) - 1);
                       }
                   }
                   allbox = $("#boxlinks").children("li:contains(\'All\')").first();
@@ -115,7 +116,7 @@ function mailsPage($esimail) {
                       if (allbadge.text() == "1") {
                           allbadge.remove();
                       } else {
-                          allbadge.text(parseInt(allbadge.text() - 1));
+                          allbadge.text(parseInt(allbadge.text()) - 1);
                       }
                   }
               }
@@ -176,9 +177,9 @@ $footer .= '          function getmore() {
           }
           $(document).ready(function() {
             if (label == 2) {
-                var columns = [{ "data": "date" },{ "data": "to" },{ "data": "subject" }, {"data" : null,"defaultContent": "<a href=\"#\" title=\"Forward mail\" onclick=\"fwdrow(this)\"><i class=\"fa fa-share\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" class=\"faa-parent animated-hover\" title=\"Delete mail\" onclick=\"deleterow(this)\"><i class=\"fa fa-trash faa-shake\" aria-hidden=\"true\"><\/i><\/a>", "width": "32px"}]
+                var columns = [{ "data": "date" },{ "data": "to" },{ "data": "subject" }, {"data" : null,"defaultContent": "<a href=\"#\" title=\"Forward mail\" onclick=\"fwdrow(this)\"><i class=\"fa fa-share\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" class=\"faa-parent animated-hover\" title=\"Delete mail\" onclick=\"deleterow(this)\"><i class=\"fa fa-trash faa-shake\" aria-hidden=\"true\"><\/i><\/a>", "width": "32px"}, {"defaultContent":""}]
             } else {
-                var columns =  [{ "data": "date" },{ "data": "isread" },{ "data": "img" },{ "data": "from" },{ "data": "subject" },{ "data": "to" },{ "data": null,"defaultContent": "<a href=\"#\" title=\"Reply to\" onclick=\"replyrow(this)\"><i class=\"fa fa-reply\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" title=\"Forward mail\" onclick=\"fwdrow(this)\"><i class=\"fa fa-share\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" class=\"faa-parent animated-hover\" title=\"Delete mail\" onclick=\"deleterow(this)\"><i class=\"fa fa-trash faa-shake\" aria-hidden=\"true\"><\/i><\/a>", "width": "50px"}]
+                var columns =  [{ "data": "date" },{ "data": "isread" },{ "data": "img" },{ "data": "from" },{ "data": "subject" },{ "data": "to" },{ "data": null,"defaultContent": "<a href=\"#\" title=\"Reply to\" onclick=\"replyrow(this)\"><i class=\"fa fa-reply\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" title=\"Forward mail\" onclick=\"fwdrow(this)\"><i class=\"fa fa-share\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" class=\"faa-parent animated-hover\" title=\"Delete mail\" onclick=\"deleterow(this)\"><i class=\"fa fa-trash faa-shake\" aria-hidden=\"true\"><\/i><\/a>", "width": "50px"}, {"defaultContent":""}]
             }
             if (mlist != undefined) {
                 pages = 5
@@ -189,6 +190,10 @@ $footer .= '          function getmore() {
             }
             mtable = $(".jdatatable").DataTable(
                {
+                   "dom": "<\'row\'<\'col-sm-6\'l><\'col-sm-6\'f>>" +
+                   "<\'row\'<\'col-sm-12\'tr>>" +
+                   "<\'row\'<\'col-sm-5\'i><\'pull-right col-sm-7\'B>>" +
+                   "<<\'col-sm-12\'p>>", 
                    "ajax": {
                        "url": "fetchmails.php?label="+label+"&pages="+pages+mlstring,
                        "dataSrc": function ( json ) {
@@ -207,6 +212,59 @@ $footer .= '          function getmore() {
                            return json.data;
                        },
                   },
+                  buttons: [
+                   {
+                      text: "<i class=\'fa fa-trash\' aria-hidden=\'true\'></i>",
+                      className: "btn btn-primary btn-xs",
+                      action: function () {
+                          selected = mtable.rows(".selected").data();
+                          if (selected.length) {
+                             ids = [];
+                             for (var i = 0; i < selected.length; i++) {
+                                 ids.push(parseInt($(selected[i].subject).attr("id")));
+                             }
+                             massdelete(ids);
+                          }
+                      }
+                   }, {
+                      text: "<i class=\'fa fa-envelope-open-o\' aria-hidden=\'true\'></i>",
+                      className: "btn btn-primary btn-xs",
+                      action: function () {
+                          selected = mtable.rows(".selected").data();
+                          if (selected.length) {
+                             ids = [];
+                             for (var i = 0; i < selected.length; i++) {
+                                 ids.push(parseInt($(selected[i].subject).attr("id")));
+                             }
+                             massread(ids);
+                          }
+                      }
+                   }, {
+                      text: "<i class=\'fa fa-envelope-o\' aria-hidden=\'true\'></i>",
+                      className: "btn btn-primary btn-xs",
+                      action: function () {
+                          selected = mtable.rows(".selected").data();
+                          if (selected.length) {
+                             ids = [];
+                             for (var i = 0; i < selected.length; i++) {
+                                 ids.push(parseInt($(selected[i].subject).attr("id")));
+                             }
+                             massunread(ids);
+                          }
+                      }
+                   }, {
+                      text: "<i class=\'fa fa-check-square-o\' aria-hidden=\'true\'></i>",
+                      className: "m-left btn btn-primary btn-xs",
+                      action: function () {
+                          mtable.rows({page:"current"}).select();
+                      }
+                  }, {
+                      text: "<i class=\'fa fa-square-o\' aria-hidden=\'true\'></i>",
+                      className: "btn btn-primary btn-xs",
+                      action: function () {
+                          mtable.rows().deselect();
+                      }
+                   }],
 
                    "columns": columns,
                    "bPaginate": true,
@@ -217,6 +275,10 @@ $footer .= '          function getmore() {
                    }, {
                        "sClass" : "num-col",
                        "aTargets" : [ "num" ]
+                   }, {
+                       orderable: false,
+                       className: "select-checkbox",
+                       "aTargets" : [ "cb" ]
                    } ], 
                    "order": [[ 0, "desc" ]],
                    fixedHeader: {
@@ -224,8 +286,103 @@ $footer .= '          function getmore() {
                        footer: true
                    },
                    responsive: {details: false},
+                   select: {
+                       style:    "multi",
+                       selector: "td:last-child"
+                   },
                });
+               $(mtable.buttons(0).container()).addClass("pull-right");
+               $(mtable.buttons(0).nodes()).attr("title", "Delete selected");
+               $(mtable.buttons(1).nodes()).attr("title", "Mark selected read");
+               $(mtable.buttons(2).nodes()).attr("title", "Mark selected unread");
+               $(mtable.buttons(3).nodes()).attr("title", "Select all");
+               $(mtable.buttons(4).nodes()).attr("title", "Select none");
           });
+         function massunread(ids) {
+             var sum = 0;
+             var todo = ids.length
+             $(ids).each(function() {
+                 var id = this;
+                 $.ajax({
+                     type: "POST",
+                     url: "'.URL::url_path().'ajax/aj_mailunread.php",
+                     data: {"ajtok" : "'.$_SESSION['ajtoken'].'", "id" : id},
+                     success:function(data) {
+                         if (data !== "true") {
+                             BootstrapDialog.show({message: "Something went wrong..."+data, type: BootstrapDialog.TYPE_WARNING});
+                         } else {
+                             isreadcol = $( $("#"+id).closest("tr")).find("i").first();
+                             if (isreadcol.hasClass("fa-envelope-open-o")) {
+                                 isreadcol.removeClass("fa-envelope-open-o");
+                                 isreadcol.addClass("fa-envelope-o");
+                                 box = $("#boxlinks").children(".active");
+                                 badge = $(box.find(".badge-unread"));
+                                 if (badge.length == 0) {
+                                     box.html(box.html().substr(0, box.html().length-4)+"<span class=\"badge badge-unread\">1</span></a>");
+                                 } else {
+                                     badge.text(parseInt(badge.text()) + 1);
+                                 }
+                                 allbox = $("#boxlinks").children("li:contains(\'All\')").first();
+                                 allbadge = $(allbox.find(".badge-unread"));
+                                 if (allbadge.length == 0) {
+                                     allbox.html(allbox.html().substr(0, allbox.html().length-4)+"<span class=\"badge badge-unread\">1</span></a>");
+                                 } else {
+                                     allbadge.text(parseInt(allbadge.text()) + 1);
+                                 }
+                             }
+                             mtable.rows().deselect()
+                         }
+                     }
+                 });
+             });
+         }
+
+         function massread(ids) {
+             var sum = 0;
+             var todo = ids.length
+             $(ids).each(function() {
+                 var id = this;
+                 $.ajax({
+                     type: "POST",
+                     url: "'.URL::url_path().'ajax/aj_mailread.php",
+                     data: {"ajtok" : "'.$_SESSION['ajtoken'].'", "id" : id},
+                     success:function(data) {
+                         if (data !== "true") {
+                             BootstrapDialog.show({message: "Something went wrong..."+data, type: BootstrapDialog.TYPE_WARNING});
+                         } else {
+                             isreadcol = $( $("#"+id).closest("tr")).find("i").first();
+                             if (isreadcol.hasClass("fa-envelope-o")) {
+                                 isreadcol.removeClass("fa-envelope-o");
+                                 isreadcol.addClass("fa-envelope-open-o");
+                                 box = $("#boxlinks").children(".active");
+                                 badge = $(box.find(".badge-unread"));
+                                 if (badge.length) {
+                                     if (badge.text() == "1") {
+                                         badge.remove();
+                                     } else {
+                                         badge.text(parseInt(badge.text()) - 1);
+                                     }
+                                 }
+                                 allbox = $("#boxlinks").children("li:contains(\'All\')").first();
+                                 allbadge = $(allbox.find(".badge-unread"));
+                                 if (allbadge.length) {
+                                     if (allbadge.text() == "1") {
+                                         allbadge.remove();
+                                     } else {
+                                         allbadge.text(parseInt(allbadge.text()) - 1);
+                                     }
+                                 }
+                             }
+                             mtable.rows().deselect()
+                         }
+                     }
+                 });
+             });
+         }
+
+         function massdelete(ids) {
+             console.log(ids)
+         }
 
          function deletemail(id) {
              BootstrapDialog.show({
@@ -315,12 +472,16 @@ $footer .= '          function getmore() {
          }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.3/css/select.dataTables.min.css">
+    <link rel="stylesheet" href="css/dt-custom.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/css/dataTables.bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/select/1.2.3/js/dataTables.select.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.min.js"></script>
     <script src="js/typeahead.bundle.min.js"></script>
     <script src="js/esi_autocomplete.js"></script>
     <script src="js/bootstrap-contextmenu.js"></script>

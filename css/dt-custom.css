@@ -1,0 +1,3 @@
+table.dataTable tbody td.select-checkbox::before, table.dataTable tbody td.select-checkbox::after, table.dataTable tbody th.select-checkbox::before, table.dataTable tbody th.select-checkbox::after {top: auto;}
+
+.m-left {margin-left: 12px}
