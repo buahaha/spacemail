@@ -168,6 +168,7 @@ class EVEHELPERS {
     }
 
    public static function esiMailIdsToNames($mailids) {
+        $log = new LOG('log/esi.log');
         $dict = array();
         foreach($mailids as $cat => $ids) {
             try {
@@ -196,6 +197,7 @@ class EVEHELPERS {
                         break;      
                 }
             } catch (Exception $e) {
+                $log->exception($e); 
             }
         }
         return $dict;

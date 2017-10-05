@@ -144,7 +144,7 @@ $html = '<div class="row">
                        <thead>
                          <th>Date</th>
                          <th>Time</th>
-                         <th>Message</th>
+                         <th class="wordbreak">Message</th>
                        </thead>
                        <tbody>';
 foreach ($logtext as $l) {
@@ -166,8 +166,8 @@ $footer = '<script>$(document).ready(function() {
                        "bSortable" : false,
                        "aTargets" : [ "no-sort" ]
                    }, {
-                       "sClass" : "num-col",
-                       "aTargets" : [ "num" ]
+                       className: "wordbreak",
+                       "aTargets" : [ "wordbreak" ]
                    } ],
                    fixedHeader: {
                        header: true,
@@ -178,6 +178,7 @@ $footer = '<script>$(document).ready(function() {
              });
          </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/dt-custom.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/css/dataTables.bootstrap.min.css" rel="stylesheet"/>
     <link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/js/jquery.dataTables.min.js"></script>
