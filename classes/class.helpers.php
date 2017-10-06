@@ -148,6 +148,7 @@ class EVEHELPERS {
     }
 
     public static function esiIdsToNames($ids) {
+        $log = new LOG('log/esi.log');
         $lookup = array();
         foreach($ids as $key=>$val) {
             $lookup[$val] = true;
@@ -158,6 +159,7 @@ class EVEHELPERS {
         try {
             $results = $universeapi->postUniverseNames($lookup, 'tranquility');
         } catch (Exception $e) {
+            $log->exception($e);
             return null;
         }
         $dict = array();
@@ -174,25 +176,31 @@ class EVEHELPERS {
             try {
                 $esiapi = new ESIAPI();
                 switch($cat) {
-                    case 'alliance': 
-                        $allianceapi = new AllianceApi($esiapi);
-                        $results = $allianceapi->getAlliancesNames(array_unique($ids), 'tranquility');
-                        foreach($results as $result) {
-                            $dict[$result->getAllianceId()] = $result->getAllianceName();
+                    case 'alliance':
+                        if (count($ids)) { 
+                            $allianceapi = new AllianceApi($esiapi);
+                            $results = $allianceapi->getAlliancesNames(array_unique($ids), 'tranquility');
+                            foreach($results as $result) {
+                                $dict[$result->getAllianceId()] = $result->getAllianceName();
+                            }
                         }           
                         break;      
                     case 'corporation':
-                        $corpapi = new CorporationApi($esiapi);
-                        $results = $corpapi->getCorporationsNames(array_unique($ids), 'tranquility');
-                        foreach($results as $result) {
-                            $dict[$result->getCorporationId()] = $result->getCorporationName();
+                        if (count($ids)) {
+                            $corpapi = new CorporationApi($esiapi);
+                            $results = $corpapi->getCorporationsNames(array_unique($ids), 'tranquility');
+                            foreach($results as $result) {
+                                $dict[$result->getCorporationId()] = $result->getCorporationName();
+                            }
                         }           
                         break;      
                     case 'character':
-                        $charapi = new CharacterApi($esiapi);
-                        $results = $charapi->getCharactersNames(array_unique($ids), 'tranquility');
-                        foreach($results as $result) {
-                            $dict[$result->getCharacterId()] = $result->getCharacterName();
+                        if (count($ids)) {
+                            $charapi = new CharacterApi($esiapi);
+                            $results = $charapi->getCharactersNames(array_unique($ids), 'tranquility');
+                            foreach($results as $result) {
+                                $dict[$result->getCharacterId()] = $result->getCharacterName();
+                            }
                         }           
                         break;      
                 }
@@ -204,6 +212,7 @@ class EVEHELPERS {
     }
 
     public static function esiMailIdsLookup($ids) {
+        $log = new LOG('log/esi.log');
         $lookup = array();
         foreach($ids as $key=>$val) {
             $lookup[$val] = true;
@@ -236,11 +245,13 @@ class EVEHELPERS {
                 }
             }
         } catch (Exception $e) {
+            $log->exception($e);
         }
         return $dict;
     }
 
     public static function esiIdsLookup($ids) {
+        $log = new LOG('log/esi.log');
         $lookup = array();
         foreach($ids as $key=>$val) {
             $lookup[$val] = true;
@@ -251,6 +262,7 @@ class EVEHELPERS {
         try {
             $results = $universeapi->postUniverseNames($lookup, 'tranquility');
         } catch (Exception $e) {
+            $log->exception($e);
             return null;
         }
         $dict = array();
@@ -261,23 +273,27 @@ class EVEHELPERS {
     }
 
     public static function getCorpForChar($characterID) {
+        $log = new LOG('log/esi.log');
         $esiapi = new ESIAPI();
         $charapi = new CharacterApi($esiapi);
         try {
             $charinfo = json_decode($charapi->getCharactersCharacterId($characterID, 'tranquility'));
             $corpID = $charinfo->corporation_id;
         } catch (Exception $e) {
+            $log->exception($e);
             $corpID = null;
         }
         return $corpID;
     }
 
     public static function getCorpInfo($corpID) {
+        $log = new LOG('log/esi.log');
         $esiapi = new ESIAPI();
         $corpapi = new CorporationApi($esiapi);
         try {
             $corpinfo = json_decode($corpapi->getCorporationsCorporationId($corpID, 'tranquility'));
         } catch (Exception $e) {
+            $log->exception($e);
             $corpinfo = null;
         }
         return $corpinfo;
@@ -285,6 +301,7 @@ class EVEHELPERS {
 
 
     public static function getAllyForCorp($corpID) {
+        $log = new LOG('log/esi.log');
         $esiapi = new ESIAPI();
         $corpapi = new CorporationApi($esiapi);
         try {
@@ -295,23 +312,27 @@ class EVEHELPERS {
                 $allyID = null;
             }
         } catch (Exception $e) {
+            $log->exception($e);
             $allyID = null;
         }
         return $allyID;
     }
 
     public static function getAllyInfo($allyID) {
+        $log = new LOG('log/esi.log');
         $esiapi = new ESIAPI();
         $allyapi = new AllianceApi($esiapi);
         try {
             $allyinfo = json_decode($allyapi->getAlliancesAllianceId($allyID, 'tranquility'));
         } catch (Exception $e) {
+            $log->exception($e);
             $allyinfo = null;
         }
         return $allyinfo;
     }
 
     public static function getAllyHistory($corpid) {
+        $log = new LOG('log/esi.log');
         $esiapi = new ESIAPI();
         $corpapi = new CorporationApi($esiapi);
         $allys = array();
@@ -343,6 +364,7 @@ class EVEHELPERS {
                 }
             }
         } catch (Exception $e) {
+            $log->exception($e);
             $allys = null;
         }
         return $allys;
