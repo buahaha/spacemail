@@ -12,8 +12,14 @@ class EVEHELPERS {
     {
         $str = '';
         $max = mb_strlen($keyspace, '8bit') - 1;
-        for ($i = 0; $i < $length; ++$i) {
-            $str .= $keyspace[random_int(0, $max)];
+        if (function_exists('random_int')) {
+            for ($i = 0; $i < $length; ++$i) {
+                $str .= $keyspace[random_int(0, $max)];
+            }
+        } else {
+            for ($i = 0; $i < $length; ++$i) {
+                $str .= $keyspace[rand(0, $max)];
+            }
         }
         return $str;
     }
