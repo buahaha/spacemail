@@ -1,5 +1,7 @@
 <?php
 require_once('classes/class.esiapi.php');
+require_once('classes/class.log.php');
+
 use Swagger\Client\ApiException;
 use Swagger\Client\Api\AllianceApi;
 use Swagger\Client\Api\CorporationApi;
@@ -49,7 +51,8 @@ if (isset($_GET['q'])) {
                                 break;
                         }
                     } catch (Exception $e) {
-                        print $e->getMessage();
+                        $log = new LOG('log/esi.log');
+                        $log->exception($e);
                         echo('{}');
                         die();
                     }

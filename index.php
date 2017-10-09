@@ -463,6 +463,29 @@ $footer .= '          function getmore() {
                                   if (data !== "true") {
                                       BootstrapDialog.show({message: "Something went wrong..."+data, type: BootstrapDialog.TYPE_WARNING});
                                   } else {
+                                      isreadcol = $( $("#"+id).closest("tr")).find("i").first();
+                                      if (isreadcol.hasClass("fa-envelope-o")) {
+                                          box = $("#boxlinks").children(".active");
+                                          badge = $(box.find(".badge-unread"));
+                                          if (badge.length) {
+                                              if (badge.text() == "1") {
+                                                  badge.remove();
+                                              } else {
+                                                  badge.text(parseInt(badge.text()) - 1);
+                                              }
+                                          }
+                                          allbox = $("#boxlinks").children("li:contains(\'All\')").first();
+                                          if (!allbox.hasClass("active")) {
+                                              allbadge = $(allbox.find(".badge-unread"));
+                                              if (allbadge.length) {
+                                                  if (allbadge.text() == "1") {
+                                                      allbadge.remove();
+                                                  } else {
+                                                      allbadge.text(parseInt(allbadge.text()) - 1);
+                                                  }
+                                              }
+                                          }
+                                      }
                                       var trow = $("#"+id).closest("tr");
                                       mtable.row(trow).remove().draw(false);
                                       BootstrapDialog.closeAll();
@@ -561,7 +584,12 @@ $page = new Page($esimail->getCharacterName().'\'s mailbox');
 
 $page->addBody(mailsPage($esimail));
 if ($esimail->getError()) {
-    $page->setError($esimail->getMessage());
+    $esistatus = new ESISTATUS();
+    if (!$esistatus->getServerStatus()) {
+        $page->setError('Failed to get the server status, maybe it\'s downtime?');
+    } else {
+        $page->setError($esimail->getMessage());
+    }
 }
 $page->addFooter($footer);
 $page->setBuildTime(number_format(microtime(true) - $start_time, 3));
