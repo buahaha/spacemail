@@ -123,6 +123,7 @@ function fixLinks($html) {
     $html = preg_replace('/\<a\starget=\"([a-zA-Z_]*)\"\shref=\"([a-zA-Z0-9-._~:\/?#\[\]\@\!\$\&\'\(\)\*\+\,\;\=\`]*)\"/i', '<a href=$2', $html);
     $html = str_replace('<a ', '<loc><a ', $html);
     $html = str_replace('</a>', '</a></loc>', $html);
+    $html = str_replace('&nbsp;', ' ', $html);
     return $html;
 }
 

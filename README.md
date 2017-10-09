@@ -20,6 +20,7 @@ Copyright 2017 Snitch Ashor of BRGF.
 	+ esi-mail.read_mail.v1
 	+ esi-mail.send_mail.v1
 	+ esi-characters.read_contacts.v1
+	+ esi-characters.read_notifications.v1
 
 	The callback url should be http(s)://<domain>/<app path>/login.php
 
