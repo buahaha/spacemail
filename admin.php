@@ -40,13 +40,15 @@ $esierrors24h = 0;
 $handle = fopen('log/esi.log','r');
 while (!feof($handle)) {
     $dd = fgets($handle);
-    $timestamp = substr($dd, 0, 20);
-    $time = strtotime($timestamp);
-    if($time > strtotime("-1 hours")) {
-        $esierrors1h += 1;
-        $esierrors24h += 1;
-    } elseif ($time > strtotime("-24 hours")) {
-        $esierrors24h += 1;
+    if (strlen($dd) > 20) {
+        $timestamp = substr($dd, 0, 20);
+        $time = strtotime($timestamp);
+        if($time > strtotime("-1 hours")) {
+            $esierrors1h += 1;
+            $esierrors24h += 1;
+        } elseif ($time > strtotime("-24 hours")) {
+            $esierrors24h += 1;
+        }
     }
 }
 fclose($handle);
