@@ -29,7 +29,7 @@ if (isset($_SESSION['characterID']) && !isset($_SESSION['characterName'])) {
 }
 
 if (isset($_SESSION['characterID']) && isset($_SESSION['characterName'])) {
-  if (in_array($_SESSION['characterID'], ADMINS)) {
+  if (in_array($_SESSION['characterID'], unserialize(ADMINS))) {
     $_SESSION['isAdmin'] = True;
   }
 }
@@ -44,9 +44,9 @@ if (!isset($_SESSION['scopes']) && isset($_SESSION['chsracterID'])) {
 if (isset($_SESSION['scopes'])) {
     $scopes = $_SESSION['scopes'];
 
-    if (array_intersect($scopes, MAIL_SCOPES) != MAIL_SCOPES) {
+    if (array_intersect($scopes, unserialize(MAIL_SCOPES)) != MAIL_SCOPES) {
         $page = new Page('Scopes are missing');
-        $missing = array_diff(MAIL_SCOPES, $scopes);
+        $missing = array_diff(unserialize(MAIL_SCOPES), $scopes);
         $html = '<p>Some of the Scopes required for this app to work are missing, most likely functionality has been added.<br/>You are being redirected and to the EVE login and the following scope'.(count($missing) > 1?'s are':' is').' added to the current ones:<br/><br/>';
         foreach ($missing as $m) {
             $html .= '&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus-sign"></span>&nbsp;'.$m;

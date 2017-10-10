@@ -77,7 +77,7 @@ if (isset($_GET['code'])) {
 
 $authurl = "https://login.eveonline.com/oauth/authorize/";
 $state = random_str(32); 
-$scopes = MAIL_SCOPES;
+$scopes = unserialize(MAIL_SCOPES);
 $_SESSION['authstate'] = $state;
 $url = $authurl."?response_type=code&redirect_uri=".rawurlencode(URL::full_url())."&client_id=".ESI_ID."&scope=".implode(' ',$scopes)."&state=".$state;
 header('Location: '.$url);

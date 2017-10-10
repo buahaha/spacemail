@@ -5,7 +5,9 @@ define('DB_NAME', '');
 define('DB_USER', '');
 define('DB_PASS', '');
 
+//Cache method (currently only file)
 define('CACHE_METHOD', 'file');
+
 //your eve developer ID and secret
 define('ESI_ID', '');
 define('ESI_SECRET', '');
@@ -13,19 +15,21 @@ define('ESI_SECRET', '');
 //random salt
 define('ESI_SALT', '6876sfdFgGfhgsdf76tga78sfgcgkjBJS');
 
+//user agent used for esi call
 define('ESI_USER_AGENT', 'yourdomain spacemail ESI client');
 
 //Extra cache time (in addition to esis normal expiry) in seconds
 define('ESI_EXTRA_CACHE', 30);
 
 //Users able to enter the admin section
-define('ADMINS', array("Snitch" => 90976676,));
+define('ADMINS', serialize(array("Snitch" => 90976676,)));
 
-define('MAIL_SCOPES', array('esi-calendar.read_calendar_events.v1',
+//ESI scopes (should match or be a subset of the ones you registered for your app)
+define('MAIL_SCOPES', serialize(array('esi-calendar.read_calendar_events.v1',
                             'esi-calendar.respond_calendar_events.v1',
                             'esi-mail.organize_mail.v1',
                             'esi-mail.read_mail.v1',
                             'esi-mail.send_mail.v1',
                             'esi-characters.read_contacts.v1',
-                            'esi-characters.read_notifications.v1'));
+                            'esi-characters.read_notifications.v1')));
 ?>

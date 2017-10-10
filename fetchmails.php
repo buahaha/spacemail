@@ -12,7 +12,7 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 
 if (isset($_SESSION['characterID'])) {
   $esimail = new ESIMAIL($_SESSION['characterID']);
-  if ($esimail->getScopes() == MAIL_SCOPES) {
+  if ($esimail->getScopes() == unserialize(MAIL_SCOPES)) {
     $scopesOK = True;
   } else {
     $scopesOK = False;
