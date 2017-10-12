@@ -11,7 +11,7 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 
 if (isset($_SESSION['characterID'])) {
   $esinot = new ESINOTIFICATIONS($_SESSION['characterID']);
-  if ($esinot->getScopes() == MAIL_SCOPES) {
+  if ($esinot->getScopes() == unserialize(MAIL_SCOPES)) {
     $scopesOK = True;
   } else {
     $scopesOK = False;
