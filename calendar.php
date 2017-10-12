@@ -86,8 +86,9 @@ function getScripts($esicalendar) {
                 url: "fetchevents.php?lastid="+lastid,
                 success: function(data) {
                     json = JSON.parse(data);
-                    if (firstrun) {
+                    if (firstrun && json.data.length) {
                         firstid = json.firstid;
+                        timenow = Date.parse(json.data[0].event_date);
                     }
                     if (json.lastid > lastid) {
                         lastid = json.lastid;
@@ -106,10 +107,10 @@ function getScripts($esicalendar) {
                 url: "fetchevents.php?lastid="+fromid,
                 success: function(data) {
                     json = JSON.parse(data);
-                    if (json.lastid > fromid) {
-                        if (json.lastid > firstid) {
+                    if (json.lastid != 0) {
+                        if (Date.parse(json.data[json.data.length-1].event_date) > timenow) {
                             json.data.forEach(function(element) {
-                                if (element.event_id < firstid) {
+                                if (Date.parse(element.event_date) < timenow) {
                                     events.push(element);
                                 }
                             });
@@ -239,6 +240,7 @@ $footer = '<script>
           var events = [];
           var lastid = -1;
           var firstid;
+          var timenow;
           $(document).ready(function() {
               getFutureEvents(true);
           });
