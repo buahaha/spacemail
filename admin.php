@@ -37,37 +37,37 @@ $users24h = $qry->query($sql)->num_rows;
 
 $esierrors1h = 0;
 $esierrors24h = 0;
-$handle = fopen('log/esi.log','r');
-while (!feof($handle)) {
-    $dd = fgets($handle);
-    if (strlen($dd) > 20) {
-        $timestamp = substr($dd, 0, 20);
-        $time = strtotime($timestamp);
-        if($time > strtotime("-1 hours")) {
-            $esierrors1h += 1;
-            $esierrors24h += 1;
-        } elseif ($time > strtotime("-24 hours")) {
-            $esierrors24h += 1;
+$logtext = [];
+(is_file('log/esi.log')?$nolog = false:$nolog = true);
+if (!$nolog) {
+    $handle = fopen('log/esi.log','r');
+    while (!feof($handle)) {
+        $dd = fgets($handle);
+        $temp = [];
+        if (strlen($dd) > 20) {
+            $arr = explode(" ", $dd);
+            $temp = [];
+            $arr = explode(" ", fgets($handle, 4096));
+            if (count($arr) >= 4) {
+                $temp['date'] = $arr[0];
+                $temp['time'] = $arr[1];
+                $temp['type'] = $arr[2];
+                $temp['message'] = implode(" ", array_slice($arr,3));
+                $logtext[] = $temp;
+            }
+            $timestamp = substr($dd, 0, 20);
+            $time = strtotime($timestamp);
+            if($time > strtotime("-1 hours")) {
+                $esierrors1h += 1;
+                $esierrors24h += 1;
+            } elseif ($time > strtotime("-24 hours")) {
+                $esierrors24h += 1;
+            }
         }
     }
+    fclose($handle);
+    array_reverse($logtext);
 }
-fclose($handle);
-
-$handle = fopen("log/esi.log", "r");
-$logtext = [];
-while (!feof($handle)) {
-   $temp = [];
-   $arr = explode(" ", fgets($handle, 4096));
-   if (count($arr) >= 4) {
-       $temp['date'] = $arr[0];
-       $temp['time'] = $arr[1];
-       $temp['type'] = $arr[2];
-       $temp['message'] = implode(" ", array_slice($arr,3));
-       $logtext[] = $temp;
-   }
-}
-fclose($handle);
-array_reverse($logtext);
 
 
 $fi = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('cache/'), RecursiveIteratorIterator::SELF_FIRST);

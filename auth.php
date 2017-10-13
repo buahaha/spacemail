@@ -17,7 +17,7 @@ if (!isset($_SESSION['characterID'])) {
 
 if (!isset($_SESSION['characterID'])) {
   $page = new Page('Login required');
-  $html = "<div class='col-xs-12'><br/>You need to log in with your EVE account to acces your mails. We do NOT get your account credentials. The login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php?page=".rawurlencode(URL::relative_url())."'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know what we use your API information for, please read our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
+  $html = "<div class='col-xs-12'><br/>You need to log in with your EVE account to access your mails, calendar and notifications. We do NOT get your account credentials. The login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php?page=".rawurlencode(URL::relative_url())."'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know what we use your API information for, please read our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
   $page->addBody($html);
   $page->display();
   exit;
