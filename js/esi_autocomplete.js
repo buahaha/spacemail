@@ -43,4 +43,8 @@ var esiypeahead = $('.typeahead').typeahead(null, {
 }).bind('typeahead:select', function(ev, suggestion) {
     $( "#recipients" ).append('<div class="token btn-sm bg-primary"><input type="hidden" name="rec['+suggestion.id+'][cat]" value="'+suggestion.category+'"></input><input type="hidden" name="rec['+suggestion.id+'][name]" value="'+suggestion.name+'"></input>'+suggestion.name+'&nbsp;<span class="btn btn-xs glyphicon glyphicon-remove" onclick="delrecipient(this)"></span></div>' );
      esiypeahead.typeahead('val','');
+}).bind('typeahead:asyncrequest', function(ev, suggestion) {
+     $( "#tt-loading-spinner" ).show();
+}).bind('typeahead:asyncreceive', function(ev, suggestion) {
+     $( "#tt-loading-spinner" ).hide();
 });

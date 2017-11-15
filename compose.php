@@ -65,6 +65,9 @@ function getToBar($recipients = null, $subject = null, $mailbody = null, $lists 
         </div>
         <div class="form-group col-xs-12 col-md-8 col-lg-5">
            <input id="inv-name" type="text" class="typeahead form-control" placeholder="Search mail recipients...">
+           <div id="tt-loading-spinner" class="pull-right">
+              <i class="fa fa-spinner fa-spin fa-2x fa-fw"></i>
+           </div>
         </div>';
     if(count($lists)) {
         $html .= '<div class="form-group col-xs-12 col-md-2 col-lg-3">

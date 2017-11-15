@@ -133,3 +133,14 @@ span.twitter-typeahead .tt-suggestion:focus {
   max-height: 200px;
   overflow-y: auto;
 }
+
+#tt-loading-spinner {
+  top: -32px;
+  position: relative;
+  right: 4px;
+  display: none;
+  opacity: 0.7;
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  filter: blur(1px);
+}

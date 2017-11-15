@@ -54,21 +54,32 @@ if (isset($_GET['q'])) {
                         die();
                     }
                 }
-                GuzzleHttp\Promise\all($promise)->then(function (array $responses) {
+                $responses = GuzzleHttp\Promise\settle($promise)->wait();
                 foreach ($responses as $response) {
-                    foreach ($response as $r) {
-                        switch(get_class($r)) {
-                            case 'Swagger\Client\Model\GetAlliancesNames200Ok':
-                                $result_ary[] = array('category' => 'alliance', 'id' => $r->getAllianceId() , 'name' => $r->getAllianceName());
-                                break;
-                            case 'Swagger\Client\Model\GetCorporationsNames200Ok':
-                                $result_ary[] = array('category' => 'corporation', 'id' => $r->getCorporationId() , 'name' => $r->getCorporationName());
-                                break;
-                            case 'Swagger\Client\Model\GetCharactersNames200Ok':
-                                $result_ary[] = array('category' => 'character', 'id' => $r->getCharacterId() , 'name' => $r->getCharacterName());
-                                break;
+                    if ($response['state'] == 'fulfilled') {
+                        foreach ($response['value'] as $r) {
+                            switch(get_class($r)) {
+                                case 'Swagger\Client\Model\GetAlliancesNames200Ok':
+                                    $result_ary[] = array('category' => 'alliance', 'id' => $r->getAllianceId() , 'name' => $r->getAllianceName());
+                                    break;
+                                case 'Swagger\Client\Model\GetCorporationsNames200Ok':
+                                    $result_ary[] = array('category' => 'corporation', 'id' => $r->getCorporationId() , 'name' => $r->getCorporationName());
+                                    break;
+                                case 'Swagger\Client\Model\GetCharactersNames200Ok':
+                                    $result_ary[] = array('category' => 'character', 'id' => $r->getCharacterId() , 'name' => $r->getCharacterName());
+                                    break;
+                            }
                         }
+                    } elseif ($response['state'] == 'rejected') {
+                        if(!isset($log)) {
+                            $log = new LOG('log/esi.log');
+                        }
+                        $log->exception($response['reason']);
                     }
+                }
+                if (!count($result_ary)) {
+                    echo('{}');
+                    die();
                 }
                 for($i=0; $i<count($result_ary); $i++) {
                     $temp_arr[levenshtein($_GET['q'], $result_ary[$i]['name'])] = $result_ary[$i];
@@ -80,7 +91,6 @@ if (isset($_GET['q'])) {
                 if ($response != '{}') {
                     file_put_contents($cachefile, $response, LOCK_EX);
                 }
-                })->wait();
             } else {
                 echo('{}');
                 die();

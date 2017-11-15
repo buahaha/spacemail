@@ -109,7 +109,9 @@ class ESICALENDAR extends ESISSO
         public function rsvpEvent($eventID, $respond) {
             $calendarapi = $this-> getCalendarApi();
             try {
-                $calendarapi->putCharactersCharacterIdCalendarEventId($this->characterID, $eventID, ['response' => $respond], 'tranquility');
+                $response = new \Swagger\Client\Model\PutCharactersCharacterIdCalendarEventIdResponse();
+                $response->setResponse($respond);
+                $calendarapi->putCharactersCharacterIdCalendarEventId($this->characterID, $eventID, $response, 'tranquility');
             } catch (Exception $e) {
                 $this->error = true;
                 $this->message = 'Could not respond to Calendar Event: '.$e->getMessage().PHP_EOL;

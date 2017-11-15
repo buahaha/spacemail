@@ -178,40 +178,51 @@ class EVEHELPERS {
    public static function esiMailIdsToNames($mailids) {
         $log = new LOG('log/esi.log');
         $dict = array();
-        foreach($mailids as $cat => $ids) {
+        foreach($mailids as $cat => $_ids) {
             try {
                 $esiapi = new ESIAPI();
                 switch($cat) {
                     case 'alliance':
-                        if (count($ids)) { 
-                            $allianceapi = $esiapi->getApi('Alliance');
-                            $results = $allianceapi->getAlliancesNames(array_unique($ids), 'tranquility');
-                            foreach($results as $result) {
-                                $dict[$result->getAllianceId()] = $result->getAllianceName();
-                            }
-                        }           
-                        break;      
+                        $allianceapi = $esiapi->getApi('Alliance');
+                        foreach (array_chunk($_ids, 80) as $ids) {
+                            $promise[] = $allianceapi->getAlliancesNamesAsync($ids, 'tranquility');
+                        }
+                        break;
                     case 'corporation':
-                        if (count($ids)) {
-                            $corpapi = $esiapi->getApi('Corporation');
-                            $results = $corpapi->getCorporationsNames(array_unique($ids), 'tranquility');
-                            foreach($results as $result) {
-                                $dict[$result->getCorporationId()] = $result->getCorporationName();
-                            }
-                        }           
-                        break;      
+                        $corpapi = $esiapi->getApi('Corporation');
+                        foreach (array_chunk($_ids, 80) as $ids) {
+                            $promise[] = $corpapi->getCorporationsNamesAsync($ids, 'tranquility');
+                        }
+                        break;
                     case 'character':
-                        if (count($ids)) {
-                            $charapi = $esiapi->getApi('Character');
-                            $results = $charapi->getCharactersNames(array_unique($ids), 'tranquility');
-                            foreach($results as $result) {
-                                $dict[$result->getCharacterId()] = $result->getCharacterName();
-                            }
-                        }           
-                        break;      
+                        $charapi = $esiapi->getApi('Character');
+                        foreach (array_chunk($_ids, 80) as $ids) {
+                            $promise[] = $charapi->getCharactersNamesAsync($ids, 'tranquility');
+                        }
+                        break;
                 }
             } catch (Exception $e) {
                 $log->exception($e); 
+            }
+        }
+        $responses = GuzzleHttp\Promise\settle($promise)->wait();
+        foreach ($responses as $response) {
+            if ($response['state'] == 'fulfilled') {
+                foreach ($response['value'] as $r) {
+                    switch(get_class($r)) {
+                        case 'Swagger\Client\Model\GetAlliancesNames200Ok':
+                            $dict[$r->getAllianceId()] = $r->getAllianceName();
+                            break;
+                        case 'Swagger\Client\Model\GetCorporationsNames200Ok':
+                            $dict[$r->getCorporationId()] = $r->getCorporationName();
+                            break;
+                        case 'Swagger\Client\Model\GetCharactersNames200Ok':
+                            $dict[$r->getCharacterId()] = $r->getCharacterName();
+                            break;
+                    }
+                }
+            } elseif ($response['state'] == 'rejected') {
+                $log->exception($response['reason']);
             }
         }
         return $dict;
