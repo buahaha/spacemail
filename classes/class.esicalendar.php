@@ -3,7 +3,6 @@ require_once('config.php');
 ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
 
-use Swagger\Client\ApiClient;
 use Swagger\Client\Configuration;
 use Swagger\Client\ApiException;
 use Swagger\Client\Api\CalendarApi;
@@ -28,7 +27,7 @@ class ESICALENDAR extends ESISSO
             }
             $esiapi = new ESIAPI();
             $esiapi->setAccessToken($this->accessToken);
-            $calendarapi = new CalendarApi($esiapi);
+            $calendarapi = $esiapi->getApi('Calendar');
             return $calendarapi;
         }
 

@@ -165,6 +165,10 @@ img.mod-column {
   float: left;
 }
 
+a.cal-event > .glyphicon {
+  margin-right: -5px;
+}
+
 @media (max-width: 767px) {
   .cal-row {padding: 0;}
   .cal-cell{margin: 1px 0; width: 14.2%;}

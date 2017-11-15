@@ -27,6 +27,12 @@ if (isset($_POST['clearcache'])) {
             unlink($file->getRealPath());
         }
     }
+    $di = new DirectoryIterator('cache/api/');
+    foreach ($di as $dir) {
+        if ($dir->isDir() and (substr($dir->getFilename(), 0, 1) != '.' ) ) {
+            rmdir($dir->getRealPath());
+        }
+    }
 }
 
 $qry = DB::getConnection();

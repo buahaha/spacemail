@@ -5,7 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **constellation_id** | **int** | constellation_id integer | 
 **name** | **string** | name string | 
-**position** | [**\Swagger\Client\Model\GetUniverseConstellationsConstellationIdOkPosition**](GetUniverseConstellationsConstellationIdOkPosition.md) |  | [optional] 
+**position** | [**\Swagger\Client\Model\GetUniverseConstellationsConstellationIdPosition**](GetUniverseConstellationsConstellationIdPosition.md) |  | [optional] 
 **region_id** | **int** | The region this constellation is in | 
 **systems** | **int[]** | systems array | 
 

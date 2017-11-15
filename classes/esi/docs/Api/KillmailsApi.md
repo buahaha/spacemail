@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 Get character kills and losses
 
-Return a list of character's recent kills and losses  --- Alternate route: `/v1/characters/{character_id}/killmails/recent/`  Alternate route: `/legacy/characters/{character_id}/killmails/recent/`  Alternate route: `/dev/characters/{character_id}/killmails/recent/`  --- This route is cached for up to 120 seconds
+Return a list of character's recent kills and losses  --- Alternate route: `/dev/characters/{character_id}/killmails/recent/`  Alternate route: `/legacy/characters/{character_id}/killmails/recent/`  Alternate route: `/v1/characters/{character_id}/killmails/recent/`  --- This route is cached for up to 120 seconds
 
 ### Example
 ```php
@@ -24,7 +24,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: evesso
 Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\KillmailsApi();
+$api_instance = new Swagger\Client\Api\KillmailsApi(new \Http\Adapter\Guzzle6\Client());
 $character_id = 56; // int | An EVE character ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $max_count = 50; // int | How many killmails to return at maximum
@@ -74,7 +74,7 @@ Name | Type | Description  | Notes
 
 Get corporation kills and losses
 
-Get a list of corporation's recent kills and losses  --- Alternate route: `/v1/corporations/{corporation_id}/killmails/recent/`  Alternate route: `/legacy/corporations/{corporation_id}/killmails/recent/`  Alternate route: `/dev/corporations/{corporation_id}/killmails/recent/`  --- This route is cached for up to 3600 seconds
+Get a list of corporation's recent kills and losses  --- Alternate route: `/dev/corporations/{corporation_id}/killmails/recent/`  Alternate route: `/legacy/corporations/{corporation_id}/killmails/recent/`  Alternate route: `/v1/corporations/{corporation_id}/killmails/recent/`  --- This route is cached for up to 3600 seconds
 
 ### Example
 ```php
@@ -84,7 +84,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: evesso
 Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\KillmailsApi();
+$api_instance = new Swagger\Client\Api\KillmailsApi(new \Http\Adapter\Guzzle6\Client());
 $corporation_id = 56; // int | An EVE corporation ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $max_kill_id = 56; // int | Only return killmails with ID smaller than this
@@ -132,14 +132,14 @@ Name | Type | Description  | Notes
 
 Get a single killmail
 
-Return a single killmail from its ID and hash  --- Alternate route: `/v1/killmails/{killmail_id}/{killmail_hash}/`  Alternate route: `/legacy/killmails/{killmail_id}/{killmail_hash}/`  Alternate route: `/dev/killmails/{killmail_id}/{killmail_hash}/`  --- This route is cached for up to 3600 seconds
+Return a single killmail from its ID and hash  --- Alternate route: `/dev/killmails/{killmail_id}/{killmail_hash}/`  Alternate route: `/legacy/killmails/{killmail_id}/{killmail_hash}/`  Alternate route: `/v1/killmails/{killmail_id}/{killmail_hash}/`  --- This route is cached for up to 3600 seconds
 
 ### Example
 ```php
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\KillmailsApi();
+$api_instance = new Swagger\Client\Api\KillmailsApi(new \Http\Adapter\Guzzle6\Client());
 $killmail_hash = "killmail_hash_example"; // string | The killmail hash for verification
 $killmail_id = 56; // int | The killmail ID to be queried
 $datasource = "tranquility"; // string | The server name you would like data from

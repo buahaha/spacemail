@@ -3,7 +3,6 @@ require_once('config.php');
 ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
 
-use Swagger\Client\ApiClient;
 use Swagger\Client\Configuration;
 use Swagger\Client\ApiException;
 use Swagger\Client\Api\MailApi;
@@ -24,7 +23,7 @@ class ESIMAIL extends ESISSO
         public function sendMail($recipients, $subject, $body, $cspa = 0) {
             $rec_ary = array();
             foreach($recipients as $rec) {
-                $temp = new \Swagger\Client\Model\CharacterscharacterIdmailRecipients();
+                $temp = new \Swagger\Client\Model\PostCharactersCharacterIdMailRecipient();
                 $temp->setRecipientId($rec['id']);
                 $temp->setRecipientType($rec['type']);
                 $rec_ary[]=$temp;
@@ -98,7 +97,7 @@ class ESIMAIL extends ESISSO
             }
             $esiapi = new ESIAPI();
             $esiapi->setAccessToken($this->accessToken);
-            $mailapi = new MailApi($esiapi);
+            $mailapi = $esiapi->getApi('Mail');
             return $mailapi;
         }
 
@@ -233,7 +232,7 @@ class ESIMAIL extends ESISSO
             }
             $esiapi = new ESIAPI();
             $esiapi->setAccessToken($this->accessToken);
-            $contactsapi = new ContactsApi($esiapi);
+            $contactsapi = $esiapi->getApi('Contacts');
             $contacts = array();
             try {
                 $response = array();
@@ -257,7 +256,7 @@ class ESIMAIL extends ESISSO
                         $contacts[$id]['watched'] = $contact->getIsWatched();
                         $contacts[$id]['standing'] = $contact->getStanding();
                     }
-                    $universeapi = new UniverseApi($esiapi);
+                    $universeapi = $esiapi->getApi('Universe');
                     $results = $universeapi->postUniverseNames($lookup, 'tranquility');
                     foreach ($results as $r) {
                         if (isset($contacts[$r->getId()])) {

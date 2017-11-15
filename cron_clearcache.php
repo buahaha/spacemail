@@ -29,6 +29,12 @@ foreach ($fi as $file) {
         }
     }
 }
+$di = new DirectoryIterator('cache/api/');
+foreach ($di as $dir) {
+    if ($dir->isDir() and (substr($dir->getFilename(), 0, 1) != '.' ) ) {
+        rmdir($dir->getRealPath());
+    }
+}
 if (php_sapi_name() !='cli') {
     $page = new Page('Cache Cleared');
     $page->addBody('Sucessfully cleared cache. Deleted '.$count. ' files with a total size of '.round($size/(1024*1024), 2).' MB.');

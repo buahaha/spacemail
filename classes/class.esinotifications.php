@@ -3,7 +3,6 @@ require_once('config.php');
 ini_set('display_errors', 'On');
 error_reporting(E_ALL | E_STRICT);
 
-use Swagger\Client\ApiClient;
 use Swagger\Client\Configuration;
 use Swagger\Client\ApiException;
 use Swagger\Client\Api\AllianceApi;
@@ -26,7 +25,7 @@ class ESINOTIFICATIONS extends ESISSO
             }
             $esiapi = new ESIAPI();
             $esiapi->setAccessToken($this->accessToken);
-            $notificationapi = new CharacterApi($esiapi);
+            $notificationapi = $esiapi->getApi('Character');
             return $notificationapi;
         }
 

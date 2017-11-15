@@ -52,9 +52,11 @@ if (isset($_GET['code'])) {
         $page = new Page('SSO Login');
         $_SESSION['characterID'] = $esisso->getCharacterID();
         $_SESSION['characterName'] = $esisso->getCharacterName();
-        $authtoken = new AUTHTOKEN(null, $_SESSION['characterID']);
-        $authtoken->addToDb();
-        $authtoken->storeCookie();
+        if (isset($_SESSION['persistent_login']) && $_SESSION['persistent_login']) {
+            $authtoken = new AUTHTOKEN(null, $_SESSION['characterID']);
+            $authtoken->addToDb();
+            $authtoken->storeCookie();
+        }
         include_once('auth.php');
         $page = new Page('SSO Login');
         if (isset($_GET['page'])) {
@@ -62,7 +64,7 @@ if (isset($_GET['code'])) {
         } else {
             $fwd = 'index.php';
         }
-        $page->addHeader('<meta http-equiv="refresh" content="2;url='.URL::url_path().$fwd.'">');
+        $page->addHeader('<meta http-equiv="refresh" content="1;url='.URL::url_path().$fwd.'">');
         $page->setInfo($esisso->getMessage());
         $page->display();
         exit;
@@ -73,6 +75,12 @@ if (isset($_GET['code'])) {
     $page->display();
     exit;
   }
+}
+
+if (isset($_GET['persistent_login'])) {
+  $_SESSION['persistent_login'] = true;
+} else {
+  $_SESSION['persistent_login'] = false;
 }
 
 $authurl = "https://login.eveonline.com/oauth/authorize/";

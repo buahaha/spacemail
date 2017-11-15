@@ -20,33 +20,30 @@ if (isset($_GET['q'])) {
             die();
         }
         $esiapi = new ESIAPI();
-        $searchapi = new SearchApi($esiapi);
+        $searchapi = $esiapi->getApi('Search');
         try {
-            $tempids = json_decode($searchapi->getSearch(array('character', 'corporation', 'alliance'), $_GET['q'], 'tranquility', 'en-us', false), true);
+            $tempids = json_decode($searchapi->getSearch(array('character', 'corporation', 'alliance'), $_GET['q'], 'tranquility', 'en-us', 0), true);
             if (count($tempids)) {
                 $result_ary = array();
-                foreach($tempids as $cat => $ids) {
+                foreach($tempids as $cat => $_ids) {
                     try {
                         switch($cat) {
                             case 'alliance':
-                                $allianceapi = new AllianceApi($esiapi);
-                                $results = $allianceapi->getAlliancesNames($ids, 'tranquility');
-                                foreach($results as $result) {
-                                    $result_ary[] = array('category' => $cat, 'id' => $result->getAllianceId() , 'name' => $result->getAllianceName());
+                                $allianceapi = $esiapi->getApi('Alliance');
+                                foreach (array_chunk($_ids, 80) as $ids) {
+                                    $promise[] = $allianceapi->getAlliancesNamesAsync($ids, 'tranquility');
                                 }
                                 break;
                             case 'corporation':
-                                $corpapi = new CorporationApi($esiapi);
-                                $results = $corpapi->getCorporationsNames($ids, 'tranquility');
-                                foreach($results as $result) {
-                                    $result_ary[] = array('category' => $cat, 'id' => $result->getCorporationId() , 'name' => $result->getCorporationName());
+                                $corpapi = $esiapi->getApi('Corporation');
+                                foreach (array_chunk($_ids, 80) as $ids) {
+                                    $promise[] = $corpapi->getCorporationsNamesAsync($ids, 'tranquility');
                                 }
                                 break;
                             case 'character':
-                                $charapi = new CharacterApi($esiapi);
-                                $results = $charapi->getCharactersNames($ids, 'tranquility');
-                                foreach($results as $result) {
-                                    $result_ary[] = array('category' => $cat, 'id' => $result->getCharacterId() , 'name' => $result->getCharacterName());
+                                $charapi = $esiapi->getApi('Character');
+                                foreach (array_chunk($_ids, 80) as $ids) {
+                                    $promise[] = $charapi->getCharactersNamesAsync($ids, 'tranquility');
                                 }
                                 break;
                         }
@@ -56,18 +53,34 @@ if (isset($_GET['q'])) {
                         echo('{}');
                         die();
                     }
-                    for($i=0; $i<count($result_ary); $i++) {
-                        $temp_arr[levenshtein($_GET['q'], $result_ary[$i]['name'])] = $result_ary[$i];
-                    }
-                    ksort($temp_arr);
-                    $response = json_encode(array_values($temp_arr));
                 }
+                GuzzleHttp\Promise\all($promise)->then(function (array $responses) {
+                foreach ($responses as $response) {
+                    foreach ($response as $r) {
+                        switch(get_class($r)) {
+                            case 'Swagger\Client\Model\GetAlliancesNames200Ok':
+                                $result_ary[] = array('category' => 'alliance', 'id' => $r->getAllianceId() , 'name' => $r->getAllianceName());
+                                break;
+                            case 'Swagger\Client\Model\GetCorporationsNames200Ok':
+                                $result_ary[] = array('category' => 'corporation', 'id' => $r->getCorporationId() , 'name' => $r->getCorporationName());
+                                break;
+                            case 'Swagger\Client\Model\GetCharactersNames200Ok':
+                                $result_ary[] = array('category' => 'character', 'id' => $r->getCharacterId() , 'name' => $r->getCharacterName());
+                                break;
+                        }
+                    }
+                }
+                for($i=0; $i<count($result_ary); $i++) {
+                    $temp_arr[levenshtein($_GET['q'], $result_ary[$i]['name'])] = $result_ary[$i];
+                }
+                ksort($temp_arr);
+                $response = json_encode(array_values($temp_arr));
                 header('Content-type: application/json');
                 echo $response;
                 if ($response != '{}') {
                     file_put_contents($cachefile, $response, LOCK_EX);
                 }
-                die();
+                })->wait();
             } else {
                 echo('{}');
                 die();
@@ -84,5 +97,4 @@ if (isset($_GET['q'])) {
     echo('{}');
     die();
 }
-
 ?>

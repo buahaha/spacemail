@@ -23,7 +23,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: evesso
 Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\SearchApi();
+$api_instance = new Swagger\Client\Api\SearchApi(new \Http\Adapter\Guzzle6\Client());
 $categories = array("categories_example"); // string[] | Type of entities to search for
 $character_id = 56; // int | An EVE character ID
 $search = "search_example"; // string | The string to search on
@@ -77,14 +77,14 @@ Name | Type | Description  | Notes
 
 Search on a string
 
-Search for entities that match a given sub-string.  --- Alternate route: `/v1/search/`  Alternate route: `/legacy/search/`  --- This route is cached for up to 3600 seconds
+Search for entities that match a given sub-string.  --- Alternate route: `/legacy/search/`  Alternate route: `/v1/search/`  --- This route is cached for up to 3600 seconds
 
 ### Example
 ```php
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\SearchApi();
+$api_instance = new Swagger\Client\Api\SearchApi(new \Http\Adapter\Guzzle6\Client());
 $categories = array("categories_example"); // string[] | Type of entities to search for
 $search = "search_example"; // string | The string to search on
 $datasource = "tranquility"; // string | The server name you would like data from

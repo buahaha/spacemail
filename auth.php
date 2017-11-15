@@ -17,7 +17,14 @@ if (!isset($_SESSION['characterID'])) {
 
 if (!isset($_SESSION['characterID'])) {
   $page = new Page('Login required');
-  $html = "<div class='col-xs-12'><br/>You need to log in with your EVE account to access your mails, calendar and notifications. We do NOT get your account credentials. The login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p><a href='login.php?page=".rawurlencode(URL::relative_url())."'><img height='32px' src='img/evesso.png'></a><br/><br/>If you would like to know what we use your API information for, please read our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
+  $html = "<div class='col-xs-12'><br/>You need to log in with your EVE account to access your mails, calendar and notifications. We do NOT get your account credentials. The login button will redirect you to the single sign on page and afterwards back here.<div class='col-xs-12' style='height: 20px'></div><p>
+    <div class='col-xs-1'></div><div class='col-xs-11 col-sm-12'><form method='get' action='login.php'>
+        <input name='page' type='hidden' value='".rawurlencode(URL::relative_url())."'>
+        <input type='image' value='submit' height='32px' src='img/evesso.png'/>
+        <div class='checkbox'>
+            <label><input type='checkbox' name='persistent_login' value='true'>Keep me logged in</label>
+        </div>
+    </form></div><br/>If you would like to know what we use your API information for, please read our <a href='disclaimer.php'>disclaimer</a>.</p></div>";
   $page->addBody($html);
   $page->display();
   exit;

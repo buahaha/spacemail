@@ -3,7 +3,7 @@
 class LOG {
 
     private $log_file, $fh;
-    private $maxsize = 64;
+    private $maxsize = 1024;
     private $log_file_default = 'log/logfile.txt';
 
     public function __construct($path = null) {
@@ -22,6 +22,7 @@ class LOG {
         }
         $script_name = pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME);
         $time = @date('Y/m/d H:i:s');
+        $message = str_replace(array("\r", "\n"), '', $message);
         fwrite($this->fh, "$time ".($type == ''?'':$type.': ')."[$script_name] $message" . PHP_EOL);
     }
 

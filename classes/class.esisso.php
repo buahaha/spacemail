@@ -1,7 +1,6 @@
 <?php
 require_once('config.php');
 
-use Swagger\Client\ApiClient;
 use Swagger\Client\Configuration;
 use Swagger\Client\ApiException;
 use Swagger\Client\Api\CharacterApi;
@@ -184,14 +183,14 @@ class ESISSO
 		$result = $qry->query("SELECT * FROM esisso WHERE (characterID='".$characterID."')");
                 if ($result->num_rows == 0) {
                         $esiapi = new ESIAPI();
-                        $charapi = new CharacterApi($esiapi);
+                        $charapi = $esiapi->getApi('Character');
                         try {
                             $charinfo = json_decode($charapi->getCharactersCharacterId($characterID, 'tranquility'));
                             $characterName = $charinfo->name;
                             $this->characterName = $characterName;
                         } catch (Exception $e) {
                             $this->error = true;
-                            $this->message = 'Could not relove character name: '.$e->getMessage();
+                            $this->message = 'Could not resolve character name: '.$e->getMessage();
                             $this->log->error($this->message);
                             return false;
                         }
@@ -347,14 +346,14 @@ class ESISSO
         public function getCharacterName() {
                 if ($this->characterName == null || $this->characterName == '') {
                     $esiapi = new ESIAPI();
-                    $charapi = new CharacterApi($esiapi);
+                    $charapi = $esiapi->getApi('Character');
                     try {
                         $charinfo = json_decode($charapi->getCharactersCharacterId($this->characterID, 'tranquility'));
                         $characterName = $charinfo->name;
                         $this->characterName = $characterName;
                     } catch (Exception $e) {
                         $this->error = true;
-                        $this->message = 'Could not relove character name: '.$e->getMessage();
+                        $this->message = 'Could not resolve character name: '.$e->getMessage();
                         $this->log->error($this->message);
                     }
                 }

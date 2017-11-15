@@ -161,7 +161,7 @@ class EVEHELPERS {
         }
         $lookup = array_keys($lookup);
         $esiapi = new ESIAPI();
-        $universeapi = new UniverseApi($esiapi);
+        $universeapi = $esiapi->getApi('Universe');
         try {
             $results = $universeapi->postUniverseNames($lookup, 'tranquility');
         } catch (Exception $e) {
@@ -184,7 +184,7 @@ class EVEHELPERS {
                 switch($cat) {
                     case 'alliance':
                         if (count($ids)) { 
-                            $allianceapi = new AllianceApi($esiapi);
+                            $allianceapi = $esiapi->getApi('Alliance');
                             $results = $allianceapi->getAlliancesNames(array_unique($ids), 'tranquility');
                             foreach($results as $result) {
                                 $dict[$result->getAllianceId()] = $result->getAllianceName();
@@ -193,7 +193,7 @@ class EVEHELPERS {
                         break;      
                     case 'corporation':
                         if (count($ids)) {
-                            $corpapi = new CorporationApi($esiapi);
+                            $corpapi = $esiapi->getApi('Corporation');
                             $results = $corpapi->getCorporationsNames(array_unique($ids), 'tranquility');
                             foreach($results as $result) {
                                 $dict[$result->getCorporationId()] = $result->getCorporationName();
@@ -202,7 +202,7 @@ class EVEHELPERS {
                         break;      
                     case 'character':
                         if (count($ids)) {
-                            $charapi = new CharacterApi($esiapi);
+                            $charapi = $esiapi->getApi('Character');
                             $results = $charapi->getCharactersNames(array_unique($ids), 'tranquility');
                             foreach($results as $result) {
                                 $dict[$result->getCharacterId()] = $result->getCharacterName();
@@ -227,7 +227,7 @@ class EVEHELPERS {
         $esiapi = new ESIAPI();
         try {
             if (count($lookup)) {
-                $charapi = new CharacterApi($esiapi);
+                $charapi = $esiapi->getApi('Character');
                 $results = $charapi->getCharactersNames(array_keys($lookup), 'tranquility');
                 foreach($results as $result) {
                     $dict[$result->getCharacterId()] = array('name' => $result->getCharacterName(), 'cat' => 'character');
@@ -235,7 +235,7 @@ class EVEHELPERS {
                 }
             }
             if (count($lookup)) {
-                $corpapi = new CorporationApi($esiapi);
+                $corpapi = $esiapi->getApi('Corporation');
                 $results = $corpapi->getCorporationsNames(array_keys($lookup), 'tranquility');
                 foreach($results as $result) {
                     $dict[$result->getCorporationId()] = array('name' => $result->getCorporationName(), 'cat' => 'corporation');
@@ -243,7 +243,7 @@ class EVEHELPERS {
                 }
             }
             if (count($lookup)) {
-                $allianceapi = new AllianceApi($esiapi);
+                $allianceapi = $esiapi->getApi('Alliance');
                 $results = $allianceapi->getAlliancesNames(array_keys($lookup), 'tranquility');
                 foreach($results as $result) {
                     $dict[$result->getAllianceId()] = array('name' => $result->getAllianceName(), 'cat' => 'alliance');
@@ -264,7 +264,7 @@ class EVEHELPERS {
         }
         $lookup = array_keys($lookup);
         $esiapi = new ESIAPI();
-        $universeapi = new UniverseApi($esiapi);
+        $universeapi = $esiapi->getApi('Universe');
         try {
             $results = $universeapi->postUniverseNames($lookup, 'tranquility');
         } catch (Exception $e) {
@@ -281,7 +281,7 @@ class EVEHELPERS {
     public static function getCorpForChar($characterID) {
         $log = new LOG('log/esi.log');
         $esiapi = new ESIAPI();
-        $charapi = new CharacterApi($esiapi);
+        $charapi = $esiapi->getApi('Character');
         try {
             $charinfo = json_decode($charapi->getCharactersCharacterId($characterID, 'tranquility'));
             $corpID = $charinfo->corporation_id;
@@ -295,7 +295,7 @@ class EVEHELPERS {
     public static function getCorpInfo($corpID) {
         $log = new LOG('log/esi.log');
         $esiapi = new ESIAPI();
-        $corpapi = new CorporationApi($esiapi);
+        $corpapi = $esiapi->getApi('Corporation');
         try {
             $corpinfo = json_decode($corpapi->getCorporationsCorporationId($corpID, 'tranquility'));
         } catch (Exception $e) {
@@ -309,7 +309,7 @@ class EVEHELPERS {
     public static function getAllyForCorp($corpID) {
         $log = new LOG('log/esi.log');
         $esiapi = new ESIAPI();
-        $corpapi = new CorporationApi($esiapi);
+        $corpapi = $esiapi->getApi('Corporation');
         try {
             $corpinfo = json_decode($corpapi->getCorporationsCorporationId($corpID, 'tranquility'));
             if (isset($corpinfo->alliance_id)) {
@@ -327,7 +327,7 @@ class EVEHELPERS {
     public static function getAllyInfo($allyID) {
         $log = new LOG('log/esi.log');
         $esiapi = new ESIAPI();
-        $allyapi = new AllianceApi($esiapi);
+        $allyapi = $esiapi->getApi('AllianceApi');
         try {
             $allyinfo = json_decode($allyapi->getAlliancesAllianceId($allyID, 'tranquility'));
         } catch (Exception $e) {
@@ -340,7 +340,7 @@ class EVEHELPERS {
     public static function getAllyHistory($corpid) {
         $log = new LOG('log/esi.log');
         $esiapi = new ESIAPI();
-        $corpapi = new CorporationApi($esiapi);
+        $corpapi = $esiapi->getApi('Corporation');
         $allys = array();
         $lookup = array();
         try {
@@ -358,7 +358,7 @@ class EVEHELPERS {
                 }
             }
             if (count($lookup)) {
-                $allyapi = new AllianceApi($esiapi);
+                $allyapi = $esiapi->getApi('Alliance');
                 $results = $allyapi->getAlliancesNames(array_keys($lookup), 'tranquility');
                 foreach($results as $result) {
                     $lookup[$result->getAllianceId()] = $result->getAllianceName();

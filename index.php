@@ -72,8 +72,8 @@ function mailsPage($esimail) {
             $table .= '<th class="all no-sort"></th>
             <th class="num no-sort min-tablet-l"></th>
             <th>From:</th>
-            <th>Subject</th>
-            <th class="min-tablet-l">To:</th>
+            <th class="subj-col">Subject</th>
+            <th class="min-tablet-l to-col">To:</th>
             <th class="num no-sort min-mobile-l"></th>';
           }
           $table .= '<th class="cb"></th>';
@@ -83,7 +83,11 @@ function mailsPage($esimail) {
           var mlist = '.($ml == null?'null':$ml).';
           function readmail(link, isread) {
               var id = $(link).attr("id");
-              var subject = $(link).text();
+              if ($(link).parent().hasClass("ellipsis")) {
+                  var subject = $(link).parent().attr("title");
+              } else {
+                  var subject = $(link).text();
+              }
               var dialog = new BootstrapDialog(
                   {message: "Fetching mail...</br><center><i class=\"fa fa-spinner fa-pulse fa-3x fa-fw\"></i></center>",
                   title: subject,
@@ -181,7 +185,7 @@ $footer .= '          function getmore() {
             if (label == 2) {
                 var columns = [{ "data": "date" },{ "data": "to" },{ "data": "subject" }, {"data" : null,"defaultContent": "<a href=\"#\" title=\"Forward mail\" onclick=\"fwdrow(this)\"><i class=\"fa fa-share\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" class=\"faa-parent animated-hover\" title=\"Delete mail\" onclick=\"deleterow(this)\"><i class=\"fa fa-trash faa-shake\" aria-hidden=\"true\"><\/i><\/a>", "width": "32px"}, {"defaultContent":""}]
             } else {
-                var columns =  [{ "data": "date" },{ "data": "isread" },{ "data": "img" },{ "data": "from" },{ "data": "subject" },{ "data": "to" },{ "data": null,"defaultContent": "<a href=\"#\" title=\"Reply to\" onclick=\"replyrow(this)\"><i class=\"fa fa-reply\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" title=\"Forward mail\" onclick=\"fwdrow(this)\"><i class=\"fa fa-share\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" class=\"faa-parent animated-hover\" title=\"Delete mail\" onclick=\"deleterow(this)\"><i class=\"fa fa-trash faa-shake\" aria-hidden=\"true\"><\/i><\/a>", "width": "50px"}, {"defaultContent":""}]
+                var columns =  [{ "data": "date" },{ "data": "isread" },{ "data": "img" },{ "data": "from" },{ "data": "subject", "class" : "subj-col" },{ "data": "to", "class" : "to-col" },{ "data": null,"defaultContent": "<a href=\"#\" title=\"Reply to\" onclick=\"replyrow(this)\"><i class=\"fa fa-reply\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" title=\"Forward mail\" onclick=\"fwdrow(this)\"><i class=\"fa fa-share\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" class=\"faa-parent animated-hover\" title=\"Delete mail\" onclick=\"deleterow(this)\"><i class=\"fa fa-trash faa-shake\" aria-hidden=\"true\"><\/i><\/a>", "width": "50px"}, {"defaultContent":""}]
             }
             if (mlist != undefined) {
                 pages = 5
@@ -281,6 +285,9 @@ $footer .= '          function getmore() {
                        orderable: false,
                        className: "select-checkbox hidden-xs",
                        "aTargets" : [ "cb" ]
+                   }, {
+                       "render" : $.fn.dataTable.render.ellipsis( 45, true),
+                       "aTargets" : [ "to-col", "subj-col" ]
                    } ], 
                    "order": [[ 0, "desc" ]],
                    fixedHeader: {
@@ -568,6 +575,7 @@ $footer .= '          function getmore() {
     <script src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/select/1.2.3/js/dataTables.select.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="js/ellipsis.js"></script>
     <script src="js/typeahead.bundle.min.js"></script>
     <script src="js/esi_autocomplete.js"></script>
     <script src="js/bootstrap-contextmenu.js"></script>

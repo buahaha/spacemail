@@ -14,14 +14,14 @@ Method | HTTP request | Description
 
 List wars
 
-Return a list of wars  --- Alternate route: `/v1/wars/`  Alternate route: `/legacy/wars/`  Alternate route: `/dev/wars/`  --- This route is cached for up to 3600 seconds
+Return a list of wars  --- Alternate route: `/dev/wars/`  Alternate route: `/legacy/wars/`  Alternate route: `/v1/wars/`  --- This route is cached for up to 3600 seconds
 
 ### Example
 ```php
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\WarsApi();
+$api_instance = new Swagger\Client\Api\WarsApi(new \Http\Adapter\Guzzle6\Client());
 $datasource = "tranquility"; // string | The server name you would like data from
 $max_war_id = 56; // int | Only return wars with ID smaller than this.
 $user_agent = "user_agent_example"; // string | Client identifier, takes precedence over headers
@@ -65,14 +65,14 @@ No authorization required
 
 Get war information
 
-Return details about a war  --- Alternate route: `/v1/wars/{war_id}/`  Alternate route: `/legacy/wars/{war_id}/`  Alternate route: `/dev/wars/{war_id}/`  --- This route is cached for up to 3600 seconds
+Return details about a war  --- Alternate route: `/dev/wars/{war_id}/`  Alternate route: `/legacy/wars/{war_id}/`  Alternate route: `/v1/wars/{war_id}/`  --- This route is cached for up to 3600 seconds
 
 ### Example
 ```php
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\WarsApi();
+$api_instance = new Swagger\Client\Api\WarsApi(new \Http\Adapter\Guzzle6\Client());
 $war_id = 56; // int | ID for a war
 $datasource = "tranquility"; // string | The server name you would like data from
 $user_agent = "user_agent_example"; // string | Client identifier, takes precedence over headers
@@ -116,14 +116,14 @@ No authorization required
 
 List kills for a war
 
-Return a list of kills related to a war  --- Alternate route: `/v1/wars/{war_id}/killmails/`  Alternate route: `/legacy/wars/{war_id}/killmails/`  Alternate route: `/dev/wars/{war_id}/killmails/`  --- This route is cached for up to 3600 seconds
+Return a list of kills related to a war  --- Alternate route: `/dev/wars/{war_id}/killmails/`  Alternate route: `/legacy/wars/{war_id}/killmails/`  Alternate route: `/v1/wars/{war_id}/killmails/`  --- This route is cached for up to 3600 seconds
 
 ### Example
 ```php
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\WarsApi();
+$api_instance = new Swagger\Client\Api\WarsApi(new \Http\Adapter\Guzzle6\Client());
 $war_id = 56; // int | A valid war ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $page = 1; // int | Which page of results to return

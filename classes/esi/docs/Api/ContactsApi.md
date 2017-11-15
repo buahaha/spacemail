@@ -5,6 +5,7 @@ All URIs are relative to *https://esi.tech.ccp.is/latest*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deleteCharactersCharacterIdContacts**](ContactsApi.md#deleteCharactersCharacterIdContacts) | **DELETE** /characters/{character_id}/contacts/ | Delete contacts
+[**getAlliancesAllianceIdContacts**](ContactsApi.md#getAlliancesAllianceIdContacts) | **GET** /alliances/{alliance_id}/contacts/ | Get alliance contacts
 [**getCharactersCharacterIdContacts**](ContactsApi.md#getCharactersCharacterIdContacts) | **GET** /characters/{character_id}/contacts/ | Get contacts
 [**getCharactersCharacterIdContactsLabels**](ContactsApi.md#getCharactersCharacterIdContactsLabels) | **GET** /characters/{character_id}/contacts/labels/ | Get contact labels
 [**getCorporationsCorporationIdContacts**](ContactsApi.md#getCorporationsCorporationIdContacts) | **GET** /corporations/{corporation_id}/contacts/ | Get corporation contacts
@@ -17,7 +18,7 @@ Method | HTTP request | Description
 
 Delete contacts
 
-Bulk delete contacts  --- Alternate route: `/v1/characters/{character_id}/contacts/`  Alternate route: `/legacy/characters/{character_id}/contacts/`
+Bulk delete contacts  --- Alternate route: `/legacy/characters/{character_id}/contacts/`  Alternate route: `/v1/characters/{character_id}/contacts/`
 
 ### Example
 ```php
@@ -27,9 +28,9 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: evesso
 Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\ContactsApi();
+$api_instance = new Swagger\Client\Api\ContactsApi(new \Http\Adapter\Guzzle6\Client());
 $character_id = 56; // int | An EVE character ID
-$contact_ids = array(new int[]()); // int[] | A list of contacts to delete
+$contact_ids = array(new \Swagger\Client\Model\int[]()); // int[] | A list of contacts to delete
 $datasource = "tranquility"; // string | The server name you would like data from
 $token = "token_example"; // string | Access token to use if unable to set a header
 $user_agent = "user_agent_example"; // string | Client identifier, takes precedence over headers
@@ -69,12 +70,12 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 
-# **getCharactersCharacterIdContacts**
-> \Swagger\Client\Model\GetCharactersCharacterIdContacts200Ok[] getCharactersCharacterIdContacts($character_id, $datasource, $page, $token, $user_agent, $x_user_agent)
+# **getAlliancesAllianceIdContacts**
+> \Swagger\Client\Model\GetAlliancesAllianceIdContacts200Ok[] getAlliancesAllianceIdContacts($alliance_id, $datasource, $page, $token, $user_agent, $x_user_agent)
 
-Get contacts
+Get alliance contacts
 
-Return contacts of a character  --- Alternate route: `/v1/characters/{character_id}/contacts/`  Alternate route: `/legacy/characters/{character_id}/contacts/`  Alternate route: `/dev/characters/{character_id}/contacts/`  --- This route is cached for up to 300 seconds
+Return contacts of an alliance  --- Alternate route: `/dev/alliances/{alliance_id}/contacts/`  Alternate route: `/legacy/alliances/{alliance_id}/contacts/`  Alternate route: `/v1/alliances/{alliance_id}/contacts/`  --- This route is cached for up to 300 seconds
 
 ### Example
 ```php
@@ -84,7 +85,65 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: evesso
 Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\ContactsApi();
+$api_instance = new Swagger\Client\Api\ContactsApi(new \Http\Adapter\Guzzle6\Client());
+$alliance_id = 56; // int | An EVE alliance ID
+$datasource = "tranquility"; // string | The server name you would like data from
+$page = 1; // int | Which page of results to return
+$token = "token_example"; // string | Access token to use if unable to set a header
+$user_agent = "user_agent_example"; // string | Client identifier, takes precedence over headers
+$x_user_agent = "x_user_agent_example"; // string | Client identifier, takes precedence over User-Agent
+
+try {
+    $result = $api_instance->getAlliancesAllianceIdContacts($alliance_id, $datasource, $page, $token, $user_agent, $x_user_agent);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling ContactsApi->getAlliancesAllianceIdContacts: ', $e->getMessage(), PHP_EOL;
+}
+?>
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **alliance_id** | **int**| An EVE alliance ID |
+ **datasource** | **string**| The server name you would like data from | [optional] [default to tranquility]
+ **page** | **int**| Which page of results to return | [optional] [default to 1]
+ **token** | **string**| Access token to use if unable to set a header | [optional]
+ **user_agent** | **string**| Client identifier, takes precedence over headers | [optional]
+ **x_user_agent** | **string**| Client identifier, takes precedence over User-Agent | [optional]
+
+### Return type
+
+[**\Swagger\Client\Model\GetAlliancesAllianceIdContacts200Ok[]**](../Model/GetAlliancesAllianceIdContacts200Ok.md)
+
+### Authorization
+
+[evesso](../../README.md#evesso)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
+# **getCharactersCharacterIdContacts**
+> \Swagger\Client\Model\GetCharactersCharacterIdContacts200Ok[] getCharactersCharacterIdContacts($character_id, $datasource, $page, $token, $user_agent, $x_user_agent)
+
+Get contacts
+
+Return contacts of a character  --- Alternate route: `/dev/characters/{character_id}/contacts/`  Alternate route: `/legacy/characters/{character_id}/contacts/`  Alternate route: `/v1/characters/{character_id}/contacts/`  --- This route is cached for up to 300 seconds
+
+### Example
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+// Configure OAuth2 access token for authorization: evesso
+Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+$api_instance = new Swagger\Client\Api\ContactsApi(new \Http\Adapter\Guzzle6\Client());
 $character_id = 56; // int | An EVE character ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $page = 1; // int | Which page of results to return
@@ -132,7 +191,7 @@ Name | Type | Description  | Notes
 
 Get contact labels
 
-Return custom labels for contacts the character defined  --- Alternate route: `/v1/characters/{character_id}/contacts/labels/`  Alternate route: `/legacy/characters/{character_id}/contacts/labels/`  Alternate route: `/dev/characters/{character_id}/contacts/labels/`  --- This route is cached for up to 300 seconds
+Return custom labels for contacts the character defined  --- Alternate route: `/dev/characters/{character_id}/contacts/labels/`  Alternate route: `/legacy/characters/{character_id}/contacts/labels/`  Alternate route: `/v1/characters/{character_id}/contacts/labels/`  --- This route is cached for up to 300 seconds
 
 ### Example
 ```php
@@ -142,7 +201,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: evesso
 Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\ContactsApi();
+$api_instance = new Swagger\Client\Api\ContactsApi(new \Http\Adapter\Guzzle6\Client());
 $character_id = 56; // int | An EVE character ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $token = "token_example"; // string | Access token to use if unable to set a header
@@ -188,7 +247,7 @@ Name | Type | Description  | Notes
 
 Get corporation contacts
 
-Return contacts of a corporation  --- Alternate route: `/v1/corporations/{corporation_id}/contacts/`  Alternate route: `/legacy/corporations/{corporation_id}/contacts/`  Alternate route: `/dev/corporations/{corporation_id}/contacts/`  --- This route is cached for up to 300 seconds
+Return contacts of a corporation  --- Alternate route: `/dev/corporations/{corporation_id}/contacts/`  Alternate route: `/legacy/corporations/{corporation_id}/contacts/`  Alternate route: `/v1/corporations/{corporation_id}/contacts/`  --- This route is cached for up to 300 seconds
 
 ### Example
 ```php
@@ -198,7 +257,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: evesso
 Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\ContactsApi();
+$api_instance = new Swagger\Client\Api\ContactsApi(new \Http\Adapter\Guzzle6\Client());
 $corporation_id = 56; // int | An EVE corporation ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $page = 1; // int | Which page of results to return
@@ -246,7 +305,7 @@ Name | Type | Description  | Notes
 
 Add contacts
 
-Bulk add contacts with same settings  --- Alternate route: `/v1/characters/{character_id}/contacts/`  Alternate route: `/legacy/characters/{character_id}/contacts/`  Alternate route: `/dev/characters/{character_id}/contacts/`
+Bulk add contacts with same settings  --- Alternate route: `/dev/characters/{character_id}/contacts/`  Alternate route: `/legacy/characters/{character_id}/contacts/`  Alternate route: `/v1/characters/{character_id}/contacts/`
 
 ### Example
 ```php
@@ -256,9 +315,9 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: evesso
 Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\ContactsApi();
+$api_instance = new Swagger\Client\Api\ContactsApi(new \Http\Adapter\Guzzle6\Client());
 $character_id = 56; // int | An EVE character ID
-$contact_ids = array(new int[]()); // int[] | A list of contacts to add
+$contact_ids = array(new \Swagger\Client\Model\int[]()); // int[] | A list of contacts to add
 $standing = 3.4; // float | Standing for the new contact
 $datasource = "tranquility"; // string | The server name you would like data from
 $label_id = 0; // int | Add a custom label to the new contact
@@ -310,7 +369,7 @@ Name | Type | Description  | Notes
 
 Edit contacts
 
-Bulk edit contacts with same settings  --- Alternate route: `/v1/characters/{character_id}/contacts/`  Alternate route: `/legacy/characters/{character_id}/contacts/`  Alternate route: `/dev/characters/{character_id}/contacts/`
+Bulk edit contacts with same settings  --- Alternate route: `/dev/characters/{character_id}/contacts/`  Alternate route: `/legacy/characters/{character_id}/contacts/`  Alternate route: `/v1/characters/{character_id}/contacts/`
 
 ### Example
 ```php
@@ -320,9 +379,9 @@ require_once(__DIR__ . '/vendor/autoload.php');
 // Configure OAuth2 access token for authorization: evesso
 Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\ContactsApi();
+$api_instance = new Swagger\Client\Api\ContactsApi(new \Http\Adapter\Guzzle6\Client());
 $character_id = 56; // int | An EVE character ID
-$contact_ids = array(new int[]()); // int[] | A list of contacts to edit
+$contact_ids = array(new \Swagger\Client\Model\int[]()); // int[] | A list of contacts to edit
 $standing = 3.4; // float | Standing for the contact
 $datasource = "tranquility"; // string | The server name you would like data from
 $label_id = 0; // int | Add a custom label to the contact, use 0 for clearing label
