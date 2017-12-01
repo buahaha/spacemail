@@ -12,10 +12,10 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 
 if (isset($_SESSION['characterID'])) {
   $esimail = new ESIMAIL($_SESSION['characterID']);
-  if ($esimail->getScopes() == unserialize(MAIL_SCOPES)) {
-    $scopesOK = True;
-  } else {
+  if (count(array_diff(unserialize(MAIL_SCOPES), $esimail->getScopes()))) {
     $scopesOK = False;
+  } else {
+    $scopesOK = True;
   }
 }
 

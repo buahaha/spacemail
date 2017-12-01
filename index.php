@@ -539,7 +539,7 @@ $footer .= '          function getmore() {
                                  else {
                                      var notification = new Notification("You got EVE mail!", {
                                          icon: "https://spacemail.tk/img/spacemail.png",
-                                         body: "You got mail. Currently you have unread "+unread+" mails.",
+                                         body: "You got mail. Currently you have "+unread+" unread mail"+((unread > 1) ? "s." :"."),
                                      });
                                  }
                              }

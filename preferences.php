@@ -65,6 +65,9 @@ $html = '<div class="col-xs-12">
                <div class="radio">
                  <label><input type="radio" name="style" value="light" '.($style == "light"?'checked ':'').'>Light</label>
                </div>
+               <div class="radio">
+                 <label><input type="radio" name="style" value="colors" '.($style == "colors"?'checked ':'').'>I really like colors...</label>
+               </div>
              </div>
              <div class="form-group col-xs-12">
                  <label class="checkbox-inline"><input type="checkbox" name="reload" value="1" '.($reload?'checked ':'').'>Auto reload mails</label>

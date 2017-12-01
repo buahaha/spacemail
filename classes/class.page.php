@@ -82,7 +82,7 @@ class Page {
 
     private function getDynamic() {
         $page ='<!DOCTYPE html>
-        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+        <html xmlns="https://www.w3.org/1999/xhtml" xml:lang="en">
         <head>
             <meta charset="utf-8"/>
             <link rel="canonical" href="'.URL::full_url().'"/>
@@ -233,7 +233,7 @@ class Page {
         $page .= '</div></div></div>
         <footer class="footer navbar-inverse">
             <div class="container">
-                <p class="text-muted">EVE Online, the EVE logo, EVE and all associated logos and designs are the intellectual property of&nbsp;<a href="http://www.ccpgames.com/">CCP</a>&nbsp;hf. All artwork, screenshots, characters, vehicles, storylines, world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. All other trademarks are the property of their respective owners. CCP hf. has granted permission to Spacemail to use EVE Online and all associated logos and designs for promotional and information purposes on its website but does not endorse, and is not in any way affiliated with, Spacemail. CCP is in no way responsible for the content on or functioning of this website, nor can it be liable for any damage arising from the use of this website.</p>
+                <p class="text-muted">EVE Online, the EVE logo, EVE and all associated logos and designs are the intellectual property of&nbsp;<a href="https://www.ccpgames.com/">CCP</a>&nbsp;hf. All artwork, screenshots, characters, vehicles, storylines, world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. All other trademarks are the property of their respective owners. CCP hf. has granted permission to Spacemail to use EVE Online and all associated logos and designs for promotional and information purposes on its website but does not endorse, and is not in any way affiliated with, Spacemail. CCP is in no way responsible for the content on or functioning of this website, nor can it be liable for any damage arising from the use of this website.</p>
             </div>
         </footer>
         <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
@@ -287,6 +287,8 @@ class Page {
             case 'light':
                 return '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/spacelab/bootstrap.min.css" integrity="sha256-EcfrF/G54HxW6buGJmPVuNLgViKrjyVncuaq11qAMUY=" crossorigin="anonymous" />';
                 break;
+            case 'colors':
+                return '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.2.0+2/amelia/bootstrap.css" integrity="sha256-+0IVlVvReXjhRVw5WUH404nAg0VP/RmoUZP1A8RBNG4=" crossorigin="anonymous" />';
             default:
             case 'dark':
                 return '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cyborg/bootstrap.min.css" integrity="sha256-OS83dfsRdMVkXGhSSJtvinOaQUUIYaFZfF2DBwdFqb0=" crossorigin="anonymous" />';
