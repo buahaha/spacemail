@@ -12,10 +12,10 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 
 if (isset($_SESSION['characterID'])) {
   $esical = new ESICALENDAR($_SESSION['characterID']);
-  if ($esical->getScopes() == unserialize(MAIL_SCOPES)) {
-    $scopesOK = True;
-  } else {
+  if (count(array_diff(unserialize(MAIL_SCOPES), $esical->getScopes()))) {
     $scopesOK = False;
+  } else {
+    $scopesOK = True;
   }
 }
 
