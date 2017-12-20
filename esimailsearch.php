@@ -48,7 +48,7 @@ if (isset($_GET['q'])) {
                                 break;
                         }
                     } catch (Exception $e) {
-                        $log = new LOG('log/esi.log');
+                        $log = new ESILOG('log/esi.log');
                         $log->exception($e);
                         echo('{}');
                         die();
@@ -72,7 +72,7 @@ if (isset($_GET['q'])) {
                         }
                     } elseif ($response['state'] == 'rejected') {
                         if(!isset($log)) {
-                            $log = new LOG('log/esi.log');
+                            $log = new ESILOG('log/esi.log');
                         }
                         $log->exception($response['reason']);
                     }

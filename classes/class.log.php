@@ -1,6 +1,6 @@
 <?php
 
-class LOG {
+class ESILOG {
 
     private $log_file, $fh;
     private $maxsize = 1024;

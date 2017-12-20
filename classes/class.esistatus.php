@@ -15,7 +15,7 @@ class ESISTATUS extends ESIAPI
         protected $log;
 
         public function __construct() {
-            $this->log = new LOG('log/esi.log');
+            $this->log = new ESILOG('log/esi.log');
             parent::__construct();
         }
 

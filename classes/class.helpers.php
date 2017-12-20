@@ -154,7 +154,7 @@ class EVEHELPERS {
     }
 
     public static function esiIdsToNames($ids) {
-        $log = new LOG('log/esi.log');
+        $log = new ESILOG('log/esi.log');
         $lookup = array();
         foreach($ids as $key=>$val) {
             $lookup[$val] = true;
@@ -176,7 +176,7 @@ class EVEHELPERS {
     }
 
    public static function esiMailIdsToNames($mailids) {
-        $log = new LOG('log/esi.log');
+        $log = new ESILOG('log/esi.log');
         $dict = array();
         foreach($mailids as $cat => $_ids) {
             try {
@@ -229,7 +229,7 @@ class EVEHELPERS {
     }
 
     public static function esiMailIdsLookup($ids) {
-        $log = new LOG('log/esi.log');
+        $log = new ESILOG('log/esi.log');
         $lookup = array();
         foreach($ids as $key=>$val) {
             $lookup[$val] = true;
@@ -268,7 +268,7 @@ class EVEHELPERS {
     }
 
     public static function esiIdsLookup($ids) {
-        $log = new LOG('log/esi.log');
+        $log = new ESILOG('log/esi.log');
         $lookup = array();
         foreach($ids as $key=>$val) {
             $lookup[$val] = true;
@@ -290,7 +290,7 @@ class EVEHELPERS {
     }
 
     public static function getCorpForChar($characterID) {
-        $log = new LOG('log/esi.log');
+        $log = new ESILOG('log/esi.log');
         $esiapi = new ESIAPI();
         $charapi = $esiapi->getApi('Character');
         try {
@@ -304,7 +304,7 @@ class EVEHELPERS {
     }
 
     public static function getCorpInfo($corpID) {
-        $log = new LOG('log/esi.log');
+        $log = new ESILOG('log/esi.log');
         $esiapi = new ESIAPI();
         $corpapi = $esiapi->getApi('Corporation');
         try {
@@ -318,7 +318,7 @@ class EVEHELPERS {
 
 
     public static function getAllyForCorp($corpID) {
-        $log = new LOG('log/esi.log');
+        $log = new ESILOG('log/esi.log');
         $esiapi = new ESIAPI();
         $corpapi = $esiapi->getApi('Corporation');
         try {
@@ -336,7 +336,7 @@ class EVEHELPERS {
     }
 
     public static function getAllyInfo($allyID) {
-        $log = new LOG('log/esi.log');
+        $log = new ESILOG('log/esi.log');
         $esiapi = new ESIAPI();
         $allyapi = $esiapi->getApi('AllianceApi');
         try {
@@ -349,7 +349,7 @@ class EVEHELPERS {
     }
 
     public static function getAllyHistory($corpid) {
-        $log = new LOG('log/esi.log');
+        $log = new ESILOG('log/esi.log');
         $esiapi = new ESIAPI();
         $corpapi = $esiapi->getApi('Corporation');
         $allys = array();

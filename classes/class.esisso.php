@@ -31,7 +31,7 @@ class ESISSO
 
 	function __construct($id = null, $characterID = 0, $refreshToken = null, $failcount = 0)
 	{
-                $this->log = new LOG('log/esi.log');
+                $this->log = new ESILOG('log/esi.log');
                 if($id != null) {
                         $this->id = $id;
                         $sql="SELECT * FROM esisso WHERE id=".$id;

@@ -42,7 +42,7 @@ class DB extends mysqli
         self::$options = array_merge(self::$options, $opt);
     }
 
-    public function query($query) {
+    public function query($query, $resultmode = NULL) {
         if( !$this->real_query($query) ) {
             throw new exception( $this->error, $this->errno );
         }
