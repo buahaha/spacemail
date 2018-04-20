@@ -4,6 +4,8 @@ All URIs are relative to *https://esi.tech.ccp.is/latest*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**getUniverseAncestries**](UniverseApi.md#getUniverseAncestries) | **GET** /universe/ancestries/ | Get ancestries
+[**getUniverseAsteroidBeltsAsteroidBeltId**](UniverseApi.md#getUniverseAsteroidBeltsAsteroidBeltId) | **GET** /universe/asteroid_belts/{asteroid_belt_id}/ | Get asteroid belt information
 [**getUniverseBloodlines**](UniverseApi.md#getUniverseBloodlines) | **GET** /universe/bloodlines/ | Get bloodlines
 [**getUniverseCategories**](UniverseApi.md#getUniverseCategories) | **GET** /universe/categories/ | Get item categories
 [**getUniverseCategoriesCategoryId**](UniverseApi.md#getUniverseCategoriesCategoryId) | **GET** /universe/categories/{category_id}/ | Get item category information
@@ -30,8 +32,111 @@ Method | HTTP request | Description
 [**getUniverseSystemsSystemId**](UniverseApi.md#getUniverseSystemsSystemId) | **GET** /universe/systems/{system_id}/ | Get solar system information
 [**getUniverseTypes**](UniverseApi.md#getUniverseTypes) | **GET** /universe/types/ | Get types
 [**getUniverseTypesTypeId**](UniverseApi.md#getUniverseTypesTypeId) | **GET** /universe/types/{type_id}/ | Get type information
+[**postUniverseIds**](UniverseApi.md#postUniverseIds) | **POST** /universe/ids/ | Bulk names to IDs
 [**postUniverseNames**](UniverseApi.md#postUniverseNames) | **POST** /universe/names/ | Get names and categories for a set of ID&#39;s
 
+
+# **getUniverseAncestries**
+> \Swagger\Client\Model\GetUniverseAncestries200Ok[] getUniverseAncestries($datasource, $language, $user_agent, $x_user_agent)
+
+Get ancestries
+
+Get all character ancestries  --- Alternate route: `/dev/universe/ancestries/`  Alternate route: `/legacy/universe/ancestries/`  Alternate route: `/v1/universe/ancestries/`  --- This route expires daily at 11:05
+
+### Example
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\Api\UniverseApi(new \Http\Adapter\Guzzle6\Client());
+$datasource = "tranquility"; // string | The server name you would like data from
+$language = "en-us"; // string | Language to use in the response
+$user_agent = "user_agent_example"; // string | Client identifier, takes precedence over headers
+$x_user_agent = "x_user_agent_example"; // string | Client identifier, takes precedence over User-Agent
+
+try {
+    $result = $api_instance->getUniverseAncestries($datasource, $language, $user_agent, $x_user_agent);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling UniverseApi->getUniverseAncestries: ', $e->getMessage(), PHP_EOL;
+}
+?>
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **datasource** | **string**| The server name you would like data from | [optional] [default to tranquility]
+ **language** | **string**| Language to use in the response | [optional] [default to en-us]
+ **user_agent** | **string**| Client identifier, takes precedence over headers | [optional]
+ **x_user_agent** | **string**| Client identifier, takes precedence over User-Agent | [optional]
+
+### Return type
+
+[**\Swagger\Client\Model\GetUniverseAncestries200Ok[]**](../Model/GetUniverseAncestries200Ok.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
+# **getUniverseAsteroidBeltsAsteroidBeltId**
+> \Swagger\Client\Model\GetUniverseAsteroidBeltsAsteroidBeltIdOk getUniverseAsteroidBeltsAsteroidBeltId($asteroid_belt_id, $datasource, $user_agent, $x_user_agent)
+
+Get asteroid belt information
+
+Get information on an asteroid belt  --- Alternate route: `/dev/universe/asteroid_belts/{asteroid_belt_id}/`  Alternate route: `/legacy/universe/asteroid_belts/{asteroid_belt_id}/`  Alternate route: `/v1/universe/asteroid_belts/{asteroid_belt_id}/`  --- This route expires daily at 11:05
+
+### Example
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\Api\UniverseApi(new \Http\Adapter\Guzzle6\Client());
+$asteroid_belt_id = 56; // int | asteroid_belt_id integer
+$datasource = "tranquility"; // string | The server name you would like data from
+$user_agent = "user_agent_example"; // string | Client identifier, takes precedence over headers
+$x_user_agent = "x_user_agent_example"; // string | Client identifier, takes precedence over User-Agent
+
+try {
+    $result = $api_instance->getUniverseAsteroidBeltsAsteroidBeltId($asteroid_belt_id, $datasource, $user_agent, $x_user_agent);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling UniverseApi->getUniverseAsteroidBeltsAsteroidBeltId: ', $e->getMessage(), PHP_EOL;
+}
+?>
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **asteroid_belt_id** | **int**| asteroid_belt_id integer |
+ **datasource** | **string**| The server name you would like data from | [optional] [default to tranquility]
+ **user_agent** | **string**| Client identifier, takes precedence over headers | [optional]
+ **x_user_agent** | **string**| Client identifier, takes precedence over User-Agent | [optional]
+
+### Return type
+
+[**\Swagger\Client\Model\GetUniverseAsteroidBeltsAsteroidBeltIdOk**](../Model/GetUniverseAsteroidBeltsAsteroidBeltIdOk.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
 
 # **getUniverseBloodlines**
 > \Swagger\Client\Model\GetUniverseBloodlines200Ok[] getUniverseBloodlines($datasource, $language, $user_agent, $x_user_agent)
@@ -1348,6 +1453,59 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**\Swagger\Client\Model\GetUniverseTypesTypeIdOk**](../Model/GetUniverseTypesTypeIdOk.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
+
+# **postUniverseIds**
+> \Swagger\Client\Model\PostUniverseIdsOk postUniverseIds($names, $datasource, $language, $user_agent, $x_user_agent)
+
+Bulk names to IDs
+
+Resolve a set of names to IDs in the following categories: agents, alliances, characters, constellations, corporations factions, inventory_types, regions, stations, and systems. Only exact matches will be returned. All names searched for are cached for 12 hours.  --- Alternate route: `/dev/universe/ids/`  Alternate route: `/legacy/universe/ids/`  Alternate route: `/v1/universe/ids/`
+
+### Example
+```php
+<?php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\Api\UniverseApi(new \Http\Adapter\Guzzle6\Client());
+$names = array(new \Swagger\Client\Model\string[]()); // string[] | The names to resolve
+$datasource = "tranquility"; // string | The server name you would like data from
+$language = "en-us"; // string | Language to use in the response
+$user_agent = "user_agent_example"; // string | Client identifier, takes precedence over headers
+$x_user_agent = "x_user_agent_example"; // string | Client identifier, takes precedence over User-Agent
+
+try {
+    $result = $api_instance->postUniverseIds($names, $datasource, $language, $user_agent, $x_user_agent);
+    print_r($result);
+} catch (Exception $e) {
+    echo 'Exception when calling UniverseApi->postUniverseIds: ', $e->getMessage(), PHP_EOL;
+}
+?>
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **names** | **string[]**| The names to resolve |
+ **datasource** | **string**| The server name you would like data from | [optional] [default to tranquility]
+ **language** | **string**| Language to use in the response | [optional] [default to en-us]
+ **user_agent** | **string**| Client identifier, takes precedence over headers | [optional]
+ **x_user_agent** | **string**| Client identifier, takes precedence over User-Agent | [optional]
+
+### Return type
+
+[**\Swagger\Client\Model\PostUniverseIdsOk**](../Model/PostUniverseIdsOk.md)
 
 ### Authorization
 

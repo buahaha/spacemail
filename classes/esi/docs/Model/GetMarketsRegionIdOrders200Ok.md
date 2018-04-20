@@ -6,10 +6,11 @@ Name | Type | Description | Notes
 **order_id** | **int** | order_id integer | 
 **type_id** | **int** | type_id integer | 
 **location_id** | **int** | location_id integer | 
+**system_id** | **int** | The solar system this order was placed | 
 **volume_total** | **int** | volume_total integer | 
 **volume_remain** | **int** | volume_remain integer | 
 **min_volume** | **int** | min_volume integer | 
-**price** | **float** | price number | 
+**price** | **double** | price number | 
 **is_buy_order** | **bool** | is_buy_order boolean | 
 **duration** | **int** | duration integer | 
 **issued** | [**\DateTime**](\DateTime.md) | issued string | 
