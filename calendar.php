@@ -6,16 +6,19 @@ require_once('config.php');
 require_once('loadclasses.php');
 
 function calPage() {
+    $today_d = (int)gmdate('d');
+    $today_m = (int)gmdate('m');
+    $today_y = (int)gmdate('Y');
     $cal = '';
     if (null == URL::getQ('m') || null == URL::getQ('y')) {
-        $m = date('m');
-        $y = date('Y');
+        $m = gmdate('m');
+        $y = gmdate('Y');
     } else {
         $m = URL::getQ('m');
         $y = URL::getQ('y');
     }
     $cal .= '<div id="caldiv" class="row"><div class="col-xs-12 col-sm-5"><h4>'.date('F Y', strtotime($y.'/'.$m.'/01')).'</h4></div><div class="col-xs-12 col-lg-6 col-sm-6 text-right" id="loadingdiv"></div></div>';
-    $w = (int)date('W', strtotime($y.'/'.$m.'/01'));
+    $w = (int)gmdate('W', strtotime($y.'/'.$m.'/01'));
     $dto = new DateTime();
     if ($m == 1 && $w > 50) {
         $dto->setISODate($y-1, $w);
@@ -27,7 +30,14 @@ function calPage() {
         $i = 0;
         $cal .= '<div class="row cal-row">';
         do {
-            $cal .= '<div class="panel small '.($i > 4?'panel-primary ':'panel-default ').'cal-cell" id="'.$dto->format('Y-m-d').'"'.($dto->format('m') != $m?'style=" opacity: 0.4" ':'').'>
+            if ((int)$dto->format('d') == $today_d && (int)$dto->format('m') == $today_m && (int)$dto->format('Y') == $today_y) {
+                $style = 'panel-primary';
+            } else if ($i > 4) {
+                $style = 'panel-success';
+            } else {
+                $style = 'panel-default';
+            }
+            $cal .= '<div class="panel small '.$style.' cal-cell" id="'.$dto->format('Y-m-d').'"'.($dto->format('m') != $m?'style=" opacity: 0.4" ':'').'>
                          <div class="panel-heading"><span class="hidden-xs">'.$dto->format('D').'&nbsp;</span>' .$dto->format('j').'</div>
                          <div class="panel-body tiny">';
                 $cal .= '</div>
