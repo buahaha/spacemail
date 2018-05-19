@@ -235,8 +235,8 @@ function getScripts($esicalendar) {
 }
 
 if (null == URL::getQ('m') || null == URL::getQ('y')) {
-    $m = date('m');
-    $y = date('Y');
+    $m = gmdate('m');
+    $y = gmdate('Y');
     header('location: '.URL::full_url_noq().'?y='.$y.'&m='.$m);
 } elseif (null != URL::getQ('calonly')) {
     echo calPage();
