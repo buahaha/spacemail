@@ -170,7 +170,6 @@ $footer .= '          function getmore() {
               $.ajax({
                   url: "fetchmails.php?label="+label+"&lastid="+lastid+"&pages="+pages+mlstring,
                   success: function(data) {
-                      console.log("fetchmails.php?label="+label+"&lastid="+lastid+"&pages="+pages+mlstring);
                       json = JSON.parse(data);
                       mtable.rows.add(json.data).draw();
                       if (json.lastid < lastid) {
