@@ -133,7 +133,7 @@ class ESIMAIL extends ESISSO
             $i = 0;
             try {
                 do {
-                    $mailfetch = $mailapi->getCharactersCharacterIdMail($this->characterID, 'tranquility', $labels, $lastid);
+                    $mailfetch = $mailapi->getCharactersCharacterIdMail($this->characterID, 'tranquility', null, $labels, $lastid);
                     foreach ($mailfetch as $mail) {
                         $mails[] = json_decode($mail, true);
                     }
