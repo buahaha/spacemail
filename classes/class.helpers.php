@@ -85,6 +85,37 @@ class EVEHELPERS {
         }
     }
 
+    public static function getAllSystemNames() {
+        $qry = DB::getConnection();
+        $sql="SELECT solarSystemID, solarSystemName FROM mapSolarSystems";
+        $result = $qry->query($sql);
+        $return = array();
+        if($result->num_rows) {
+            while ($row = $result->fetch_assoc()) {
+                $return[$row['solarSystemID']] = $row['solarSystemName'];
+            }
+            return $return;
+        } else {
+            return null;
+        }
+    }
+
+    public static function getFactionNames() {
+        $qry = DB::getConnection();
+        $sql="SELECT factionName as name, factionID as id FROM chrFactions";
+        $result = $qry->query($sql);
+        $return = array();
+        if($result->num_rows) {
+            while ($row = $result->fetch_assoc()) {
+                $return[$row['id']] = $row['name'];
+            }
+            return $return;
+        } else {
+            return null;
+        }
+    }
+
+
     public static function getStructureNames($items) {
         $qry = DB::getConnection();
         $sql="SELECT structureID, structureName FROM structures WHERE structureID=".implode(" OR structureID=", self::flatten($items));
@@ -163,7 +194,7 @@ class EVEHELPERS {
         $esiapi = new ESIAPI();
         $universeapi = $esiapi->getApi('Universe');
         try {
-            $results = $universeapi->postUniverseNames($lookup, 'tranquility');
+            $results = $universeapi->postUniverseNames(json_encode($lookup), 'tranquility');
         } catch (Exception $e) {
             $log->exception($e);
             return null;
@@ -189,15 +220,15 @@ class EVEHELPERS {
                         }
                         break;
                     case 'corporation':
-                        $corpapi = $esiapi->getApi('Corporation');
-                        foreach (array_chunk($_ids, 80) as $ids) {
-                            $promise[] = $corpapi->getCorporationsNamesAsync($ids, 'tranquility');
+                        $universeapi = $esiapi->getApi('Universe');
+                        foreach (array_chunk(array_unique($_ids), 80) as $ids) {
+                            $promise[] = $universeapi->postUniverseNamesAsync(json_encode($ids), 'tranquility');
                         }
                         break;
                     case 'character':
-                        $charapi = $esiapi->getApi('Character');
-                        foreach (array_chunk($_ids, 80) as $ids) {
-                            $promise[] = $charapi->getCharactersNamesAsync($ids, 'tranquility');
+                        $universeapi = $esiapi->getApi('Universe');
+                        foreach (array_chunk(array_unique($_ids), 80) as $ids) {
+                            $promise[] = $universeapi->postUniverseNamesAsync(json_encode($ids), 'tranquility');
                         }
                         break;
                 }
@@ -277,7 +308,7 @@ class EVEHELPERS {
         $esiapi = new ESIAPI();
         $universeapi = $esiapi->getApi('Universe');
         try {
-            $results = $universeapi->postUniverseNames($lookup, 'tranquility');
+            $results = $universeapi->postUniverseNames(json_encode($lookup), 'tranquility');
         } catch (Exception $e) {
             $log->exception($e);
             return null;
@@ -338,7 +369,7 @@ class EVEHELPERS {
     public static function getAllyInfo($allyID) {
         $log = new ESILOG('log/esi.log');
         $esiapi = new ESIAPI();
-        $allyapi = $esiapi->getApi('AllianceApi');
+        $allyapi = $esiapi->getApi('Alliance');
         try {
             $allyinfo = json_decode($allyapi->getAlliancesAllianceId($allyID, 'tranquility'));
         } catch (Exception $e) {
@@ -357,15 +388,14 @@ class EVEHELPERS {
         try {
             $allyHist = ($corpapi->getCorporationsCorporationIdAlliancehistory($corpid, 'tranquility'));
             if (count($allyHist)) {
-                foreach($allyHist as $a) {
-                    $ally = $a->getAlliance();
+                foreach($allyHist as $ally) {
                     $temp=array();
-                    if ($ally) {
-                        $temp['id'] = $ally->getAllianceId();
+                    $temp['id'] = $ally->getAllianceId();
+                    $temp['joined'] = date_format($ally->getStartDate(), 'Y-m-d h:i:s');
+                    if (!empty($temp['id']) && !is_null($temp['id'])) {
                         $lookup[$ally->getAllianceId()] = null;
+                        $allys[]=$temp;
                     }
-                    $temp['joined'] = date_format($a->getStartDate(), 'Y-m-d h:i:s');
-                    $allys[]=$temp;
                 }
             }
             if (count($lookup)) {

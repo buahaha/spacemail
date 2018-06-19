@@ -301,16 +301,6 @@ class CorporationApiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test case for getCorporationsNames
-     *
-     * Get corporation names.
-     *
-     */
-    public function testGetCorporationsNames()
-    {
-    }
-
-    /**
      * Test case for getCorporationsNpccorps
      *
      * Get npc corporations.

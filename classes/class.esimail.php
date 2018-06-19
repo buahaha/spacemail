@@ -160,7 +160,7 @@ class ESIMAIL extends ESISSO
                     $mailids[$recipient['recipient_type']][]=$recipient['recipient_id'];
                 }
             }
-            $dict = EVEHELPERS::esiMailIdsToNames($mailids);
+            $dict = EVEHELPERS::esiIdsToNames(array_merge($mailids['alliance'], $mailids['corporation'], $mailids['character']));
             
             foreach ($mails as $i => $mail) {
                 if (!isset($mail['is_read'])) {
@@ -255,7 +255,7 @@ class ESIMAIL extends ESISSO
                         $contacts[$id]['standing'] = $contact->getStanding();
                     }
                     $universeapi = $esiapi->getApi('Universe');
-                    $results = $universeapi->postUniverseNames($lookup, 'tranquility');
+                    $results = $universeapi->postUniverseNames(json_encode(array_unique($lookup)), 'tranquility');
                     foreach ($results as $r) {
                         if (isset($contacts[$r->getId()])) {
                             $contacts[$r->getId()]['name'] = $r->getName();

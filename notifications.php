@@ -53,11 +53,13 @@ $page = new Page($esinot->getCharacterName().'\'s notifications');
 
 $notifications = $esinot->getNotifications();
 
-$lookup = ['character' => array(), 'corporation' => array(), 'alliance' => array()];
+$lookup = array();
 foreach ($notifications as $n) {
-    $lookup[$n['sender_type']][] = $n['sender_id'];
+    if ($n['sender_type'] == 'character' || $n['sender_type'] == 'corporation' || $n['sender_type'] == 'alliance') {
+        $lookup[] = $n['sender_id'];
+    }
 }
-$dict = EVEHELPERS::esiMailIdsToNames($lookup);
+$dict = EVEHELPERS::esiIdsToNames($lookup);
 
 $html = '<table class="table table-striped small" id="nottable">
              <thead>

@@ -27,7 +27,6 @@ Method | HTTP request | Description
 [**getCorporationsCorporationIdStarbasesStarbaseId**](CorporationApi.md#getCorporationsCorporationIdStarbasesStarbaseId) | **GET** /v1/corporations/{corporation_id}/starbases/{starbase_id}/ | Get starbase (POS) detail
 [**getCorporationsCorporationIdStructures**](CorporationApi.md#getCorporationsCorporationIdStructures) | **GET** /v2/corporations/{corporation_id}/structures/ | Get corporation structures
 [**getCorporationsCorporationIdTitles**](CorporationApi.md#getCorporationsCorporationIdTitles) | **GET** /v1/corporations/{corporation_id}/titles/ | Get corporation titles
-[**getCorporationsNames**](CorporationApi.md#getCorporationsNames) | **GET** /v2/corporations/names/ | Get corporation names
 [**getCorporationsNpccorps**](CorporationApi.md#getCorporationsNpccorps) | **GET** /v1/corporations/npccorps/ | Get npc corporations
 
 
@@ -1280,55 +1279,6 @@ Name | Type | Description  | Notes
 ### Authorization
 
 [evesso](../../README.md#evesso)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
-
-# **getCorporationsNames**
-> \Swagger\Client\Model\GetCorporationsNames200Ok[] getCorporationsNames($corporation_ids, $datasource, $if_none_match)
-
-Get corporation names
-
-Resolve a set of corporation IDs to corporation names  ---  This route is cached for up to 3600 seconds
-
-### Example
-```php
-<?php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-$api_instance = new Swagger\Client\Api\CorporationApi(new \Http\Adapter\Guzzle6\Client());
-$corporation_ids = array(56); // int[] | A comma separated list of corporation IDs
-$datasource = "tranquility"; // string | The server name you would like data from
-$if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
-
-try {
-    $result = $api_instance->getCorporationsNames($corporation_ids, $datasource, $if_none_match);
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling CorporationApi->getCorporationsNames: ', $e->getMessage(), PHP_EOL;
-}
-?>
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **corporation_ids** | [**int[]**](../Model/int.md)| A comma separated list of corporation IDs |
- **datasource** | **string**| The server name you would like data from | [optional] [default to tranquility]
- **if_none_match** | **string**| ETag from a previous request. A 304 will be returned if this matches the current ETag | [optional]
-
-### Return type
-
-[**\Swagger\Client\Model\GetCorporationsNames200Ok[]**](../Model/GetCorporationsNames200Ok.md)
-
-### Authorization
-
-No authorization required
 
 ### HTTP request headers
 

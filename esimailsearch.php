@@ -27,25 +27,9 @@ if (isset($_GET['q'])) {
                 $result_ary = array();
                 foreach($tempids as $cat => $_ids) {
                     try {
-                        switch($cat) {
-                            case 'alliance':
-                                $allianceapi = $esiapi->getApi('Alliance');
-                                foreach (array_chunk($_ids, 80) as $ids) {
-                                    $promise[] = $allianceapi->getAlliancesNamesAsync($ids, 'tranquility');
-                                }
-                                break;
-                            case 'corporation':
-                                $corpapi = $esiapi->getApi('Corporation');
-                                foreach (array_chunk($_ids, 80) as $ids) {
-                                    $promise[] = $corpapi->getCorporationsNamesAsync($ids, 'tranquility');
-                                }
-                                break;
-                            case 'character':
-                                $charapi = $esiapi->getApi('Character');
-                                foreach (array_chunk($_ids, 80) as $ids) {
-                                    $promise[] = $charapi->getCharactersNamesAsync($ids, 'tranquility');
-                                }
-                                break;
+                        $universeapi = $esiapi->getApi('Universe');
+                        foreach (array_chunk(array_unique($_ids), 250) as $ids) {
+                            $promise[] = $universeapi->postUniverseNamesAsync(json_encode($ids), 'tranquility');
                         }
                     } catch (Exception $e) {
                         $log = new ESILOG('log/esi.log');
@@ -58,17 +42,7 @@ if (isset($_GET['q'])) {
                 foreach ($responses as $response) {
                     if ($response['state'] == 'fulfilled') {
                         foreach ($response['value'] as $r) {
-                            switch(get_class($r)) {
-                                case 'Swagger\Client\Model\GetAlliancesNames200Ok':
-                                    $result_ary[] = array('category' => 'alliance', 'id' => $r->getAllianceId() , 'name' => $r->getAllianceName());
-                                    break;
-                                case 'Swagger\Client\Model\GetCorporationsNames200Ok':
-                                    $result_ary[] = array('category' => 'corporation', 'id' => $r->getCorporationId() , 'name' => $r->getCorporationName());
-                                    break;
-                                case 'Swagger\Client\Model\GetCharactersNames200Ok':
-                                    $result_ary[] = array('category' => 'character', 'id' => $r->getCharacterId() , 'name' => $r->getCharacterName());
-                                    break;
-                            }
+                            $result_ary[] = array('category' => $r->getCategory(), 'id' => $r->getId(), 'name' => $r->getName());
                         }
                     } elseif ($response['state'] == 'rejected') {
                         if(!isset($log)) {

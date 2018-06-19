@@ -17,7 +17,6 @@ Method | HTTP request | Description
 [**getCharactersCharacterIdStandings**](CharacterApi.md#getCharactersCharacterIdStandings) | **GET** /v1/characters/{character_id}/standings/ | Get standings
 [**getCharactersCharacterIdStats**](CharacterApi.md#getCharactersCharacterIdStats) | **GET** /v2/characters/{character_id}/stats/ | Yearly aggregate stats
 [**getCharactersCharacterIdTitles**](CharacterApi.md#getCharactersCharacterIdTitles) | **GET** /v1/characters/{character_id}/titles/ | Get character corporation titles
-[**getCharactersNames**](CharacterApi.md#getCharactersNames) | **GET** /v1/characters/names/ | Get character names
 [**postCharactersAffiliation**](CharacterApi.md#postCharactersAffiliation) | **POST** /v1/characters/affiliation/ | Character affiliation
 [**postCharactersCharacterIdCspa**](CharacterApi.md#postCharactersCharacterIdCspa) | **POST** /v4/characters/{character_id}/cspa/ | Calculate a CSPA charge cost
 
@@ -703,55 +702,6 @@ Name | Type | Description  | Notes
 ### Authorization
 
 [evesso](../../README.md#evesso)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../../README.md#documentation-for-api-endpoints) [[Back to Model list]](../../README.md#documentation-for-models) [[Back to README]](../../README.md)
-
-# **getCharactersNames**
-> \Swagger\Client\Model\GetCharactersNames200Ok[] getCharactersNames($character_ids, $datasource, $if_none_match)
-
-Get character names
-
-Resolve a set of character IDs to character names  ---  This route is cached for up to 3600 seconds
-
-### Example
-```php
-<?php
-require_once(__DIR__ . '/vendor/autoload.php');
-
-$api_instance = new Swagger\Client\Api\CharacterApi(new \Http\Adapter\Guzzle6\Client());
-$character_ids = array(56); // int[] | A comma separated list of character IDs
-$datasource = "tranquility"; // string | The server name you would like data from
-$if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
-
-try {
-    $result = $api_instance->getCharactersNames($character_ids, $datasource, $if_none_match);
-    print_r($result);
-} catch (Exception $e) {
-    echo 'Exception when calling CharacterApi->getCharactersNames: ', $e->getMessage(), PHP_EOL;
-}
-?>
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **character_ids** | [**int[]**](../Model/int.md)| A comma separated list of character IDs |
- **datasource** | **string**| The server name you would like data from | [optional] [default to tranquility]
- **if_none_match** | **string**| ETag from a previous request. A 304 will be returned if this matches the current ETag | [optional]
-
-### Return type
-
-[**\Swagger\Client\Model\GetCharactersNames200Ok[]**](../Model/GetCharactersNames200Ok.md)
-
-### Authorization
-
-No authorization required
 
 ### HTTP request headers
 

@@ -201,16 +201,6 @@ class CharacterApiTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test case for getCharactersNames
-     *
-     * Get character names.
-     *
-     */
-    public function testGetCharactersNames()
-    {
-    }
-
-    /**
      * Test case for postCharactersAffiliation
      *
      * Character affiliation.
