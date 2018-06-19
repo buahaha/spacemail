@@ -51,7 +51,7 @@ $mailids['character'][]=$mail['from'];
 foreach($mail['recipients'] as $recipient) {
     $mailids[$recipient['recipient_type']][]=$recipient['recipient_id'];
 }
-$dict = EVEHELPERS::esiMailIdsToNames($mailids);
+$dict = EVEHELPERS::esiIdsToNames(array_merge($mailids['alliance'], $mailids['corporation'], $mailids['character']));
 
 if (isset($dict[$mail['from']])) {
     $mail['from_name'] = $dict[$mail['from']];

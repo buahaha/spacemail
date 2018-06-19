@@ -159,7 +159,7 @@ if(!isset($_POST['submit']) && isset($_GET['action']) && isset($_GET['mid']) && 
         foreach ($mail['recipients'] as $r) {
             $ids[] = $r['recipient_id'];
         }
-        $dict = EVEHELPERS::esiMailIdsLookup($ids);
+        $dict = EVEHELPERS::esiIdsLookup($ids);
         $mail['from_name'] = idToName($mail['from'], $dict);
         foreach ($mail['recipients'] as $i=>$r) {
             if ($r['recipient_type'] == 'mailing_list') {
