@@ -508,6 +508,23 @@ $footer .= '          function getmore() {
                   }],
              });
          }
+         function showfit(btn, dna) {
+              name = $(btn).text();
+              var dialog = new BootstrapDialog(
+                  {message: "Parsing Fit...</br><center><i class=\"fa fa-spinner fa-pulse fa-3x fa-fw\"></i></center>",
+                  title: name,
+                  draggable: true,
+                  buttons: [{
+                      label: "Close",
+                      action: function(dialogRef) {
+                          dialogRef.close();
+                      }
+                  }],});
+              dialog.open();
+              $.get("fitting.php?dna="+dna, function(data, status){
+                  dialog.setMessage(data);
+              });
+         }
          function fwdrow(btn) {
              var trow = $(btn).closest("tr");
              var id = trow.find("a").first().attr("id");

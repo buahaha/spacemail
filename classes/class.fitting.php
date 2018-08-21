@@ -11,67 +11,65 @@ class FITTING
     protected $rigs = array();
     protected $subsys = array();
     protected $drones = array();
+    protected $charges = array();
     protected $error = false;
     protected $message = '';
+    private $typenames = array();
 
     public function __construct($fit = null) {
       if ($fit != null) {
         $temp = array();
         $tempmods = array();
-        $named = false;
-        foreach(preg_split("/((\r?\n)|(\r\n?))/", $fit) as $line){
-            if (0 === strpos($line, '[') && !$named) {
-                $temp[] = array(0 => preg_split('/[\[,]/', $line)[1]);
-                $named = true;
-            } else {
-                if (trim($line) == '') {
-                    $temp[] = $tempmods;
-                    $tempmods = array();
-                } else {
-                    $tempmods[] = (preg_split('/[,]/', $line)[0]);
+        foreach(explode(":", $fit) as $part){
+            $p = explode(";",$part);
+            if (sizeof($p) > 1) {
+                for ($i = 1; $i <= (int)$p[1]; $i++) {
+                    $tempmods[] = (int)$p[0];
                 }
+            } else {
+                $tempmods[] = (int)$p[0];
             }
         }
-        foreach ($temp as $i => $values) {
-            if (count($values)) {
-                $qry = DB::getConnection();
-                $escapednames = array();
-                foreach ($values as $value) {
-                    $escapednames[] = $qry->real_escape_string($value);
-                }
-                $typenames = implode("' OR typeName='",$escapednames);
-                $sql="SELECT typeID, typeName FROM invTypes WHERE typeName='".$typenames."'";
-                $result = $qry->query($sql);
-                while ($row = $result->fetch_row()) {
-                    foreach ($values as $name) {
-                        if ($row[1] == $name) {
-                            switch ($i) {
-                               case 0:
-                                   $this->shipID = $row[0];
-                                   break;
-                               case 1:
-                                   $this->lows[] = $row[0];
-                                   break;
-                               case 2:
-                                   $this->meds[] = $row[0];
-                                   break;
-                               case 3:
-                                   $this->highs[] = $row[0];
-                                   break;
-                               case 4:
-                                   $this->rigs[] = $row[0];
-                                   break;
-                               case 5:
-                                   $this->subsys[] = $row[0];
-                                   break;
-                               case 6:
-                                   $this->drones[] = $row[0];
-                                   break;
-        
-                            }
-                        }
-                    }
-                }
+        $sql='select invTypes.typeid,typename,COALESCE(effectid,categoryID) effectid from invTypes left join dgmTypeEffects on (dgmTypeEffects.typeid=invTypes.typeid and effectid in (11,12,13,2663,3772)), invGroups where invTypes.typeid= ? and invTypes.groupid=invGroups.groupid';
+        $qry = DB::getConnection();
+        $stmt = $qry->prepare($sql);
+        $stmt->bind_param("i", $typeid);
+        $typeslot = array();
+        foreach(array_unique($tempmods) as $_mod) {
+            $typeid = $_mod;
+            $stmt->execute();
+            if ($res = $stmt->get_result()) {
+                $row = $res->fetch_assoc();
+                $this->typenames[$row['typeid']]=htmlentities($row['typename'], ENT_QUOTES);
+                $typeslot[$row['typeid']]=$row['effectid'];
+            }
+        }
+        foreach ($tempmods as $mod) {
+            switch ($typeslot[$mod]) {
+                case 6:
+                    $this->shipID = $mod;
+                    break;
+                case 11:
+                    $this->lows[] = $mod;
+                    break;
+                case 13:
+                    $this->meds[] = $mod;
+                    break;
+                case 12:
+                    $this->highs[] = $mod;
+                    break;
+                case 2663:
+                    $this->rigs[] = $mod;
+                    break;
+                case 3772:
+                    $this->subsys[] = $mod;
+                    break;
+                case 18:
+                    $this->drones[] = $mod;
+                    break;
+                case 8:
+                    $this->charges[] = $mod;
+                    break;
             }
         }
         if ($this->shipID == null) {
@@ -85,6 +83,7 @@ class FITTING
         $this->fitting['rigs'] = $this->rigs;
         $this->fitting['subsys'] = $this->subsys;
         $this->fitting['drones'] = $this->drones;
+        $this->fitting['charges'] = $this->charges;
       }
     }
 
@@ -170,25 +169,18 @@ class FITTING
         return $f;
     }
 
-    public static function getNames($fitting) {
-        $qry = DB::getConnection();
-        $sql="SELECT typeID, typeName FROM invTypes WHERE typeID=".implode(" OR typeID=", self::flatten($fitting));
-        $result = $qry->query($sql);
-        $return = array();
-        if($result->num_rows) {
-            while ($row = $result->fetch_assoc()) {
-                $return[$row['typeID']] = $row['typeName'];
-            }
-            return $return;
-        } else {
-            return null;
-        }
+    public function getNames() {
+        return $this->typenames;
     }
 
     private static function flatten(array $array) {
         $return = array();
         array_walk_recursive($array, function($a) use (&$return) { $return[] = $a; });
         return $return;
+    }
+
+    public function getFitArray() {
+        return $this->fitting;
     }
 
     public function getShipTypeID() {

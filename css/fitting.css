@@ -60,6 +60,33 @@
 .fit-sub-3 {top: 161px; left: 31px;}
 .fit-sub-4 {top: 175px; left: 40px;}
 
+.fitting-drones {
+  position: absolute;
+  height: 48px;
+  left: 241px;
+  -webkit-filter: drop-shadow(0px 0px 2px #000);
+  filter: drop-shadow(0px 0px 2px #000);
+}
 
+.fit-drone {
+  position: absolute;
+  height: 26px;
+  left: 251px;
+  border-radius: 2px;
+}
 
+.fitting-charges {
+  position: absolute;
+  height: 48px;
+  left: 278px;
+  -webkit-filter: drop-shadow(0px 0px 2px #000);
+  filter: drop-shadow(0px 0px 2px #000);
+}
+
+.fit-charge {
+  position: absolute;
+  height: 26px;
+  left: 291px;
+  border-radius: 2px;
+}
 
