@@ -102,5 +102,9 @@ $html = '<div class="row" style="display: none"><div class="col-xs-12"><span cla
              <div class="col-xs-12"><p>'.EVEHELPERS::mailparse($body).'</p></div>
            </div></div>
          </div>';
+if (isset($_SESSION['style']) && $_SESSION['style'] == 'light') {
+    $html = str_replace('color="#ffffff"', 'color="#666666"', $html);
+}
+
 echo(preg_replace( "/\r|\n/", "", $html));
 ?>
