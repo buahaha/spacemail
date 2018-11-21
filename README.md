@@ -1,6 +1,6 @@
-#Spacemail.tk#
+#Spacemail.xyz#
 Out-of-game mail client for EVE Online.
-Copyright 2017 Snitch Ashor of BRGF.
+Copyright 2017 Snitch Ashor of MBLOC.
 
 #Requirements#
 + php 5.5+

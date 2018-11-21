@@ -1,7 +1,7 @@
 <?php
 require_once('loadclasses.php');
 $page = new Page('About Spacemail');
-$html = '<p>Spacemail.tk &copy;'.date('Y').' Snitch Ashor of BRGF.<br/><br/>
+$html = '<p>Spacemail.tk &copy;'.date('Y').' Snitch Ashor of MBLOC.<br/><br/>
 Version 1.1<br/><br/>
 This app is built using php and the <a href="http://getbootstrap.com/">bootstrap</a> framework.<br/>
 All interactions with EVE Online are done using the <a href=" https://esi.tech.ccp.is/">EVE Swagger Interface</a><br/>
