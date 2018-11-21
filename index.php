@@ -555,7 +555,7 @@ $footer .= '          function getmore() {
                                      Notification.requestPermission();
                                  else {
                                      var notification = new Notification("You got EVE mail!", {
-                                         icon: "https://spacemail.tk/img/spacemail.png",
+                                         icon: "https://spacemail.xyz/img/spacemail.png",
                                          body: "You got mail. Currently you have "+unread+" unread mail"+((unread > 1) ? "s." :"."),
                                      });
                                  }
