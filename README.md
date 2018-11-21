@@ -24,10 +24,13 @@ Copyright 2017 Snitch Ashor of BRGF.
 
 	The callback url should be http(s)://<domain>/<app path>/login.php
 
-4. Rename config.php.sample to config.php and edit it. Fill in the database and developer app credentials and put a random string for the salt. This one is used to add some security to authentication cookies. Add at least one admin by his or her characterID. If you want to keep track of what you added you can use associative arrays like array("Snitch" => 90976676,)
+4. Grab the following tables from the SDE and insert them into your database: invTypes, invGroups, dgmTypeEffects (Required for the fitting viewer, get them here: https://www.fuzzwork.co.uk/dump/latest/)
+5. Rename config.php.sample to config.php and edit it. Fill in the database and developer app credentials and put a random string for the salt. This one is used to add some security to authentication cookies. Add at least one admin by his or her characterID. If you want to keep track of what you added you can use associative arrays like array("Snitch" => 90976676,)
 
 Done.
 
 #Version history#
 
 + 0.1b First public release
++ 1.0 First stable release
++ 1.1 Updated for php7.2
