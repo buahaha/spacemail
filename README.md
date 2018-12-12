@@ -3,7 +3,7 @@ Out-of-game mail client for EVE Online.
 Copyright 2017 Snitch Ashor of MBLOC.
 
 #Requirements#
-+ php 5.5+
++ php 7+
 + php-curl
 + MySQL
 + php-mysqli
@@ -29,8 +29,12 @@ Copyright 2017 Snitch Ashor of MBLOC.
 
 Done.
 
+#Update#
+When updating from verions <= 1.1 to version >= 1.2, drop all tables and re-import schema.sql (or empty essisso and authTokens and change esisso/authtoken from VARCHAR(255) to VARCHAR(4096).
+
 #Version history#
 
 + 0.1b First public release
 + 1.0 First stable release
 + 1.1 Updated for php7.2
++ 1.2 Updated to SSO v2
