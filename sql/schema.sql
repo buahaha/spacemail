@@ -17,7 +17,7 @@ CREATE TABLE `esisso` (
   `characterID` bigint(16) NOT NULL,
   `characterName` varchar(255) DEFAULT NULL,
   `refreshToken` varchar(255) NOT NULL,
-  `accessToken` varchar(255) DEFAULT NULL,
+  `accessToken` varchar(4096) DEFAULT NULL,
   `expires` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ownerHash` varchar(255) NOT NULL,
   `failcount` int(11) DEFAULT NULL,
