@@ -142,9 +142,11 @@ $html = '<div class="row">
                      </div>
                  </div>
                </div>
-               <form id="cache" role="form" action="" method="post">
-                   <button id="clearcache" name="clearcache" type="submit" value="clearcache" class="btn btn-primary pull-right">Clear Cache</button>
-               </form>
+               <div class="col-sm-12 text-right">
+                 <form id="cache" role="form" action="" method="post">
+                   <button id="clearcache" name="clearcache" type="submit" value="clearcache" class="btn btn-primary">Clear Cache</button>
+                 </form>
+               </div>
              </div>
              <div class="col-lg-12"><h3>ESI error log</h3>
                  <div class="">

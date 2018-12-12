@@ -83,11 +83,11 @@ if (isset($_GET['persistent_login'])) {
   $_SESSION['persistent_login'] = false;
 }
 
-$authurl = "https://login.eveonline.com/oauth/authorize/";
+$authurl = "https://login.eveonline.com/v2/oauth/authorize/";
 $state = random_str(32); 
 $scopes = unserialize(MAIL_SCOPES);
 $_SESSION['authstate'] = $state;
-$url = $authurl."?response_type=code&redirect_uri=".rawurlencode(URL::full_url())."&client_id=".ESI_ID."&scope=".implode(' ',$scopes)."&state=".$state;
+$url = $authurl."?response_type=code&redirect_uri=".rawurlencode(URL::full_url())."&client_id=".ESI_ID."&scope=".urlencode(implode(' ',$scopes))."&state=".urlencode($state);
 header('Location: '.$url);
 exit;
 ?>

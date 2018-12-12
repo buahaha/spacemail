@@ -35,6 +35,11 @@ class ESILOG {
         $this->close();
     }
 
+    public function warning($message) {
+        $this->put($message, 'Warning');
+        $this->close();
+    }
+
     public function close() {
         if (is_resource($this->fh)) {
             fclose($this->fh);
