@@ -154,8 +154,11 @@ class ESIMAIL extends ESISSO
             $mailids['corporation'] = array();
             $mailids['character'] = array();
             $mailids['mailing_list'] = array();
+            $mldict = $this->getMailingLists();
             foreach ($mails as $mail) {
-                $mailids['character'][]=$mail['from'];
+                if(!in_array(array_keys($mldict), $mail['from']) && !(isset(array_column($mail['recipients'], 'recipient_type', 'recipient_id')[$mail['from']]) && array_column($mail['recipients'], 'recipient_type', 'recipient_id')[$mail['from']] == 'mailing_list') ) {
+                    $mailids['character'][]=$mail['from'];
+                }
                 foreach($mail['recipients'] as $recipient) {
                     $mailids[$recipient['recipient_type']][]=$recipient['recipient_id'];
                 }

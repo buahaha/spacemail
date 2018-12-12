@@ -185,6 +185,9 @@ class EVEHELPERS {
     }
 
     public static function esiIdsToNames($ids) {
+        if (!count((array)$ids)) {
+            return array();
+        }
         $log = new ESILOG('log/esi.log');
         $lookup = array();
         foreach($ids as $key=>$val) {
@@ -193,15 +196,26 @@ class EVEHELPERS {
         $lookup = array_keys($lookup);
         $esiapi = new ESIAPI();
         $universeapi = $esiapi->getApi('Universe');
+        $dict = array();
         try {
             $results = $universeapi->postUniverseNames(json_encode($lookup), 'tranquility');
+            foreach($results as $r) {
+                $dict[$r->getId()] = $r->getName();
+            }
         } catch (Exception $e) {
-            $log->exception($e);
-            return null;
-        }
-        $dict = array();
-        foreach($results as $r) {
-            $dict[$r->getId()] = $r->getName();
+            $log->error($e->getMessage().' POST params: ['.implode(", ",$lookup)."]");
+            $promise = array();
+            foreach ($lookup as $l) {
+                $promise[] = $universeapi->postUniverseNamesAsync(json_encode(array($l)), 'tranquility');
+                $responses = GuzzleHttp\Promise\settle($promise)->wait();
+                foreach ($responses as $response) {
+                    if ($response['state'] == 'fulfilled') {
+                        foreach ($response['value'] as $r) {
+                            $dict[$r->getId()] = $r->getName();
+                        }
+                    }
+                }
+            }
         }
         return $dict;
     }
@@ -260,6 +274,9 @@ class EVEHELPERS {
     }
 
     public static function esiMailIdsLookup($ids) {
+        if (!count((array)$ids)) {
+            return array();
+        }
         $log = new ESILOG('log/esi.log');
         $lookup = array();
         foreach($ids as $key=>$val) {
@@ -299,6 +316,9 @@ class EVEHELPERS {
     }
 
     public static function esiIdsLookup($ids) {
+        if (!count((array)$ids)) {
+            return array();
+        }
         $log = new ESILOG('log/esi.log');
         $lookup = array();
         foreach($ids as $key=>$val) {
@@ -310,7 +330,7 @@ class EVEHELPERS {
         try {
             $results = $universeapi->postUniverseNames(json_encode($lookup), 'tranquility');
         } catch (Exception $e) {
-            $log->exception($e);
+            $log->error($e->getMessage().' POST params: ['.implode(", ",$lookup)."]");
             return null;
         }
         $dict = array();
@@ -427,7 +447,7 @@ class EVEHELPERS {
         $html = str_replace('href="showinfo:5//', 'target="_blank" href="http://evemaps.dotlan.net/system/', $html);
         $html = preg_replace("/<a(.*?)>/", "<a$1 target=\"_blank\">", $html);
         $html = preg_replace('$(?<=\s|^|br\s\/>|br>|br\/>|div>|<p>)(https?:\/\/[a-z0-9_./?=&-]+)(?![^<>]*>)$i', ' <a href="$1" target="_blank">$1</a> ', $html." ");
-        $html = preg_replace('/<a href="fitting:([0-9:;]*)"[a-zA-Z0-9\=\s_:;"]*>/', '<a href="#" onclick="showfit(this, \'\1\'); return false;">', $html);
+        $html = preg_replace('/<a href="fitting:([0-9:;._]*)"[a-zA-Z0-9\=\s_:;"]*>/', '<a href="#" onclick="showfit(this, \'\1\'); return false;">', $html);
         $html = preg_replace('/size="[^"]*[^"]"/', "", $html);
         $html = preg_replace('/(color="#)[a-f0-9]{2}([a-f0-9]{6}")/', '\1\2', $html);
         return $html;

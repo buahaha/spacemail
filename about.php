@@ -19,6 +19,9 @@ Additional Software used:<br/>
 <li><a href="http://searchturbine.com/php/phpwee">PHPWee</a> Minifier</li>
 <li>Sydcanem\'s <a href="https://github.com/sydcanem/bootstrap-contextmenu">Bootstrap Contextmenu</a></li>
 <li><a href="https://github.com/bootstrap-wysiwyg/bootstrap3-wysiwyg">bootstrap3-wysihtml5</a></li>
+<li>The <a href="http://docs.guzzlephp.org/en/stable/">Guzzle</a> PHP HTTP client</li>
+<li>Kevinrob\'s <a href="https://github.com/Kevinrob/guzzle-cache-middleware">Guzzle Cache Middleware</a></li>
+<li>Local AccessToken verification using Spomky Lab\'s <a href="https://web-token.spomky-labs.com/">JWT Framework</a></li>
 </ul>
 <br/>
 Special Thanks to a lot of very helpful people in #devfleet and #esi on the tweetfleet slack.<br/>
