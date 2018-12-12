@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **name** | **string** | name string | 
 **office_rental_cost** | **float** | office_rental_cost number | 
 **owner** | **int** | ID of the corporation that controls this station | [optional] 
-**position** | [**\Swagger\Client\Model\GetUniverseStationsStationIdPosition**](GetUniverseStationsStationIdPosition.md) |  | [optional] 
+**position** | [**\Swagger\Client\Model\GetUniverseStationsStationIdPosition**](GetUniverseStationsStationIdPosition.md) |  | 
 **race_id** | **int** | race_id integer | [optional] 
 **reprocessing_efficiency** | **float** | reprocessing_efficiency number | 
 **reprocessing_stations_take** | **float** | reprocessing_stations_take number | 

@@ -3,9 +3,9 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**destination** | [**\Swagger\Client\Model\GetUniverseStargatesStargateIdDestination**](GetUniverseStargatesStargateIdDestination.md) |  | [optional] 
+**destination** | [**\Swagger\Client\Model\GetUniverseStargatesStargateIdDestination**](GetUniverseStargatesStargateIdDestination.md) |  | 
 **name** | **string** | name string | 
-**position** | [**\Swagger\Client\Model\GetUniverseStargatesStargateIdPosition**](GetUniverseStargatesStargateIdPosition.md) |  | [optional] 
+**position** | [**\Swagger\Client\Model\GetUniverseStargatesStargateIdPosition**](GetUniverseStargatesStargateIdPosition.md) |  | 
 **stargate_id** | **int** | stargate_id integer | 
 **system_id** | **int** | The solar system this stargate is in | 
 **type_id** | **int** | type_id integer | 

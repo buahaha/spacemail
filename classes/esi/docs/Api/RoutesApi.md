@@ -19,7 +19,11 @@ Get the systems between origin and destination  ---  This route is cached for up
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\RoutesApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\RoutesApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $destination = 56; // int | destination solar system ID
 $origin = 56; // int | origin solar system ID
 $avoid = array(56); // int[] | avoid solar system ID(s)
@@ -29,7 +33,7 @@ $flag = "shortest"; // string | route security preference
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 
 try {
-    $result = $api_instance->getRouteOriginDestination($destination, $origin, $avoid, $connections, $datasource, $flag, $if_none_match);
+    $result = $apiInstance->getRouteOriginDestination($destination, $origin, $avoid, $connections, $datasource, $flag, $if_none_match);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling RoutesApi->getRouteOriginDestination: ', $e->getMessage(), PHP_EOL;

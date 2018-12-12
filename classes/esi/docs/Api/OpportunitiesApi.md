@@ -24,16 +24,21 @@ Return a list of tasks finished by a character  ---  This route is cached for up
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\OpportunitiesApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\OpportunitiesApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $character_id = 56; // int | An EVE character ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $result = $api_instance->getCharactersCharacterIdOpportunities($character_id, $datasource, $if_none_match, $token);
+    $result = $apiInstance->getCharactersCharacterIdOpportunities($character_id, $datasource, $if_none_match, $token);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling OpportunitiesApi->getCharactersCharacterIdOpportunities: ', $e->getMessage(), PHP_EOL;
@@ -77,12 +82,16 @@ Return a list of opportunities groups  ---  This route expires daily at 11:05
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\OpportunitiesApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\OpportunitiesApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 
 try {
-    $result = $api_instance->getOpportunitiesGroups($datasource, $if_none_match);
+    $result = $apiInstance->getOpportunitiesGroups($datasource, $if_none_match);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling OpportunitiesApi->getOpportunitiesGroups: ', $e->getMessage(), PHP_EOL;
@@ -124,7 +133,11 @@ Return information of an opportunities group  ---  This route expires daily at 1
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\OpportunitiesApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\OpportunitiesApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $group_id = 56; // int | ID of an opportunities group
 $accept_language = "en-us"; // string | Language to use in the response
 $datasource = "tranquility"; // string | The server name you would like data from
@@ -132,7 +145,7 @@ $if_none_match = "if_none_match_example"; // string | ETag from a previous reque
 $language = "en-us"; // string | Language to use in the response, takes precedence over Accept-Language
 
 try {
-    $result = $api_instance->getOpportunitiesGroupsGroupId($group_id, $accept_language, $datasource, $if_none_match, $language);
+    $result = $apiInstance->getOpportunitiesGroupsGroupId($group_id, $accept_language, $datasource, $if_none_match, $language);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling OpportunitiesApi->getOpportunitiesGroupsGroupId: ', $e->getMessage(), PHP_EOL;
@@ -177,12 +190,16 @@ Return a list of opportunities tasks  ---  This route expires daily at 11:05
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\OpportunitiesApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\OpportunitiesApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 
 try {
-    $result = $api_instance->getOpportunitiesTasks($datasource, $if_none_match);
+    $result = $apiInstance->getOpportunitiesTasks($datasource, $if_none_match);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling OpportunitiesApi->getOpportunitiesTasks: ', $e->getMessage(), PHP_EOL;
@@ -224,13 +241,17 @@ Return information of an opportunities task  ---  This route expires daily at 11
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\OpportunitiesApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\OpportunitiesApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $task_id = 56; // int | ID of an opportunities task
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 
 try {
-    $result = $api_instance->getOpportunitiesTasksTaskId($task_id, $datasource, $if_none_match);
+    $result = $apiInstance->getOpportunitiesTasksTaskId($task_id, $datasource, $if_none_match);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling OpportunitiesApi->getOpportunitiesTasksTaskId: ', $e->getMessage(), PHP_EOL;

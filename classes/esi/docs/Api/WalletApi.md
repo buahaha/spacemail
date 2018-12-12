@@ -25,16 +25,21 @@ Returns a character's wallet balance  ---  This route is cached for up to 120 se
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\WalletApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\WalletApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $character_id = 56; // int | An EVE character ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $result = $api_instance->getCharactersCharacterIdWallet($character_id, $datasource, $if_none_match, $token);
+    $result = $apiInstance->getCharactersCharacterIdWallet($character_id, $datasource, $if_none_match, $token);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling WalletApi->getCharactersCharacterIdWallet: ', $e->getMessage(), PHP_EOL;
@@ -71,7 +76,7 @@ Name | Type | Description  | Notes
 
 Get character wallet journal
 
-Retrieve the given character's wallet journal going 30 days back  ---  This route is cached for up to 3600 seconds
+Retrieve the given character's wallet journal going 30 days back  ---  This route is cached for up to 3600 seconds  --- Warning: This route has an upgrade available  --- [Diff of the upcoming changes](https://esi.evetech.net/diff/latest/dev/#GET-/characters/{character_id}/wallet/journal/)
 
 ### Example
 ```php
@@ -79,9 +84,14 @@ Retrieve the given character's wallet journal going 30 days back  ---  This rout
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\WalletApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\WalletApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $character_id = 56; // int | An EVE character ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
@@ -89,7 +99,7 @@ $page = 1; // int | Which page of results to return
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $result = $api_instance->getCharactersCharacterIdWalletJournal($character_id, $datasource, $if_none_match, $page, $token);
+    $result = $apiInstance->getCharactersCharacterIdWalletJournal($character_id, $datasource, $if_none_match, $page, $token);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling WalletApi->getCharactersCharacterIdWalletJournal: ', $e->getMessage(), PHP_EOL;
@@ -135,9 +145,14 @@ Get wallet transactions of a character  ---  This route is cached for up to 3600
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\WalletApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\WalletApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $character_id = 56; // int | An EVE character ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $from_id = 789; // int | Only show transactions happened before the one referenced by this id
@@ -145,7 +160,7 @@ $if_none_match = "if_none_match_example"; // string | ETag from a previous reque
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $result = $api_instance->getCharactersCharacterIdWalletTransactions($character_id, $datasource, $from_id, $if_none_match, $token);
+    $result = $apiInstance->getCharactersCharacterIdWalletTransactions($character_id, $datasource, $from_id, $if_none_match, $token);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling WalletApi->getCharactersCharacterIdWalletTransactions: ', $e->getMessage(), PHP_EOL;
@@ -191,16 +206,21 @@ Get a corporation's wallets  ---  This route is cached for up to 300 seconds  --
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\WalletApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\WalletApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $corporation_id = 56; // int | An EVE corporation ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $result = $api_instance->getCorporationsCorporationIdWallets($corporation_id, $datasource, $if_none_match, $token);
+    $result = $apiInstance->getCorporationsCorporationIdWallets($corporation_id, $datasource, $if_none_match, $token);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling WalletApi->getCorporationsCorporationIdWallets: ', $e->getMessage(), PHP_EOL;
@@ -237,7 +257,7 @@ Name | Type | Description  | Notes
 
 Get corporation wallet journal
 
-Retrieve the given corporation's wallet journal for the given division going 30 days back  ---  This route is cached for up to 3600 seconds  --- Requires one of the following EVE corporation role(s): Accountant, Junior_Accountant
+Retrieve the given corporation's wallet journal for the given division going 30 days back. Note: any journal records having to do with the new navigation structures from the release of Onslaught will not show up in this version. To see those, use the v4 version of this route.  ---  This route is cached for up to 3600 seconds  --- Requires one of the following EVE corporation role(s): Accountant, Junior_Accountant  --- Warning: This route has an upgrade available  --- [Diff of the upcoming changes](https://esi.evetech.net/diff/latest/dev/#GET-/corporations/{corporation_id}/wallets/{division}/journal/)
 
 ### Example
 ```php
@@ -245,9 +265,14 @@ Retrieve the given corporation's wallet journal for the given division going 30 
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\WalletApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\WalletApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $corporation_id = 56; // int | An EVE corporation ID
 $division = 56; // int | Wallet key of the division to fetch journals from
 $datasource = "tranquility"; // string | The server name you would like data from
@@ -256,7 +281,7 @@ $page = 1; // int | Which page of results to return
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $result = $api_instance->getCorporationsCorporationIdWalletsDivisionJournal($corporation_id, $division, $datasource, $if_none_match, $page, $token);
+    $result = $apiInstance->getCorporationsCorporationIdWalletsDivisionJournal($corporation_id, $division, $datasource, $if_none_match, $page, $token);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling WalletApi->getCorporationsCorporationIdWalletsDivisionJournal: ', $e->getMessage(), PHP_EOL;
@@ -303,9 +328,14 @@ Get wallet transactions of a corporation  ---  This route is cached for up to 36
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\WalletApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\WalletApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $corporation_id = 56; // int | An EVE corporation ID
 $division = 56; // int | Wallet key of the division to fetch journals from
 $datasource = "tranquility"; // string | The server name you would like data from
@@ -314,7 +344,7 @@ $if_none_match = "if_none_match_example"; // string | ETag from a previous reque
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $result = $api_instance->getCorporationsCorporationIdWalletsDivisionTransactions($corporation_id, $division, $datasource, $from_id, $if_none_match, $token);
+    $result = $apiInstance->getCorporationsCorporationIdWalletsDivisionTransactions($corporation_id, $division, $datasource, $from_id, $if_none_match, $token);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling WalletApi->getCorporationsCorporationIdWalletsDivisionTransactions: ', $e->getMessage(), PHP_EOL;

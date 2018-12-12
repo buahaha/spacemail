@@ -24,9 +24,14 @@ Set a solar system as autopilot waypoint  ---
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\UserInterfaceApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\UserInterfaceApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $add_to_beginning = false; // bool | Whether this solar system should be added to the beginning of all waypoints
 $clear_other_waypoints = false; // bool | Whether clean other waypoints beforing adding this one
 $destination_id = 789; // int | The destination to travel to, can be solar system, station or structure's id
@@ -34,7 +39,7 @@ $datasource = "tranquility"; // string | The server name you would like data fro
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $api_instance->postUiAutopilotWaypoint($add_to_beginning, $clear_other_waypoints, $destination_id, $datasource, $token);
+    $apiInstance->postUiAutopilotWaypoint($add_to_beginning, $clear_other_waypoints, $destination_id, $datasource, $token);
 } catch (Exception $e) {
     echo 'Exception when calling UserInterfaceApi->postUiAutopilotWaypoint: ', $e->getMessage(), PHP_EOL;
 }
@@ -79,15 +84,20 @@ Open the contract window inside the client  ---
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\UserInterfaceApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\UserInterfaceApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $contract_id = 56; // int | The contract to open
 $datasource = "tranquility"; // string | The server name you would like data from
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $api_instance->postUiOpenwindowContract($contract_id, $datasource, $token);
+    $apiInstance->postUiOpenwindowContract($contract_id, $datasource, $token);
 } catch (Exception $e) {
     echo 'Exception when calling UserInterfaceApi->postUiOpenwindowContract: ', $e->getMessage(), PHP_EOL;
 }
@@ -130,15 +140,20 @@ Open the information window for a character, corporation or alliance inside the 
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\UserInterfaceApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\UserInterfaceApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $target_id = 56; // int | The target to open
 $datasource = "tranquility"; // string | The server name you would like data from
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $api_instance->postUiOpenwindowInformation($target_id, $datasource, $token);
+    $apiInstance->postUiOpenwindowInformation($target_id, $datasource, $token);
 } catch (Exception $e) {
     echo 'Exception when calling UserInterfaceApi->postUiOpenwindowInformation: ', $e->getMessage(), PHP_EOL;
 }
@@ -181,15 +196,20 @@ Open the market details window for a specific typeID inside the client  ---
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\UserInterfaceApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\UserInterfaceApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $type_id = 56; // int | The item type to open in market window
 $datasource = "tranquility"; // string | The server name you would like data from
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $api_instance->postUiOpenwindowMarketdetails($type_id, $datasource, $token);
+    $apiInstance->postUiOpenwindowMarketdetails($type_id, $datasource, $token);
 } catch (Exception $e) {
     echo 'Exception when calling UserInterfaceApi->postUiOpenwindowMarketdetails: ', $e->getMessage(), PHP_EOL;
 }
@@ -232,15 +252,20 @@ Open the New Mail window, according to settings from the request if applicable  
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\UserInterfaceApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\UserInterfaceApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $new_mail = new \Swagger\Client\Model\PostUiOpenwindowNewmailNewMail(); // \Swagger\Client\Model\PostUiOpenwindowNewmailNewMail | The details of mail to create
 $datasource = "tranquility"; // string | The server name you would like data from
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $api_instance->postUiOpenwindowNewmail($new_mail, $datasource, $token);
+    $apiInstance->postUiOpenwindowNewmail($new_mail, $datasource, $token);
 } catch (Exception $e) {
     echo 'Exception when calling UserInterfaceApi->postUiOpenwindowNewmail: ', $e->getMessage(), PHP_EOL;
 }

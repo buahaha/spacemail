@@ -19,14 +19,18 @@ Return available insurance levels for all ship types  ---  This route is cached 
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\InsuranceApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\InsuranceApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $accept_language = "en-us"; // string | Language to use in the response
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 $language = "en-us"; // string | Language to use in the response, takes precedence over Accept-Language
 
 try {
-    $result = $api_instance->getInsurancePrices($accept_language, $datasource, $if_none_match, $language);
+    $result = $apiInstance->getInsurancePrices($accept_language, $datasource, $if_none_match, $language);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling InsuranceApi->getInsurancePrices: ', $e->getMessage(), PHP_EOL;

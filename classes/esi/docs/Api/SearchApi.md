@@ -21,9 +21,14 @@ Search for entities that match a given sub-string.  ---  This route is cached fo
 require_once(__DIR__ . '/vendor/autoload.php');
 
 // Configure OAuth2 access token for authorization: evesso
-Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+$config = Swagger\Client\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
-$api_instance = new Swagger\Client\Api\SearchApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\SearchApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client(),
+    $config
+);
 $categories = array("categories_example"); // string[] | Type of entities to search for
 $character_id = 56; // int | An EVE character ID
 $search = "search_example"; // string | The string to search on
@@ -35,7 +40,7 @@ $strict = false; // bool | Whether the search should be a strict match
 $token = "token_example"; // string | Access token to use if unable to set a header
 
 try {
-    $result = $api_instance->getCharactersCharacterIdSearch($categories, $character_id, $search, $accept_language, $datasource, $if_none_match, $language, $strict, $token);
+    $result = $apiInstance->getCharactersCharacterIdSearch($categories, $character_id, $search, $accept_language, $datasource, $if_none_match, $language, $strict, $token);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling SearchApi->getCharactersCharacterIdSearch: ', $e->getMessage(), PHP_EOL;
@@ -84,7 +89,11 @@ Search for entities that match a given sub-string.  ---  This route is cached fo
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\SearchApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\SearchApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $categories = array("categories_example"); // string[] | Type of entities to search for
 $search = "search_example"; // string | The string to search on
 $accept_language = "en-us"; // string | Language to use in the response
@@ -94,7 +103,7 @@ $language = "en-us"; // string | Language to use in the response, takes preceden
 $strict = false; // bool | Whether the search should be a strict match
 
 try {
-    $result = $api_instance->getSearch($categories, $search, $accept_language, $datasource, $if_none_match, $language, $strict);
+    $result = $apiInstance->getSearch($categories, $search, $accept_language, $datasource, $if_none_match, $language, $strict);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling SearchApi->getSearch: ', $e->getMessage(), PHP_EOL;

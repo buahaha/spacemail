@@ -23,12 +23,16 @@ Get a list of dogma attribute ids  ---  This route expires daily at 11:05
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\DogmaApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\DogmaApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 
 try {
-    $result = $api_instance->getDogmaAttributes($datasource, $if_none_match);
+    $result = $apiInstance->getDogmaAttributes($datasource, $if_none_match);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DogmaApi->getDogmaAttributes: ', $e->getMessage(), PHP_EOL;
@@ -70,13 +74,17 @@ Get information on a dogma attribute  ---  This route expires daily at 11:05
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\DogmaApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\DogmaApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $attribute_id = 56; // int | A dogma attribute ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 
 try {
-    $result = $api_instance->getDogmaAttributesAttributeId($attribute_id, $datasource, $if_none_match);
+    $result = $apiInstance->getDogmaAttributesAttributeId($attribute_id, $datasource, $if_none_match);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DogmaApi->getDogmaAttributesAttributeId: ', $e->getMessage(), PHP_EOL;
@@ -119,14 +127,18 @@ Returns info about a dynamic item resulting from mutation with a mutaplasmid.  -
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\DogmaApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\DogmaApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $item_id = 789; // int | item_id integer
 $type_id = 56; // int | type_id integer
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 
 try {
-    $result = $api_instance->getDogmaDynamicItemsTypeIdItemId($item_id, $type_id, $datasource, $if_none_match);
+    $result = $apiInstance->getDogmaDynamicItemsTypeIdItemId($item_id, $type_id, $datasource, $if_none_match);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DogmaApi->getDogmaDynamicItemsTypeIdItemId: ', $e->getMessage(), PHP_EOL;
@@ -170,12 +182,16 @@ Get a list of dogma effect ids  ---  This route expires daily at 11:05
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\DogmaApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\DogmaApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 
 try {
-    $result = $api_instance->getDogmaEffects($datasource, $if_none_match);
+    $result = $apiInstance->getDogmaEffects($datasource, $if_none_match);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DogmaApi->getDogmaEffects: ', $e->getMessage(), PHP_EOL;
@@ -217,13 +233,17 @@ Get information on a dogma effect  ---  This route expires daily at 11:05
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
-$api_instance = new Swagger\Client\Api\DogmaApi(new \Http\Adapter\Guzzle6\Client());
+$apiInstance = new Swagger\Client\Api\DogmaApi(
+    // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
+    // This is optional, `GuzzleHttp\Client` will be used as default.
+    new GuzzleHttp\Client()
+);
 $effect_id = 56; // int | A dogma effect ID
 $datasource = "tranquility"; // string | The server name you would like data from
 $if_none_match = "if_none_match_example"; // string | ETag from a previous request. A 304 will be returned if this matches the current ETag
 
 try {
-    $result = $api_instance->getDogmaEffectsEffectId($effect_id, $datasource, $if_none_match);
+    $result = $apiInstance->getDogmaEffectsEffectId($effect_id, $datasource, $if_none_match);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling DogmaApi->getDogmaEffectsEffectId: ', $e->getMessage(), PHP_EOL;
