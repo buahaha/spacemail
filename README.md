@@ -5,7 +5,7 @@ Copyright 2017 Snitch Ashor of MBLOC.
 #Requirements#
 + php 7.1+
 + php-curl
-+ php-gmb
++ php-gmp
 + php-mbstring
 + MySQL 5.6+
 + php-mysqli
@@ -32,7 +32,7 @@ Copyright 2017 Snitch Ashor of MBLOC.
 Done.
 
 #Update#
-When updating from verions <= 1.1 to version >= 1.2, drop all tables and re-import schema.sql (or empty essisso and authTokens and change esisso/authtoken from VARCHAR(255) to VARCHAR(4096). This updates introduces php7.1, php-gmb and php-mbstring as requirements.
+When updating from verions <= 1.1 to version >= 1.2, drop all tables and re-import schema.sql (or empty essisso and authTokens and change esisso/authtoken from VARCHAR(255) to VARCHAR(4096). This updates introduces php7.1, php-gmp and php-mbstring as requirements.
 
 #Version history#
 
