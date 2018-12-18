@@ -53,12 +53,11 @@ if (!$nolog) {
         if (strlen($dd) > 20) {
             $arr = explode(" ", $dd);
             $temp = [];
-            $arr = explode(" ", fgets($handle, 4096));
             if (count($arr) >= 4) {
                 $temp['date'] = $arr[0];
                 $temp['time'] = $arr[1];
                 $temp['type'] = $arr[2];
-                $temp['message'] = implode(" ", array_slice($arr,3));
+                $temp['message'] = htmlentities(implode(" ", array_slice($arr,3)));
                 $logtext[] = $temp;
             }
             $timestamp = substr($dd, 0, 20);
