@@ -57,7 +57,7 @@ if (!$nolog) {
                 $temp['date'] = $arr[0];
                 $temp['time'] = $arr[1];
                 $temp['type'] = $arr[2];
-                $temp['message'] = htmlentities(implode(" ", array_slice($arr,3)));
+                $temp['message'] = htmlentities(implode(" ", array_slice($arr,2)));
                 $logtext[] = $temp;
             }
             $timestamp = substr($dd, 0, 20);

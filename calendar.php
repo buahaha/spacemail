@@ -4,6 +4,7 @@ $start_time = microtime(true);
 require_once('auth.php');
 require_once('config.php');
 require_once('loadclasses.php');
+require_once('serverstatus.php');
 
 function calPage() {
     $today_d = (int)gmdate('d');

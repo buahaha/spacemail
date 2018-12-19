@@ -98,6 +98,34 @@ class ESIAPI
                                         ), $this->esiConfig);
     }
 
+    public static function checkTQ() {
+        $stack = HandlerStack::create();
+        $stack->push(
+        new CacheMiddleware(
+            new PrivateCacheStrategy(
+                new DoctrineCacheStorage(
+                    new FilesystemCache('cache/api/')
+                )
+            )
+        ),
+        'private-cache'
+        );
+        $esiConfig = Configuration::getDefaultConfiguration();
+        $esiConfig->setUserAgent(ESI_USER_AGENT);
+        $statusApi = new Swagger\Client\Api\StatusApi(new Client(['handler' => $stack,
+                                                                  'defaults' => ['connect_timeout' => 2,
+                                                                                 'timeout' => 3]]
+                                                     ), $esiConfig);
+        try {
+            $status = json_decode($statusApi->getStatus('tranquility'), true);
+        } catch (Exception $e) {
+            $log = new ESILOG('log/esi.log');
+            $log->warning($e->getMessage());
+            return false;
+        }
+        return $status;
+    }
+
     private function retryDecider() {
        return function (
           $retries,

@@ -4,6 +4,7 @@ $start_time = microtime(true);
 require_once('auth.php');
 require_once('config.php');
 require_once('loadclasses.php');
+require_once('serverstatus.php');
 
 if (session_status() != PHP_SESSION_ACTIVE) {
   session_start();
