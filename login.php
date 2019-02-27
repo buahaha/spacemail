@@ -36,18 +36,7 @@ if (isset($_GET['code'])) {
   $esisso = new ESISSO();
   $esisso->setCode($code);
   if (!$esisso->getError()) {
-    $dbsso = new ESISSO(null, $esisso->getCharacterID());
-    if (count(array_intersect($esisso->getScopes(), $dbsso->getScopes())) == count($esisso->getScopes())) {
-      if (count($esisso->getScopes()) == count($dbsso->getScopes())) {
-          $result = $esisso->addToDb();
-      } else {
-        $esisso = $dbsso;
-        $result = true;
-        $esisso->setMessage("You were succesfully logged in.");
-      }
-    } else {
-      $result = $esisso->addToDb();
-    }
+    $result = $esisso->addToDb();
     if ($result) {
         $page = new Page('SSO Login');
         $_SESSION['characterID'] = $esisso->getCharacterID();
@@ -84,10 +73,15 @@ if (isset($_GET['persistent_login'])) {
 }
 
 $authurl = "https://login.eveonline.com/v2/oauth/authorize/";
-$state = random_str(32); 
-$scopes = unserialize(MAIL_SCOPES);
+$state = random_str(32);
+if (isset($_GET['scopes'])) {
+    $currenturl = rtrim(preg_replace('/(?<=\?|\&)(scopes=[a-zA-Z%0-9.\-\_]*[\&{0-1}])/i', '', URL::full_url()), '?');
+    $url = $authurl."?response_type=code&redirect_uri=".rawurlencode($currenturl)."&client_id=".ESI_ID."&scope=".urlencode($_GET['scopes'])."&state=".urlencode($state); 
+} else {
+    $scopes = unserialize(MINIMAL_SCOPES);
+    $url = $authurl."?response_type=code&redirect_uri=".rawurlencode(URL::full_url())."&client_id=".ESI_ID."&scope=".urlencode(implode(' ',$scopes))."&state=".urlencode($state);
+}
 $_SESSION['authstate'] = $state;
-$url = $authurl."?response_type=code&redirect_uri=".rawurlencode(URL::full_url())."&client_id=".ESI_ID."&scope=".urlencode(implode(' ',$scopes))."&state=".urlencode($state);
 header('Location: '.$url);
 exit;
 ?>

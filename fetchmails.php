@@ -12,11 +12,7 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 
 if (isset($_SESSION['characterID'])) {
   $esimail = new ESIMAIL($_SESSION['characterID']);
-  if (count(array_diff(unserialize(MAIL_SCOPES), $esimail->getScopes()))) {
-    $scopesOK = False;
-  } else {
-    $scopesOK = True;
-  }
+  $scopesOK = $esimail->getAccessToken('esi-mail.read_mail.v1');
 }
 
 $data = array('data' => array(), 'lastid' => 0);

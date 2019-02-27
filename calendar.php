@@ -247,6 +247,14 @@ if (null == URL::getQ('m') || null == URL::getQ('y')) {
 
 $esicalendar = new ESICALENDAR($_SESSION['characterID']);
 
+$scopesOK = $esicalendar->checkScopes(['esi-calendar.read_calendar_events.v1','esi-calendar.respond_calendar_events.v1']);
+if (!$scopesOK) {
+    $scopes = array_unique(array_merge($esicalendar->getDbScopes(), ['esi-calendar.read_calendar_events.v1','esi-calendar.respond_calendar_events.v1']));
+    $url = URL::url_path().'login.php?scopes='.implode(' ',$scopes)."&page=".rawurlencode(URL::relative_url());
+    header('Location: '.$url);
+}
+
+
 $footer = '<script>
           var events = [];
           var lastid = -1;

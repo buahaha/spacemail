@@ -19,18 +19,16 @@ class ESICALENDAR extends ESISSO
             $this->lasttime = strtotime('now');
         }
 
-        public function getCalendarApi() {
-            if ($this->hasExpired()) {
-                $this->verify();
-            }
+        public function getCalendarApi($scope = 'esi-calendar.read_calendar_events.v1') {
+            $accessToken = $this->getAccessToken($scope);
             $esiapi = new ESIAPI();
-            $esiapi->setAccessToken($this->accessToken);
+            $esiapi->setAccessToken($accessToken);
             $calendarapi = $esiapi->getApi('Calendar');
             return $calendarapi;
         }
 
         public function getEvents($lastid = 0, $maxpages = 0) {
-            $calendarapi = $this-> getCalendarApi();
+            $calendarapi = $this->getCalendarApi();
             $events = array();
             $pages = 0;
             try {
@@ -105,7 +103,7 @@ class ESICALENDAR extends ESISSO
         }
 
         public function rsvpEvent($eventID, $respond) {
-            $calendarapi = $this-> getCalendarApi();
+            $calendarapi = $this-> getCalendarApi('esi-calendar.respond_calendar_events.v1');
             try {
                 $response = new \Swagger\Client\Model\PutCharactersCharacterIdCalendarEventIdResponse();
                 $response->setResponse($respond);

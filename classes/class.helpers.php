@@ -441,7 +441,7 @@ class EVEHELPERS {
         $html = str_replace(array('color="#bfffffff"', 'color="#ffffa600"', 'size="12"'), '', $html);
         //$html = str_replace('href="fitting:', 'target="_blank" href="fitting.php?dna=', $html);
         $html = preg_replace('/<a href="killReport:(\d+):(\w+)">/', '<a href="https://zkillboard.com/kill/\1/#\2" target="_blank">', $html);
-        $html = str_replace(array('href="showinfo:1380//', 'href="showinfo:1379//', 'href="showinfo:1378//', 'href="showinfo:1377//'), 'target="_blank" href="https://zkillboard.com/character/', $html);
+        $html = str_replace(array('href="showinfo:1380//', 'href="showinfo:1379//', 'href="showinfo:1385//', 'href="showinfo:1375//','href="showinfo:1378//', 'href="showinfo:1377//'), 'target="_blank" href="https://zkillboard.com/character/', $html);
         $html = str_replace('href="showinfo:2//', 'target="_blank" href="https://zkillboard.com/corporation/', $html);
         $html = str_replace('href="showinfo:16159//', 'target="_blank" href="https://zkillboard.com/alliance/', $html);
         $html = str_replace('href="showinfo:5//', 'target="_blank" href="http://evemaps.dotlan.net/system/', $html);

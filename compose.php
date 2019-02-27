@@ -6,6 +6,13 @@ require_once('config.php');
 require_once('loadclasses.php');
 
 $esimail = new ESIMAIL($_SESSION['characterID']);
+$scopesOK = $esimail->checkScopes(['esi-mail.send_mail.v1']);
+if (!$scopesOK) {
+    $scopes = array_unique(array_merge($esimail->getDbScopes(), ['esi-mail.send_mail.v1']));
+    $url = URL::url_path().'login.php?scopes='.implode(' ',$scopes)."&page=".rawurlencode(URL::relative_url());
+    header('Location: '.$url);
+}
+
 
 $footer = '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>

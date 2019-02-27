@@ -50,6 +50,15 @@ $footer = '<script>$(document).ready(function() {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome-animation/0.0.10/font-awesome-animation.min.css" integrity="sha256-C4J6NW3obn7eEgdECI2D1pMBTve41JFWQs0UTboJSTg=" crossorigin="anonymous" />';
 
 $esinot = new ESINOTIFICATIONS($_SESSION['characterID']);
+
+$scopesOK = $esinot->checkScopes(['esi-characters.read_notifications.v1']);
+if (!$scopesOK) {
+    $scopes = array_unique(array_merge($esinot->getDbScopes(), ['esi-characters.read_notifications.v1']));
+    $url = URL::url_path().'login.php?scopes='.implode(' ',$scopes)."&page=".rawurlencode(URL::relative_url());
+    header('Location: '.$url);
+}
+
+
 $page = new Page($esinot->getCharacterName().'\'s notifications');
 
 $notifications = $esinot->getNotifications();

@@ -34,61 +34,43 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 class ESISSO
 {
     private $code = null;
-    protected $accessToken = null;
-    private $refreshToken = null;
     private $scopes = array();
     private $ownerHash = null;
+    private $refreshToken = null;
+    private $accessToken = null;
+    private $expires = null;
     protected $characterID = 0;
     protected $characterName = null;
     protected $error = false;
     protected $message = null;
-    protected $failcount = 0;
-    protected $enabled = true;
     protected $id = null;
-    protected $expires = null;
     protected $log;
     private $keySet = null;
 
 	function __construct($id = null, $characterID = 0, $refreshToken = null, $failcount = 0)
 	{
-                $this->log = new ESILOG('log/esi.log');
-                if($id != null) {
-                        $this->id = $id;
-                        $sql="SELECT * FROM esisso WHERE id=".$id;
-                        $qry = DB::getConnection();
-                        $result = $qry->query($sql);
-                        if($result->num_rows) {
-                                $row = $result->fetch_assoc();
-                        	$this->characterID = $row['characterID'];
-                                $this->characterName = $row['characterName'];
-                                $this->refreshToken = $row['refreshToken'];
-                                $this->accessToken = $row['accessToken'];
-                                $this->ownerHash = $row['ownerHash'];
-                                $this->failcount = $row['failcount'];
-                                $this->enabled = $row['enabled'];
-                                $this->expires = strtotime($row['expires']);
-                                if ($this->hasExpired()) {
-                                    $this->refresh(false);
-                                }
-                        }		
+        $this->log = new ESILOG('log/esi.log');
+        if($id != null) {
+            $this->id = $id;
+            $sql="SELECT * FROM esisso WHERE id=".$id;
+            $qry = DB::getConnection();
+            $result = $qry->query($sql);
+            if($result->num_rows) {
+                $row = $result->fetch_assoc();
+                $this->characterID = $row['characterID'];
+                $this->characterName = $row['characterName'];
+                $this->ownerHash = $row['ownerHash'];
+            }		
 		} elseif ($characterID != 0) {
 			$this->characterID = $characterID;
 			$qry = DB::getConnection();
 			$sql="SELECT * FROM esisso WHERE (characterID='".$characterID."')";
 			$result = $qry->query($sql);
 			if($result->num_rows) {
-                                $row = $result->fetch_assoc();
-				$this->id = $row['id'];
-                                $this->characterName = $row['characterName'];
-				$this->refreshToken = $row['refreshToken'];
-                                $this->accessToken = $row['accessToken'];
-                                $this->ownerHash = $row['ownerHash'];
-                                $this->failcount = $row['failcount'];
-                                $this->enabled = $row['enabled'];
-                                $this->expires = strtotime($row['expires']);
-                                if ($this->hasExpired()) {
-				    $this->refresh(false);
-                                }
+                $row = $result->fetch_assoc();
+                $this->id = $row['id'];
+                $this->characterName = $row['characterName'];
+                $this->ownerHash = $row['ownerHash'];
 			}
 		} elseif (isset($this->refreshToken)) {
 			$this->refreshToken = $refreshToken;
@@ -337,7 +319,11 @@ class ESISSO
             return false;
         }
         $this->characterName = $claims['name'];
-        $this->scopes = $claims['scp'];
+        if (gettype($claims['scp']) == 'string' && strlen($claims['scp'])) {
+            $this->scopes = array($claims['scp']);
+        } else {
+            $this->scopes = $claims['scp'];
+        }
         if (!$this->scopes) {
             $this->error = true;
             $this->message = 'Scopes missing.';
@@ -361,46 +347,40 @@ class ESISSO
 		$enabled = true;
 		$qry = DB::getConnection();
 		$result = $qry->query("SELECT * FROM esisso WHERE (characterID='".$characterID."')");
-                if ($result->num_rows == 0) {
-                        $esiapi = new ESIAPI();
-                        $charapi = $esiapi->getApi('Character');
-                        try {
-                            $charinfo = json_decode($charapi->getCharactersCharacterId($characterID, 'tranquility'));
-                            $characterName = $charinfo->name;
-                            $this->characterName = $characterName;
-                        } catch (Exception $e) {
-                            $this->error = true;
-                            $this->message = 'Could not resolve character name: '.$e->getMessage();
-                            $this->log->error($this->message);
-                            return false;
-                        }
-                	$stmt = $qry->prepare("INSERT into esisso (characterID,characterName,refreshToken,accessToken,expires,ownerHash,failcount,enabled) 
-                                               VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-                        if ($stmt) {
-                            $stmt->bind_param('isssssii', $cid, $cn, $rt, $at, $exp, $oh, $fc, $en);
-                            $cid = $characterID;
-                            $cn = $characterName;
-                            $rt = $refreshToken;
-                            $at = $accessToken;
-                            $exp = $expires;
-                            $oh = $ownerHash;
-                            $ft = 0;
-                            $en = 1;
+        if ($result->num_rows == 0) {
+            $esiapi = new ESIAPI();
+            $charapi = $esiapi->getApi('Character');
+            try {
+                $charinfo = json_decode($charapi->getCharactersCharacterId($characterID, 'tranquility'));
+                $characterName = $charinfo->name;
+                $this->characterName = $characterName;
+            } catch (Exception $e) {
+                $this->error = true;
+                $this->message = 'Could not resolve character name: '.$e->getMessage();
+                $this->log->error($this->message);
+                return false;
+            }
+            $stmt = $qry->prepare("INSERT into esisso (characterID,characterName,ownerHash) VALUES (?, ?, ?)");
+            if ($stmt) {
+                $stmt->bind_param('iss', $cid, $cn, $oh);
+                $cid = $characterID;
+                $cn = $characterName;
+                $oh = $ownerHash;
 			    $stmt->execute();
-                            if ($stmt->errno) {
-				$this->error = true;
-				$this->message = $stmt->error;
-                                $this->log->error($this->message);
-				return false;
-                            }
-                        }
-                        $this->message = 'SSO credentials succesfully added.';
+                if ($stmt->errno) {
+			        $this->error = true;
+			        $this->message = $stmt->error;
+                    $this->log->error($this->message);
+			        return false;
+                }
+                $stmt->close();
+            }
+            $this->message = 'SSO credentials succesfully added.';
 		} else {
-			$row = $result->fetch_assoc();
-			$id = $row['id'];
+			    $row = $result->fetch_assoc();
+			    $id = $row['id'];
                         $this->characterName = $row['characterName'];
-			$sql="UPDATE esisso SET characterID={$characterID},refreshToken='{$refreshToken}',
-                              accessToken='{$accessToken}',expires='{$expires}',ownerHash='{$ownerHash}',failcount=0,enabled=TRUE WHERE id={$id};";
+			    $sql="UPDATE esisso SET characterID={$characterID},ownerHash='{$ownerHash}' WHERE id={$id};";
                         $result = $qry->query($sql);
                         if (!$result) {
                                 $this->error = true;
@@ -410,14 +390,43 @@ class ESISSO
                         }
                         $this->message = 'SSO credentials updated.';
 		}
-                return true;
+        if ($this->scopes) {
+            $stmt = $qry->prepare("INSERT into accessTokens (characterID,scope,refreshToken,accessToken,expires,failcount,enabled) VALUES (?, ?, ?, ?, ?, 0, 1) ON DUPLICATE KEY UPDATE refreshToken=?, accessToken=?, expires=?, failcount=0, enabled=1");
+            if ($stmt) {
+                $stmt->bind_param('isssssss', $cid, $scp, $rt, $at, $exp, $rt2, $at2, $exp2);
+                foreach ($this->scopes as $scope) {
+                    $cid = $characterID;
+                    $scp = $scope;
+                    $rt = $refreshToken;
+                    $at = $accessToken;
+                    $exp = $expires;
+                    $rt2 = $refreshToken;
+                    $at2 = $accessToken;
+                    $exp2 = $expires;
+                    $stmt->execute();
+                    if ($stmt->errno) {
+                        $this->error = true;
+                        $this->message = $stmt->error;
+                        $this->log->error('Error inserting into scopes table: '.$this->message);
+                        return false;
+                    }
+                }
+                $stmt->close();
+            } else {
+                $this->error = true;
+                $this->message = $stmt->error;
+                $this->log->error('Error inserting into scopes table: '.$this->message);
+                return false;
+            }
+        }
+        return true;
 	}
 	public function refresh( $verify = true ) {
         if (!isset($this->refreshToken)) {
 	    $this->error = true;
-                $this->message = "No refresh token set.";
-                $this->log->error($this->message);
-                return false;
+             $this->message = "No refresh token set.";
+             $this->log->error($this->message);
+             return false;
 	    }
 	    $fields = array('grant_type' => 'refresh_token', 'refresh_token' => $this->refreshToken);
         $url = 'https://login.eveonline.com/v2/oauth/token';
@@ -450,11 +459,15 @@ class ESISSO
             }
 	    $response = json_decode($result);
         $this->accessToken = $response->access_token;
+        if (!$this->verifyLocal()) {
+            return false;
+        }
         $this->expires = (strtotime("now")+$response->expires_in);
         $this->refreshToken = $response->refresh_token;
         $qry = DB::getConnection();
         $expires = date('Y-m-d H:i:s', $this->expires);
-        $sql="UPDATE esisso SET accessToken='{$this->accessToken}',expires='{$expires}',refreshToken='{$this->refreshToken}' WHERE characterID={$this->characterID};";
+        $sql="UPDATE accessTokens SET accessToken='{$this->accessToken}',expires='{$expires}',refreshToken='{$this->refreshToken}' 
+              WHERE characterID={$this->characterID} AND (scope='".implode("' OR scope='", $this->scopes)."')";
         $result = $qry->query($sql);
         if (!$result) {
                 $this->error = true;
@@ -462,36 +475,32 @@ class ESISSO
                 $this->log->error($this->message);
                 return false;
         }
-
-        if ($verify) {
-	        $this->verifyLocal();
-        }
         $this->resetFailCount();
 		return true;
 	}
 
 	public function increaseFailCount() {
-                $this->failcount+=1;
-                $qry = DB::getConnection();
-                if ($this->failcount >= 10) { 
-			$sql="UPDATE esisso SET failcount={$this->failcount},enabled=FALSE WHERE id={$this->id};";
-                } else {
-                        $sql="UPDATE esisso SET failcount={$this->failcount} WHERE id={$this->id};";
-                }
-                $result = $qry->query($sql);
+        $this->failcount+=1;
+        $qry = DB::getConnection();
+        if ($this->failcount >= 10) { 
+			$sql="UPDATE accessTokens SET failcount={$this->failcount},enabled=FALSE WHERE characterID={$this->characterID} AND accessToken={$this->accessToken};";
+        } else {
+            $sql="UPDATE accessTokens SET failcount={$this->failcount} WHERE characterID={$this->characterID} AND accessToken={$this->accessToken};";
+        }
+        $result = $qry->query($sql);
 	}
 
-        public function resetFailCount() {
-                if ($this->failcount != 0) {
-                	$this->failcount = 0;
-                	$qry = DB::getConnection();
-                        $sql="UPDATE esisso SET failcount=0 WHERE id={$this->id};";
-	                $result = $qry->query($sql);
-                }
+    public function resetFailCount() {
+        if ($this->failcount != 0) {
+        	$this->failcount = 0;
+        	$qry = DB::getConnection();
+                $sql="UPDATE accessTokens SET failcount=0 WHERE characterID={$this->characterID} AND accessToken={$this->accessToken};";
+	        $result = $qry->query($sql);
         }
+    }
 
 
-        public function getError() {
+    public function getError() {
 		return $this->error;
 	}
 
@@ -503,8 +512,85 @@ class ESISSO
                 return $this->message;
         }
 
-        public function getAccessToken() {
-                return $this->accessToken;
+        public function checkScopes($scopes) {
+            $qry = DB::getConnection();
+            $sql = "SELECT * FROM accessTokens WHERE characterID = ".$this->characterID;
+            $result = $qry->query($sql);
+            $tokens = array();
+            if($result->num_rows) {
+                while ($row = $result->fetch_assoc()) {
+                    $this->scopes[] = $row['scope'];
+                    $this->refreshToken = $row['refreshToken'];
+                    $this->accessToken = $row['accessToken'];
+                    $this->failcount = $row['failcount'];
+                    $this->enabled = $row['enabled'];
+                    $this->expires = strtotime($row['expires']);
+                }
+                if (!$this->enabled) {
+                    return false;
+                }
+                if (array_diff($scopes, $this->scopes)) {
+                    return false;
+                }
+                if ($this->hasExpired()) {
+                    if (!$this->refresh(false)) {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
+            }
+            return true;
+        }
+
+        public function getDbScopes() {
+            $qry = DB::getConnection();
+            $sql = "SELECT * FROM accessTokens WHERE characterID = ".$this->characterID;
+            $scopes = array();
+            $result = $qry->query($sql);
+            if($result->num_rows) {
+                while ($row = $result->fetch_assoc()) {
+                    $scopes[] = $row['scope'];
+                }
+            }
+            return $scopes;
+        }
+
+        public function getAccessToken($scope) {
+            if (in_array($scope, $this->scopes)) {
+                if ($this->hasExpired()) {
+                    if (!$this->refresh(false)) {
+                        return null;
+                    }
+                }
+            } else {
+                $this->scopes = array();
+                $qry = DB::getConnection();
+                $sql = "SELECT * FROM accessTokens WHERE accessToken = (SELECT accessToken From accessTokens WHERE scope = '".$scope."' AND characterID = ".$this->characterID.") 
+                       AND characterID = ".$this->characterID;
+                $result = $qry->query($sql);
+                if($result->num_rows) {
+                    while ($row = $result->fetch_assoc()) {
+                        $this->scopes[] = $row['scope'];
+                        $this->refreshToken = $row['refreshToken'];
+                        $this->accessToken = $row['accessToken'];
+                        $this->failcount = $row['failcount'];
+                        $this->enabled = $row['enabled'];
+                        $this->expires = strtotime($row['expires']);
+                    }
+                    if (!$this->enabled) {
+                        return null;
+                    }
+                    if ($this->hasExpired()) {
+                        if (!$this->refresh(false)) {
+                            return null;
+                        }
+                    }
+                } else {
+                    return null;
+                }
+            }
+            return $this->accessToken;
         }
 
         public function getRefreshToken() {
@@ -544,20 +630,17 @@ class ESISSO
 		return $this->enabled;
 	}
 
-        public function hasExpired() {
-                if ($this->expires < strtotime("now")) {
-                        return true;
-                } else {
-			return false;
-		}
-        }
+    public function hasExpired() {
+        if ($this->expires < strtotime("now")) {
+            return true;
+        } else {
+		    return false;
+	    }
+    }
 
-        public function getScopes() {
-                if (empty($this->scopes)) {
-                        $this->verifyLocal();
-                }
-                return $this->scopes;
-        }
+    public function getScopes() {
+        return $this->scopes;
+    }
 
 }
 ?>

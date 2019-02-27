@@ -26,7 +26,7 @@ class ESIMAIL extends ESISSO
                 $temp->setRecipientType($rec['type']);
                 $rec_ary[]=$temp;
             }
-            $mailapi = $this->getMailAPI();
+            $mailapi = $this->getMailApi('esi-mail.send_mail.v1');
             $mail = new \Swagger\Client\Model\PostCharactersCharacterIdMailMail();
             $mail->setRecipients($rec_ary);
             $mail->setSubject($subject);
@@ -46,7 +46,7 @@ class ESIMAIL extends ESISSO
             $recipients = array();
             $subject = '';
             $body = '';
-            $mailapi = $this->getMailAPI();
+            $mailapi = $this->getMailApi();
             try {
                 $mail = json_decode($mailapi->getCharactersCharacterIdMailMailId($this->characterID, $mailid, 'tranquility'), true);
             } catch (Exception $e) {
@@ -62,7 +62,7 @@ class ESIMAIL extends ESISSO
             $recipients = array();
             $subject = '';
             $body = '';
-            $mailapi = $this->getMailAPI();
+            $mailapi = $this->getMailApi();
             $contents = new \Swagger\Client\Model\PutCharactersCharacterIdMailMailIdContents();
             $contents->setRead($is_read);
             try {
@@ -77,7 +77,7 @@ class ESIMAIL extends ESISSO
         }
 
         public function deleteMail($mailid) {
-            $mailapi = $this->getMailAPI();
+            $mailapi = $this->getMailApi();
             try {
                 $mailapi->deleteCharactersCharacterIdMailMailId($this->characterID, $mailid, 'tranquility');
             } catch (Exception $e) {
@@ -89,18 +89,16 @@ class ESIMAIL extends ESISSO
             return true;
         }
          
-        public function getMailApi() {
-            if ($this->hasExpired()) {
-                $this->verify();
-            }
+        public function getMailApi($scope = 'esi-mail.read_mail.v1') {
+            $accessToken = $this->getAccessToken($scope);
             $esiapi = new ESIAPI();
-            $esiapi->setAccessToken($this->accessToken);
+            $esiapi->setAccessToken($accessToken);
             $mailapi = $esiapi->getApi('Mail');
             return $mailapi;
         }
 
         public function getMailLabels() {
-            $mailapi = $this->getMailAPI();
+            $mailapi = $this->getMailApi();
             try {
                 $labelfetch = $mailapi->getCharactersCharacterIdMailLabels($this->characterID, 'tranquility');
                 $labels = array();
@@ -118,7 +116,7 @@ class ESIMAIL extends ESISSO
         }
 
         public function getMails($labels = null, $lastid = null, $pages = 4, $mlist = null) {
-            $mailapi = $this->getMailAPI();
+            $mailapi = $this->getMailApi();
             if ($labels == null) {
                 try {
                     $labels = $mailapi->getCharactersCharacterIdMailLabels($this->characterID, 'tranquility');
@@ -211,7 +209,7 @@ class ESIMAIL extends ESISSO
         }
 
         public function getMailingLists() {
-            $mailapi = $this->getMailAPI();
+            $mailapi = $this->getMailApi();
             $response = array();
             try {
                 $result = $mailapi->getCharactersCharacterIdMailLists($this->characterID, 'tranquility');

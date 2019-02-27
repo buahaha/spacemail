@@ -1,4 +1,4 @@
-Fleet-Yo! Copyright 2017 Snitch Ashor of BRGF.
+Spacemail Copyright 2019 Snitch Ashor of MBLOC.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

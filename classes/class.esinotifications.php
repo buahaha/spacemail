@@ -17,12 +17,10 @@ class ESINOTIFICATIONS extends ESISSO
             parent::__construct(null, $characterID);
         }
          
-        public function getNotificationApi() {
-            if ($this->hasExpired()) {
-                $this->verify();
-            }
+        public function getNotificationApi($scope = 'esi-characters.read_notifications.v1') {
+            $accessToken = $this->getAccessToken($scope);
             $esiapi = new ESIAPI();
-            $esiapi->setAccessToken($this->accessToken);
+            $esiapi->setAccessToken($accessToken);
             $notificationapi = $esiapi->getApi('Character');
             return $notificationapi;
         }

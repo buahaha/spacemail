@@ -32,7 +32,7 @@ Copyright 2017 Snitch Ashor of MBLOC.
 Done.
 
 #Update#
-When updating from verions <= 1.1 to version >= 1.2, drop all tables and re-import schema.sql (or empty essisso and authTokens and change esisso/authtoken from VARCHAR(255) to VARCHAR(4096). This updates introduces php7.1, php-gmp and php-mbstring as requirements.
+When updating from verions <= 1.2 to version >= 1.3, drop all tables and re-import schema.sql (or delete the columns accessToken, refreshToken, expires, failcount and enabled from the table esisso and import the table accessToken from schema.sql)
 
 #Version history#
 
@@ -40,3 +40,5 @@ When updating from verions <= 1.1 to version >= 1.2, drop all tables and re-impo
 + 1.0 First stable release
 + 1.1 Updated for php7.2
 + 1.2 Updated to SSO v2
++ 1.3 Refactored database, scopes on demand
+

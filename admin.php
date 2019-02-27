@@ -7,7 +7,7 @@ require_once('loadclasses.php');
 $start_time = microtime(true);
 
 if (session_status() != PHP_SESSION_ACTIVE) {
-  header('Location: '.URL::url_path.'index.php');
+  header('Location: '.URL::url_path().'index.php');
   die();
 }
 
@@ -38,7 +38,7 @@ if (isset($_POST['clearcache'])) {
 $qry = DB::getConnection();
 $sql="SELECT * FROM esisso";
 $users = $qry->query($sql)->num_rows;
-$sql="SELECT * FROM esisso WHERE expires > DATE_SUB(NOW(), INTERVAL 24 HOUR)";
+$sql="SELECT * FROM accessTokens WHERE expires > DATE_SUB(NOW(), INTERVAL 24 HOUR) GROUP BY characterID";
 $users24h = $qry->query($sql)->num_rows;
 
 $esierrors1h = 0;

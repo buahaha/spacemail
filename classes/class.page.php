@@ -86,11 +86,11 @@ class Page {
         <head>
             <meta charset="utf-8"/>
             <link rel="canonical" href="'.URL::full_url().'"/>
-            <meta name="og:site_name" content="Spacemail">
+            <meta name="og:site_name" content="'.SITE_NAME.'">
             <meta name="description" content="An EVE Online out-of-game mail client.">
             <meta name="og:description" content="An EVE Online out-of-game mail client.">
-            <meta name="og:title" content="Spacemail">
-            <meta name="twitter:title" content="Spacemail">
+            <meta name="og:title" content="'.SITE_NAME.'">
+            <meta name="twitter:title" content="'.SITE_NAME.'">
             <meta name="og:image" content="'.URL::url_path().'img/spacemail_sq.png">
             <meta name="twitter:image" content="'.URL::url_path().'img/spacemail_sq.png">
             <meta name="og:url" content="'.URL::url_path().'">
@@ -100,7 +100,7 @@ class Page {
             <link rel="shortcut icon" href="img/spacemail_sq.png" type="image/png">
             '.$this->getCSS().'
             <link rel="stylesheet" href="css/custom.min.css" type="text/css"> 
-            <title>Spacemail: '.$this->title.'</title>
+            <title>'.SITE_NAME.': '.$this->title.'</title>
             '.$this->header.$this->getNotifier().'
         </head>
         <body>
@@ -116,7 +116,7 @@ class Page {
                 <span class="icon-bar"></span>
               </button>
               <div style="position: relative;">
-                <a class="navbar-brand" href="'.URL::url_path().'"><div id="logoimg"><img src="img/spacemail.png"></div><span class="hidden-sm">Spacemail</span></a>
+                <a class="navbar-brand" href="'.URL::url_path().'"><div id="logoimg"><img src="img/spacemail.png"></div><span class="hidden-sm">'.SITE_NAME.'</span></a>
               </div>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
@@ -233,7 +233,7 @@ class Page {
         $page .= '</div></div></div>
         <footer class="footer navbar-inverse">
             <div class="container">
-                <p class="text-muted">EVE Online, the EVE logo, EVE and all associated logos and designs are the intellectual property of&nbsp;<a href="https://www.ccpgames.com/">CCP</a>&nbsp;hf. All artwork, screenshots, characters, vehicles, storylines, world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. All other trademarks are the property of their respective owners. CCP hf. has granted permission to Spacemail to use EVE Online and all associated logos and designs for promotional and information purposes on its website but does not endorse, and is not in any way affiliated with, Spacemail. CCP is in no way responsible for the content on or functioning of this website, nor can it be liable for any damage arising from the use of this website.</p>
+                <p class="text-muted">EVE Online, the EVE logo, EVE and all associated logos and designs are the intellectual property of&nbsp;<a href="https://www.ccpgames.com/">CCP</a>&nbsp;hf. All artwork, screenshots, characters, vehicles, storylines, world facts or other recognizable features of the intellectual property relating to these trademarks are likewise the intellectual property of CCP hf. EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide. All other trademarks are the property of their respective owners. CCP hf. has granted permission to '.SITE_NAME.' to use EVE Online and all associated logos and designs for promotional and information purposes on its website but does not endorse, and is not in any way affiliated with, '.SITE_NAME.'. CCP is in no way responsible for the content on or functioning of this website, nor can it be liable for any damage arising from the use of this website.</p>
             </div>
         </footer>
         <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
@@ -249,7 +249,6 @@ class Page {
         $static = $this->getStatic();
         echo(\PHPWee\Minify::html($dynamic.$static));
         flush();
-        ob_flush();
         if ($cache) {
             CACHE::put($static);
         }
@@ -266,7 +265,7 @@ class Page {
     }
 
     public static function cookiesOk() {
-        if (isset($_COOKIE["spacemailcookies"])) {
+        if (isset($_COOKIE[COOKIE_ID."cookies"])) {
             return true;
         } else {
             return false;
@@ -276,8 +275,8 @@ class Page {
     private function getCSS() {
         if (isset($_SESSION["style"])) {
             $style = $_SESSION["style"];
-        } elseif (isset($_COOKIE["spacemailstyle"])) {
-            $style = $_COOKIE["spacemailstyle"];
+        } elseif (isset($_COOKIE[COOKIE_ID."style"])) {
+            $style = $_COOKIE[COOKIE_ID."style"];
             $_SESSION["style"] = $style;
         } else {
             $style = "dark";
@@ -299,8 +298,8 @@ class Page {
     private function getNotifier() {
         if (isset($_SESSION["notify"])) {
             $notify = $_SESSION["notify"];
-        } elseif (isset($_COOKIE["spacemailnotify"])) {
-            $notify = $_COOKIE["spacemailnotify"];
+        } elseif (isset($_COOKIE[COOKIE_ID."notify"])) {
+            $notify = $_COOKIE[COOKIE_ID."notify"];
             $_SESSION["notify"] = $notify;
         } else {
             $notify = false;

@@ -1,4 +1,5 @@
 <?php
+require_once('config.php');
 
 class ESILOG {
 
@@ -38,6 +39,13 @@ class ESILOG {
     public function warning($message) {
         $this->put($message, 'Warning');
         $this->close();
+    }
+
+    public function debug($message) {
+        if (DEBUG_LOG) {
+            $this->put($message, 'Debug');
+            $this->close();
+        }
     }
 
     public function close() {

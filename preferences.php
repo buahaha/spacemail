@@ -18,19 +18,19 @@ if (isset($_POST["submit"])) {
   if (!isset($_POST["notify"])) {
       $_POST["notify"] = 0;
   }
-  setcookie('spacemailstyle', $_POST["style"], strtotime("now")+3600*24*365, $path, $server, 0);
+  setcookie(COOKIE_ID.'style', $_POST["style"], strtotime("now")+3600*24*365, $path, $server, 0);
   $_SESSION['style'] = $_POST["style"];
-  setcookie('spacemailreload', $_POST["reload"], strtotime("now")+3600*24*365, $path, $server, 0);
+  setcookie(COOKIE_ID.'reload', $_POST["reload"], strtotime("now")+3600*24*365, $path, $server, 0);
   $_SESSION['reload'] = $_POST["reload"];
-  setcookie('spacemailnotify', $_POST["notify"], strtotime("now")+3600*24*365, $path, $server, 0);
+  setcookie(COOKIE_ID.'notify', $_POST["notify"], strtotime("now")+3600*24*365, $path, $server, 0);
   $_SESSION['notify'] = $_POST["notify"];
 
 }
 
 if (isset($_SESSION["style"])) {
     $style = $_SESSION["style"];
-} elseif (isset($_COOKIE["spacemailstyle"])) {
-    $style = $_COOKIE["spacemailstyle"];
+} elseif (isset($_COOKIE[COOKIE_ID."style"])) {
+    $style = $_COOKIE[COOKIE_ID."style"];
     $_SESSION["style"] = $style;
 } else {
     $style = "dark";
@@ -38,8 +38,8 @@ if (isset($_SESSION["style"])) {
 
 if (isset($_SESSION["reload"])) {
     $reload = $_SESSION["reload"];
-} elseif (isset($_COOKIE["spacemailreload"])) {
-    $reload = $_COOKIE["spacemailreload"];
+} elseif (isset($_COOKIE[COOKIE_ID."reload"])) {
+    $reload = $_COOKIE[COOKIE_ID."reload"];
     $_SESSION["reload"] = $reload;
 } else {
     $reload = False;
@@ -47,8 +47,8 @@ if (isset($_SESSION["reload"])) {
 
 if (isset($_SESSION["notify"])) {
     $notify = $_SESSION["notify"];
-} elseif (isset($_COOKIE["spacemailnotify"])) {
-    $notify = $_COOKIE["spacemailnotify"];
+} elseif (isset($_COOKIE[COOKIE_ID."notify"])) {
+    $notify = $_COOKIE[COOKIE_ID."notify"];
     $_SESSION["notify"] = $notify;
 } else {
     $notify = False;
