@@ -53,17 +53,17 @@ if ($hash == $oldhash) {
     exit;
 }
 
+$todo = SDE_TABLES;
 $fi = new RecursiveIteratorIterator(new RecursiveDirectoryIterator('sql/'), RecursiveIteratorIterator::SELF_FIRST);
 foreach ($fi as $file) {
     if ($file->isFile() 
         && (substr($file->getFilename(), 0, 1) != '.' )
-        && !in_array($file->getFilename(), array('schema.sql', 'latest.md5', 'required.txt', 'required.php', 'current.md5'))
+        && in_array(basename($file->getFilename(), '.sql'), SDE_TABLES)
     ){
             unlink($file->getRealPath());
     }
 }
 
-$todo = SDE_TABLES;
 foreach ($todo as $t) {
     if (download($sde_base.'latest/'.$t.$sde_ext, 'sql/'.$t.$sde_ext)['response_code'] != 200) {
         $log->put('Download of '.$t.$sde_ext.' failed.');
@@ -74,6 +74,7 @@ foreach ($todo as $t) {
     exec($xcmd.' '.__DIR__.'/sql/'.$t.$sde_ext);
     @exec($sql_bin.' -u'.DB_USER.' -p'.DB_PASS.' '.DB_NAME.' < '.__DIR__.'/sql/'.$t.'.sql');
     @exec($sql_bin.' -u'.DB_USER.' -p'.DB_PASS.' '.DB_NAME.' -e "ALTER TABLE '.$t.' ENGINE = MyISAM;"');
+    $log->put('Import of '.$t.$sde_ext.' finished.');
     $count += 1;
 }
 
