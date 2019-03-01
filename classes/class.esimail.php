@@ -77,7 +77,7 @@ class ESIMAIL extends ESISSO
         }
 
         public function deleteMail($mailid) {
-            $mailapi = $this->getMailApi();
+            $mailapi = $this->getMailApi('esi-mail.organize_mail.v1');
             try {
                 $mailapi->deleteCharactersCharacterIdMailMailId($this->characterID, $mailid, 'tranquility');
             } catch (Exception $e) {

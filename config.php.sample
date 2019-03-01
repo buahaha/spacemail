@@ -31,5 +31,6 @@ define('ESI_EXTRA_CACHE', 30);
 define('ADMINS', serialize(array("Snitch" => 90976676,)));
 
 //minimal scopes on first login, additional scopes will be requested as needed
-define('MINIMAL_SCOPES', serialize(array('esi-mail.read_mail.v1')));
+define('MINIMAL_SCOPES', serialize(array('esi-mail.read_mail.v1', 'esi-mail.organize_mail.v1'
+)));
 ?>
