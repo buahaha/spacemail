@@ -5,6 +5,7 @@ config.php
 /log/*
 !/log/.gitkeep
 !/sql/schema.sql
+!/sql/update*.sql
 /cache/*
 !/cache/.gitkeep
 !/cache/pages/.gitkeep
