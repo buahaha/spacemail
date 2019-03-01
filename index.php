@@ -187,7 +187,7 @@ $footer .= '          function getmore() {
                 var columns =  [{ "data": "date" },{ "data": "isread" },{ "data": "img" },{ "data": "from" },{ "data": "subject", "class" : "subj-col" },{ "data": "to", "class" : "to-col" },{ "data": null,"defaultContent": "<a href=\"#\" title=\"Reply to\" onclick=\"replyrow(this)\"><i class=\"fa fa-reply\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" title=\"Forward mail\" onclick=\"fwdrow(this)\"><i class=\"fa fa-share\" aria-hidden=\"true\"><\/i><\/a>&nbsp;<a href=\"#\" class=\"faa-parent animated-hover\" title=\"Delete mail\" onclick=\"deleterow(this)\"><i class=\"fa fa-trash faa-shake\" aria-hidden=\"true\"><\/i><\/a>", "width": "50px"}, {"defaultContent":""}]
             }
             if (mlist != undefined) {
-                pages = 5
+                pages = 10
                 mlstring = "&mlist="+mlist;
             } else {
                 pages = 1
