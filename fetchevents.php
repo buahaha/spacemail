@@ -12,11 +12,7 @@ if (session_status() != PHP_SESSION_ACTIVE) {
 
 if (isset($_SESSION['characterID'])) {
   $esical = new ESICALENDAR($_SESSION['characterID']);
-  if (count(array_diff(unserialize(MAIL_SCOPES), $esical->getScopes()))) {
-    $scopesOK = False;
-  } else {
-    $scopesOK = True;
-  }
+  $scopesOK = $esical->getAccessToken('esi-calendar.read_calendar_events.v1');
 }
 
 $data = array('data' => array(), 'firstid' => 0, 'lastid' => 0);
