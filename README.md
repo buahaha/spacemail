@@ -1,6 +1,6 @@
 #Spacemail.xyz#
 Out-of-game mail client for EVE Online.
-Copyright 2017 Snitch Ashor of MBLOC.
+Copyright 2019 Snitch Ashor of MBLOC.
 
 #Requirements#
 + php 7.1+
@@ -41,4 +41,5 @@ When updating from verions <= 1.2 to version >= 1.3, drop all tables and re-impo
 + 1.1 Updated for php7.2
 + 1.2 Updated to SSO v2
 + 1.3 Refactored database, scopes on demand
++ 1.4 Bugfix release
 
