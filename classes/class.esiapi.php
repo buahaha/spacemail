@@ -15,7 +15,9 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 
-require_once('classes/esi/vendor/autoload.php');
+use Concat\Http\Middleware\RateLimiter;
+
+require_once('vendor/autoload.php');
 require_once('classes/esi/autoload.php');
 
 class ESIAPI
@@ -81,6 +83,7 @@ class ESIAPI
     public function getApi($api) {
         $className = "Swagger\\Client\\Api\\".$api."Api";
         $stack = HandlerStack::create();
+        $stack->push(new RateLimiter(new ESIRateLimits()));
         $stack->push( Middleware::retry( $this->retryDecider(), $this->getRetryDelayMs() ) );
         $stack->push(
         new CacheMiddleware(
@@ -92,6 +95,7 @@ class ESIAPI
         ), 
         'private-cache'
         );
+        #$stack->push(new RateLimiter(new ESIRateLimits()));
         return new $className(new Client(['handler' => $stack, 
                                           'defaults' => ['connect_timeout' => $this->connect_timeout, 
                                                          'timeout' => $this->timeout ]]
@@ -152,7 +156,6 @@ class ESIAPI
      
           return false;
        };
-    }
-    
+    }    
 }
 ?>

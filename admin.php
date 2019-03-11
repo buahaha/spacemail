@@ -71,7 +71,7 @@ if (!$nolog) {
         }
     }
     fclose($handle);
-    array_reverse($logtext);
+    $logtext = array_reverse($logtext);
 }
 
 

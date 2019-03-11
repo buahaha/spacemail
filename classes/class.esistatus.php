@@ -5,9 +5,8 @@ use Swagger\Client\Configuration;
 use Swagger\Client\ApiException;
 use Swagger\Client\Api\StatusApi;
 
-require_once('classes/esi/vendor/autoload.php');
+require_once('vendor/autoload.php');
 require_once('classes/esi/autoload.php');
-require_once('classes/class.esisso.php');
 
 
 class ESISTATUS extends ESIAPI
