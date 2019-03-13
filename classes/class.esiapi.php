@@ -83,8 +83,8 @@ class ESIAPI
     public function getApi($api) {
         $className = "Swagger\\Client\\Api\\".$api."Api";
         $stack = HandlerStack::create();
-        $stack->push(new RateLimiter(new ESIRateLimits()));
         $stack->push( Middleware::retry( $this->retryDecider(), $this->getRetryDelayMs() ) );
+        $stack->push(new RateLimiter(new ESIRateLimits()));
         $stack->push(
         new CacheMiddleware(
             new PrivateCacheStrategy(
