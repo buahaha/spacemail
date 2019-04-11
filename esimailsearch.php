@@ -23,7 +23,7 @@ if (isset($_GET['q'])) {
         $searchapi = $esiapi->getApi('Search');
         try {
             $tempids = json_decode($searchapi->getSearch(array('character', 'corporation', 'alliance'), $_GET['q'], 'en-us', 'tranquility', null, 'en-us', 0), true);
-            if (count($tempids)) {
+            if (count((array)$tempids)) {
                 $result_ary = array();
                 foreach($tempids as $cat => $_ids) {
                     try {

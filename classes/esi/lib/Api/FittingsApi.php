@@ -664,7 +664,7 @@ class FittingsApi
         }
 
 
-        $resourcePath = '/v1/characters/{character_id}/fittings/';
+        $resourcePath = '/v2/characters/{character_id}/fittings/';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];
@@ -1023,7 +1023,7 @@ class FittingsApi
             );
         }
 
-        $resourcePath = '/v1/characters/{character_id}/fittings/';
+        $resourcePath = '/v2/characters/{character_id}/fittings/';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];

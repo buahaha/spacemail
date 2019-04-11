@@ -343,6 +343,7 @@ class GetCharactersCharacterIdWalletJournal200Ok implements ModelInterface, Arra
     const REF_TYPE_SOVEREIGNITY_BILL = 'sovereignity_bill';
     const REF_TYPE_STORE_PURCHASE = 'store_purchase';
     const REF_TYPE_STORE_PURCHASE_REFUND = 'store_purchase_refund';
+    const REF_TYPE_STRUCTURE_GATE_JUMP = 'structure_gate_jump';
     const REF_TYPE_TRANSACTION_TAX = 'transaction_tax';
     const REF_TYPE_UPKEEP_ADJUSTMENT_FEE = 'upkeep_adjustment_fee';
     const REF_TYPE_WAR_ALLY_CONTRACT = 'war_ally_contract';
@@ -494,6 +495,7 @@ class GetCharactersCharacterIdWalletJournal200Ok implements ModelInterface, Arra
             self::REF_TYPE_SOVEREIGNITY_BILL,
             self::REF_TYPE_STORE_PURCHASE,
             self::REF_TYPE_STORE_PURCHASE_REFUND,
+            self::REF_TYPE_STRUCTURE_GATE_JUMP,
             self::REF_TYPE_TRANSACTION_TAX,
             self::REF_TYPE_UPKEEP_ADJUSTMENT_FEE,
             self::REF_TYPE_WAR_ALLY_CONTRACT,
@@ -844,7 +846,7 @@ class GetCharactersCharacterIdWalletJournal200Ok implements ModelInterface, Arra
     /**
      * Sets ref_type
      *
-     * @param string $ref_type \"The transaction type for the given. transaction. Different transaction types will populate different attributes. Note: If you have an existing XML API application that is using ref_types, you will need to know which string ESI ref_type maps to which integer. You can look at the following file to see string->int mappings: https://github.com/ccpgames/eve-glue/blob/master/eve_glue/wallet_journal_ref.py\"
+     * @param string $ref_type \"The transaction type for the given. transaction. Different transaction types will populate different attributes.\"
      *
      * @return $this
      */
