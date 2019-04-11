@@ -1,6 +1,5 @@
 <?php
-require_once('classes/class.esiapi.php');
-require_once('classes/class.log.php');
+require_once('loadclasses.php');
 
 use Swagger\Client\ApiException;
 use Swagger\Client\Api\AllianceApi;

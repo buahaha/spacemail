@@ -7,7 +7,6 @@ namespace Composer\Autoload;
 class ComposerStaticInitfc5a714e06df342b0b9cba2c3cc6a689
 {
     public static $files = array (
-        '3109cb1a231dcd04bee1f9f620d46975' => __DIR__ . '/..' . '/paragonie/sodium_compat/autoload.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
@@ -28,10 +27,6 @@ class ComposerStaticInitfc5a714e06df342b0b9cba2c3cc6a689
         array (
             'Jose\\Component\\Signature\\Algorithm\\' => 35,
             'Jose\\Component\\Signature\\' => 25,
-            'Jose\\Component\\Encryption\\Algorithm\\KeyEncryption\\' => 50,
-            'Jose\\Component\\Encryption\\Algorithm\\ContentEncryption\\' => 54,
-            'Jose\\Component\\Encryption\\' => 26,
-            'Jose\\Component\\Core\\Util\\Ecc\\' => 29,
             'Jose\\Component\\Core\\' => 20,
             'Jose\\Component\\Checker\\' => 23,
         ),
@@ -56,10 +51,6 @@ class ComposerStaticInitfc5a714e06df342b0b9cba2c3cc6a689
         'B' => 
         array (
             'Base64Url\\' => 10,
-        ),
-        'A' => 
-        array (
-            'AESKW\\' => 6,
         ),
     );
 
@@ -87,28 +78,6 @@ class ComposerStaticInitfc5a714e06df342b0b9cba2c3cc6a689
         'Jose\\Component\\Signature\\' => 
         array (
             0 => __DIR__ . '/..' . '/web-token/jwt-signature',
-        ),
-        'Jose\\Component\\Encryption\\Algorithm\\KeyEncryption\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/web-token/jwt-encryption-algorithm-aesgcmkw',
-            1 => __DIR__ . '/..' . '/web-token/jwt-encryption-algorithm-aeskw',
-            2 => __DIR__ . '/..' . '/web-token/jwt-encryption-algorithm-dir',
-            3 => __DIR__ . '/..' . '/web-token/jwt-encryption-algorithm-ecdh-es',
-            4 => __DIR__ . '/..' . '/web-token/jwt-encryption-algorithm-pbes2',
-            5 => __DIR__ . '/..' . '/web-token/jwt-encryption-algorithm-rsa',
-        ),
-        'Jose\\Component\\Encryption\\Algorithm\\ContentEncryption\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/web-token/jwt-encryption-algorithm-aescbc',
-            1 => __DIR__ . '/..' . '/web-token/jwt-encryption-algorithm-aesgcm',
-        ),
-        'Jose\\Component\\Encryption\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/web-token/jwt-encryption',
-        ),
-        'Jose\\Component\\Core\\Util\\Ecc\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/web-token/jwt-util-ecc',
         ),
         'Jose\\Component\\Core\\' => 
         array (
@@ -145,10 +114,6 @@ class ComposerStaticInitfc5a714e06df342b0b9cba2c3cc6a689
         'Base64Url\\' => 
         array (
             0 => __DIR__ . '/..' . '/spomky-labs/base64url/src',
-        ),
-        'AESKW\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/spomky-labs/aes-key-wrap/src',
         ),
     );
 

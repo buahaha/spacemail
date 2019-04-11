@@ -1,5 +1,6 @@
 <?php
 require_once('config.php');
+require_once('vendor/autoload.php');
 
 use Doctrine\Common\Cache\FilesystemCache;
 use Psr\Http\Message\ResponseInterface;

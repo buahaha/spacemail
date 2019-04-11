@@ -30,6 +30,7 @@
         "web-token/jwt-signature-algorithm-rsa": "^1.2",
         "rtheunissen/guzzle-rate-limiter": "^2.0",
         "kevinrob/guzzle-cache-middleware": "^3.2",
+
         "doctrine/cache": "^1.8"
     }
 }
