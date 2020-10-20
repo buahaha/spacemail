@@ -3,6 +3,11 @@
 $start_time = microtime(true);
 require_once('auth.php');
 require_once('config.php');
+
+if (SITE_MAINTENANCE) {
+    header('Location: '.URL::url_path().'maintenance.php');
+}
+
 require_once('loadclasses.php');
 require_once('serverstatus.php');
 

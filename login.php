@@ -48,8 +48,8 @@ if (isset($_GET['code'])) {
         }
         include_once('auth.php');
         $page = new Page('SSO Login');
-        if (isset($_GET['page'])) {
-            $fwd = $_GET['page'];
+        if (isset($_SESSION['fwd_page'])) {
+            $fwd = $_SESSION['fwd_page'];
         } else {
             $fwd = 'index.php';
         }
@@ -72,14 +72,19 @@ if (isset($_GET['persistent_login'])) {
   $_SESSION['persistent_login'] = false;
 }
 
+if (isset($_GET['page'])) {
+  $_SESSION['fwd_page'] = $_GET['page'];
+} else {
+  unset($_SESSION['fwd_page']);
+}
+
 $authurl = "https://login.eveonline.com/v2/oauth/authorize/";
 $state = random_str(32);
 if (isset($_GET['scopes'])) {
-    $currenturl = rtrim(preg_replace('/(?<=\?|\&)(scopes=[a-zA-Z%0-9.\-\_]*[\&{0-1}])/i', '', URL::full_url()), '?');
-    $url = $authurl."?response_type=code&redirect_uri=".rawurlencode($currenturl)."&client_id=".ESI_ID."&scope=".urlencode($_GET['scopes'])."&state=".urlencode($state); 
+    $url = $authurl."?response_type=code&redirect_uri=".rawurlencode(URL::full_url_noq())."&client_id=".ESI_ID."&scope=".urlencode($_GET['scopes'])."&state=".urlencode($state); 
 } else {
     $scopes = unserialize(MINIMAL_SCOPES);
-    $url = $authurl."?response_type=code&redirect_uri=".rawurlencode(URL::full_url())."&client_id=".ESI_ID."&scope=".urlencode(implode(' ',$scopes))."&state=".urlencode($state);
+    $url = $authurl."?response_type=code&redirect_uri=".rawurlencode(URL::full_url_noq())."&client_id=".ESI_ID."&scope=".urlencode(implode(' ',$scopes))."&state=".urlencode($state);
 }
 $_SESSION['authstate'] = $state;
 header('Location: '.$url);
