@@ -83,7 +83,7 @@ $html = '<table class="table table-striped small" id="nottable">
 foreach ($notifications as $n) {
     $html .= '<tr><td>'.gmdate('y/m/d H:i', strtotime($n['timestamp'])).'</td>';
     if (isset($dict[$n['sender_id']])) {
-        $html .= '<td><img src="https://imageserver.eveonline.com/'.$n['sender_type'].'/'.$n['sender_id'].'_32.'.($n['sender_type'] == 'character'?'jpg':'png').'" height="24px"></td><td>'.$dict[$n['sender_id']].'</td>';
+        $html .= '<td><img src="https://imageserver.eveonline.com/'.ucwords($n['sender_type']).'/'.$n['sender_id'].'_32.'.($n['sender_type'] == 'character'?'jpg':'png').'" height="24px"></td><td>'.$dict[$n['sender_id']].'</td>';
     } else {
         $html .= '<td></td><td>Unknown</td>';
     }
